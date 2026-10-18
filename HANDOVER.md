@@ -15,7 +15,7 @@ Stand: 18.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADM
 
 ## Was tatsächlich implementiert ist
 
-`index.html`, `style.css`, `src/ui.js`: fünf klickbare Schritte; die App startet regulär bei Ziel/Einkommen. Einzelne Kostenpositionen, Teilweiterverrechnung, „noch prüfen“, Rücklage, eigene Kosten und persönlicher Puffer. AfA-Eingabe oder einfache Herleitung aus einer bereits bestätigten Basis. Ergebnis und Anschaffungsvergleich.
+`index.html`, `style.css`, `src/ui.js`: fünf klickbare Schritte; die App startet regulär bei Ziel/Einkommen. Einzelne Kostenpositionen, Teilweiterverrechnung, „noch prüfen“, Rücklage, eigene Kosten und persönlicher Puffer. AfA-Eingabe oder einfache Herleitung aus einer bereits bestätigten Basis. Ergebnis und Anschaffungsvergleich. Die Wortmarke im Kopf ist ein zugänglicher Home-Button: führt direkt zu Schritt 1, erhält alle Eingaben und setzt den Tastaturfokus auf die erste Überschrift.
 
 `src/calc.js`: geprüfte 2026-Tarifberechnung, positiver Vermietungsüberschuss, vereinfachter Veranlagungsfreibetrag im Fall Arbeitnehmer + eine Vermietung, keine Verlust-Steuergutschrift. Bisektion mit abschließender Prüfung des minimalen Cent-Mietbetrags. Cash-only-Rücklagen und AfA sind getrennt.
 

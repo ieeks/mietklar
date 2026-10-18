@@ -58,3 +58,8 @@
 @media(max-width:380px){#mietklar-app .mr-cost-controls{grid-template-columns:95px minmax(0,1fr)}#mietklar-app .mr-progress{padding-left:18px;padding-right:18px}}
 
 html{color-scheme:only light}body{margin:0;padding:20px 12px;background:#fff6f0;font-family:system-ui,sans-serif}#mietklar-app .mr-help.alpha{margin:0;border-radius:0;padding:12px 24px}#mietklar-app .mr-app{max-width:650px}button,summary,select{cursor:pointer}button:disabled{cursor:wait;opacity:.6}
+
+/* Home navigation keeps all current form values. */
+#mietklar-app button.mr-wordmark{border:0;background:transparent;padding:8px 0;min-width:44px;min-height:44px;font-size:17px;font-weight:600;letter-spacing:-.5px;cursor:pointer}
+#mietklar-app button.mr-wordmark:hover{color:var(--mr-brand)}
+#mietklar-app button.mr-wordmark:focus-visible{outline:2px solid var(--mr-brand);outline-offset:4px}

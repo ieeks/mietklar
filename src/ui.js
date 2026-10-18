@@ -33,5 +33,6 @@ function compute(){
  computed={...outputs,base,e};return true;
 }
 function show(){const names=['Ziel & Einkommen','Wohnungskosten','AfA & Steuer','Ergebnis','Anschaffung'];all('[data-panel]').forEach(p=>p.hidden=Number(p.dataset.panel)!==step);q('[data-progress-text]').textContent='Schritt '+(step+1)+' von 5 · '+names[step];all('.mr-dot').forEach((n,i)=>n.dataset.on=String(i<=step));q('[data-back]').hidden=step===0;q('[data-next]').hidden=step===4;q('[data-next]').textContent=['Weiter zu den Kosten →','Weiter zur AfA →','Ergebnis ansehen →','Anschaffung vergleichen →',''][step];compute();root.scrollIntoView({block:'start'});}
+q('[data-home]').addEventListener('click',()=>{step=0;show();const heading=q('[data-panel="0"] h2');heading.tabIndex=-1;heading.focus({preventScroll:true});});
 q('[data-next]').addEventListener('click',()=>{if(compute()){step=Math.min(4,step+1);show();}});q('[data-back]').addEventListener('click',()=>{step=Math.max(0,step-1);show();});root.addEventListener('input',compute);root.addEventListener('change',compute);all('[data-afa-mode]').forEach(b=>b.addEventListener('click',()=>{afaMode=b.dataset.afaMode;all('[data-afa-mode]').forEach(n=>n.setAttribute('aria-pressed',String(n===b)));q('[data-afa-known]').hidden=afaMode!=='known';q('[data-afa-help]').hidden=afaMode!=='help';compute();}));show();
 })();
