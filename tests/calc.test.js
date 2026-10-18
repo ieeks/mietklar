@@ -1,0 +1,18 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import {tariffTax, additionalTax, assessmentAllowance, solveRent, cashAtRent, comparePurchase, validateTariff} from '../src/calc.js';
+const tariff=JSON.parse(readFileSync(new URL('../data/tarif-2026.json',import.meta.url)));
+const close=(actual,expected)=>assert.ok(Math.abs(actual-expected)<1e-7,`${actual} != ${expected}`);
+const baseModel={base:45000,annualCashCosts:3600,annualTaxCosts:3600,annualAfa:2400,target:1000};
+test('2026 tax stays continuous at every finite boundary',()=>{let previous=0,total=0;for(const [i,b]of tariff.brackets.entries()){if(b.upTo===null)break;total+=(b.upTo-previous)*b.rate;close(tariffTax(b.upTo,tariff),total);close(tariffTax(b.upTo-.01,tariff),total-.01*b.rate);close(tariffTax(b.upTo+.01,tariff),total+.01*tariff.brackets[i+1].rate);previous=b.upTo;}});
+test('income crosses from 40 to 48 percent',()=>close(additionalTax(65000,12000,tariff),5330.8));
+test('allowance phases out at 730/1460; negative rental creates no refund',()=>{assert.deepEqual([0,730,1000,1460].map(assessmentAllowance),[0,730,460,0]);close(additionalTax(45000,730,tariff),0);close(additionalTax(45000,1000,tariff),216);close(additionalTax(45000,-1000,tariff),0);});
+test('reverse calculation gives minimum cent amount meeting target',()=>{const r=solveRent(baseModel,tariff);assert.equal(r.rent,1833.34);assert.ok(r.monthlyCash>=1000);assert.ok(cashAtRent(r.rent-.01,baseModel,tariff).monthlyCash<1000);});
+test('cash-only reserve does not reduce tax at fixed rent',()=>{const a=cashAtRent(2000,baseModel,tariff);const b=cashAtRent(2000,{...baseModel,annualCashCosts:4800},tariff);close(a.annualTax,b.annualTax);close(a.monthlyCash-b.monthlyCash,100);});
+test('AfA reduces tax without becoming a second cash payment',()=>{const a=cashAtRent(2000,baseModel,tariff);const b=cashAtRent(2000,{...baseModel,annualAfa:3600},tariff);close(b.monthlyCash-a.monthlyCash,40);});
+test('purchase across 48% boundary costs 260 after saving 240',()=>{const q=comparePurchase({base:60000,rentalIncome:10865,monthlyCash:1000,purchase:500,deduction:500},tariff);close(q.saving,240);close(q.burden,260);close(q.afterPurchase,1000-260/12);});
+test('depreciated purchase uses year deduction and full cash expense',()=>{const r=comparePurchase({base:45000,rentalIncome:16000,monthlyCash:1000,purchase:2000,deduction:200},tariff);close(r.saving,80);close(r.burden,1920);});
+test('combined purchases must recalculate across tax brackets',()=>{const one=comparePurchase({base:60000,rentalIncome:10865,monthlyCash:1000,purchase:1000,deduction:1000},tariff);close(one.saving,440);});
+test('inputs and malformed tariff are rejected',()=>{assert.throws(()=>solveRent({...baseModel,target:-1},tariff));assert.throws(()=>solveRent({...baseModel,base:Infinity},tariff));assert.throws(()=>comparePurchase({base:0,rentalIncome:0,monthlyCash:0,purchase:100,deduction:101},tariff));assert.throws(()=>validateTariff({year:2026,brackets:[{upTo:100,rate:1}]}));});
+test('zero target and repeated forward/reverse cases',()=>{for(const base of [0,20000,45000,70000,120000])for(const target of [0,500,1000,1500]){const m={...baseModel,base,target};const r=solveRent(m,tariff);assert.ok(r.monthlyCash>=target-1e-8);if(r.rent>0)assert.ok(cashAtRent(r.rent-.01,m,tariff).monthlyCash<target+1e-8);}});

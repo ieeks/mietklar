@@ -1,0 +1,1 @@
+{"name":"mietklar","version":"0.1.0-alpha.1","private":true,"type":"module","description":"Guided Austrian rental cashflow calculator, alpha checkpoint","scripts":{"test":"node --test","check":"node --check src/ui.js && node --check src/calc.js"},"engines":{"node":">=22"}}

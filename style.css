@@ -1,0 +1,57 @@
+
+#mietklar-app{color-scheme:light dark}
+#mietklar-app .mr-stage{min-height:780px;padding:16px 8px;box-sizing:border-box}
+#mietklar-app .mr-app{--mr-bg:light-dark(#f7f5f0,#191b1a);--mr-panel:light-dark(#ffffff,#242725);--mr-text:light-dark(#242e29,#e9ede8);--mr-muted:light-dark(#637067,#abb5ad);--mr-line:light-dark(#dedfd8,#3c443d);--mr-soft:light-dark(#ecefe7,#30382f);--mr-brand:light-dark(#ad452b,#f3a18a);--mr-on:light-dark(#ffffff,#281b17);background:var(--mr-bg);color:var(--mr-text);font-family:system-ui,sans-serif;max-width:470px;margin:auto;border:1px solid var(--mr-line);border-radius:25px;overflow:hidden;font-size:15px;line-height:1.5;box-shadow:0 12px 36px light-dark(#25352a14,#00000030)}
+#mietklar-app .mr-top{padding:19px 23px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--mr-line);gap:12px}
+#mietklar-app .mr-wordmark{font-size:17px;font-weight:600;letter-spacing:-.5px}
+#mietklar-app .mr-year{font-size:12px;color:var(--mr-muted)}
+#mietklar-app .mr-main{padding:24px}
+#mietklar-app .mr-eyebrow{font-size:12px;color:var(--mr-brand);font-weight:600;letter-spacing:.07em;text-transform:uppercase}
+#mietklar-app h2{font-size:27px;line-height:1.15;letter-spacing:-.8px;font-weight:600;margin:9px 0}
+#mietklar-app p{margin:6px 0 18px;color:var(--mr-muted);font-size:14px}
+#mietklar-app .mr-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:19px 0}
+#mietklar-app .mr-field{display:flex;flex-direction:column;gap:6px;min-width:0;font-size:12px;color:var(--mr-muted)}
+#mietklar-app input{background:var(--mr-panel);color:var(--mr-text);border:1px solid var(--mr-line);border-radius:10px;padding:11px 12px;font-size:16px;font-family:inherit;width:100%;min-width:0;box-sizing:border-box;font-variant-numeric:tabular-nums}
+#mietklar-app .mr-result{background:var(--mr-panel);border:1px solid var(--mr-line);border-radius:17px;padding:20px;margin-top:16px}
+#mietklar-app .mr-result-label{font-size:13px;color:var(--mr-muted)}
+#mietklar-app .mr-amount{font-size:39px;line-height:1.2;letter-spacing:-1.6px;font-weight:600;margin:5px 0 7px;font-variant-numeric:tabular-nums}
+#mietklar-app .mr-amount small{font-size:14px;font-weight:400;color:var(--mr-muted);letter-spacing:0;white-space:nowrap}
+#mietklar-app .mr-row{display:flex;justify-content:space-between;gap:15px;align-items:baseline;font-size:13px;margin-top:9px}
+#mietklar-app .mr-row span{color:var(--mr-muted)}
+#mietklar-app .mr-row strong{font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
+#mietklar-app .mr-divider{border-top:1px solid var(--mr-line);margin:15px 0}
+#mietklar-app .mr-good{background:var(--mr-soft);padding:10px 12px;border-radius:9px;font-size:13px;display:flex;justify-content:space-between;gap:12px;margin-top:15px}
+#mietklar-app button{font-family:inherit;font-size:14px;border:1px solid var(--mr-line);border-radius:10px;padding:11px 14px;min-height:44px;background:var(--mr-panel);color:var(--mr-text)}
+#mietklar-app .mr-primary{background:var(--mr-brand);color:var(--mr-on);border-color:var(--mr-brand)}
+#mietklar-app .mr-full{width:100%;margin-top:17px}
+#mietklar-app details{border-top:1px solid var(--mr-line);padding-top:14px;margin-top:18px;font-size:13px}
+#mietklar-app summary{min-height:30px;color:var(--mr-text)}
+#mietklar-app .mr-note{font-size:12px;color:var(--mr-muted);margin-top:14px}
+#mietklar-app .mr-steps{display:flex;gap:5px;padding:19px 23px 0;color:var(--mr-muted);font-size:12px}
+#mietklar-app .mr-step{flex:1;border-top:3px solid var(--mr-line);padding-top:7px}
+#mietklar-app .mr-step[aria-current=step]{border-color:var(--mr-brand);color:var(--mr-text)}
+#mietklar-app .mr-step-panel{min-height:475px;display:flex;flex-direction:column}
+#mietklar-app .mr-step-panel[hidden],#mietklar-app [hidden]{display:none!important}
+#mietklar-app .mr-actions{display:flex;gap:9px;margin-top:auto;padding-top:28px}
+#mietklar-app .mr-actions .mr-primary{flex:1}
+#mietklar-app .mr-choice{border:1px solid var(--mr-line);border-radius:13px;padding:15px;background:var(--mr-panel);margin:15px 0 4px}
+#mietklar-app .mr-choice label{font-size:13px;color:var(--mr-muted);display:block;margin-bottom:8px}
+#mietklar-app .mr-choice input{font-size:28px;border:0;padding:0;background:transparent}
+#mietklar-app .mr-purchase{margin-top:14px;padding:14px;border-radius:12px;background:var(--mr-soft)}
+#mietklar-app .mr-purchase label{font-size:13px;display:block;margin-bottom:7px}
+#mietklar-app .mr-error{color:var(--mr-brand);font-size:13px}
+@media(max-width:380px){#mietklar-app .mr-main{padding:18px}#mietklar-app .mr-fields{gap:10px}#mietklar-app .mr-amount{font-size:34px}#mietklar-app .mr-stage{min-height:860px;padding:8px 0}}
+
+
+
+#mietklar-app .mr-app{max-width:580px}#mietklar-app{padding:12px 0}#mietklar-app .mr-progress{padding:18px 24px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;color:var(--mr-muted)}
+#mietklar-app .mr-dots{display:flex;gap:5px}#mietklar-app .mr-dot{height:5px;width:24px;border-radius:4px;background:var(--mr-line)}#mietklar-app .mr-dot[data-on=true]{background:var(--mr-brand)}
+#mietklar-app .mr-section{border-top:1px solid var(--mr-line);padding-top:15px;margin-top:17px}#mietklar-app .mr-section h3{font-size:16px;font-weight:600;margin:0 0 7px}#mietklar-app .mr-tag{font-size:11px;color:var(--mr-muted);background:var(--mr-soft);padding:4px 7px;border-radius:6px}
+#mietklar-app select{color:var(--mr-text);background:var(--mr-panel);border:1px solid var(--mr-line);border-radius:9px;padding:10px;font-size:14px;font-family:inherit;width:100%;min-height:44px;box-sizing:border-box}
+#mietklar-app .mr-cost-line{padding:13px 0;border-bottom:1px solid var(--mr-line)}#mietklar-app .mr-cost-head{font-size:14px;margin-bottom:7px}#mietklar-app .mr-cost-controls{display:grid;grid-template-columns:110px minmax(0,1fr);gap:10px}#mietklar-app .mr-hint{font-size:12px;color:var(--mr-muted);margin-top:6px}#mietklar-app .mr-summary{margin-top:16px;background:var(--mr-soft);padding:13px 15px;border-radius:11px}
+#mietklar-app .mr-summary .mr-row:first-child{margin-top:0}#mietklar-app .mr-step-panel{min-height:410px}#mietklar-app .mr-help{font-size:12px;margin-top:10px;padding:11px 13px;border-radius:9px;background:var(--mr-soft);color:var(--mr-muted)}
+#mietklar-app .mr-nav{display:flex;justify-content:space-between;gap:10px;margin-top:24px}#mietklar-app .mr-nav .mr-primary{margin-left:auto}#mietklar-app [aria-invalid=true]{border-color:var(--mr-brand)}
+#mietklar-app .mr-number{font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.5px}#mietklar-app .mr-step-panel[hidden]{display:none!important}#mietklar-app .mr-mode{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}#mietklar-app .mr-mode button[aria-pressed=true]{background:var(--mr-brand);color:var(--mr-on);border-color:var(--mr-brand)}
+@media(max-width:380px){#mietklar-app .mr-cost-controls{grid-template-columns:95px minmax(0,1fr)}#mietklar-app .mr-progress{padding-left:18px;padding-right:18px}}
+
+html{color-scheme:light dark}body{margin:0;padding:20px 12px;background:light-dark(#eceee9,#121613);font-family:system-ui,sans-serif}#mietklar-app .mr-help.alpha{margin:0;border-radius:0;padding:12px 24px}#mietklar-app .mr-app{max-width:650px}button,summary,select{cursor:pointer}button:disabled{cursor:wait;opacity:.6}

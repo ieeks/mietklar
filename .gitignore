@@ -1,0 +1,14 @@
+node_modules/
+.DS_Store
+.env
+.env.*
+private/
+local-data/
+upload/
+*.pdf
+*.xlsx
+*.xlsm
+*.csv
+*.log
+coverage/
+playwright-report/
