@@ -8,7 +8,7 @@ Stand: 18.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADM
 - Wunschbetrag X ist **frei verfügbares Geld nach Kosten, zusätzlicher Einkommensteuer und gewähltem Puffer**. Monatszahl ist ein Jahresdurchschnitt, keine Garantie gleichbleibender Zahlungseingänge.
 - Zuerst Rückwärtsrechnung: gewünschter Monatsüberschuss → benötigte Hauptmiete. Vorwärtsmodus ist geplant, noch kein eigener UI-Modus.
 - **Geführte Bedienung** wurde gegenüber Kompakt gewählt, damit Wohnungskosten, AfA und BK erklärt werden können.
-- Name **mietklar.** und Akzentpunkt ausdrücklich beibehalten. Warme zurückhaltende Gestaltung; konkrete Feinabstimmung offen.
+- Name **mietklar.** und Akzentpunkt ausdrücklich beibehalten. Neue Designvorgabe: heller und freundlicher; grün-/olivlastige Flächen wurden als zu „military“ empfunden. Aktueller Entwurf mit warmem Weiß, Apricot-Flächen und Terrakotta-Akzent. Helle Darstellung zunächst als Standard; visueller Feinschliff und eine bewusst gestaltete optionale dunkle Variante bleiben offen. Siehe docs/DESIGN.md.
 - Aktuelle Vorschreibung zuerst, aufklappbare Jahresabrechnung dahinter. Mehr Detail nur bei Bedarf.
 - Der User hat `ieeks/mietklar` angelegt. Öffentliches Repo, `main`; GitHub-Zugriff wurde geprüft.
 - Gewünschter Abschluss dieser Sitzung: aktuellen Stand als Alpha sichern und so dokumentieren, dass nahtlos weitergearbeitet werden kann. Keine Behauptung einer produktionsreifen Lösung.
