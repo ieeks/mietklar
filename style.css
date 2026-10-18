@@ -1,5 +1,8 @@
+/* Isolate product content from host/embedded preview defaults. */
+#mietklar-app .mr-app { color-scheme: only light; }
+#mietklar-app .mr-app * { box-sizing: border-box; color: inherit; background-color: transparent; }
 
-#mietklar-app{color-scheme:light}
+#mietklar-app{color-scheme:only light}
 #mietklar-app .mr-stage{min-height:780px;padding:16px 8px;box-sizing:border-box}
 #mietklar-app .mr-app{--mr-bg:#fffdfa;--mr-panel:#ffffff;--mr-text:#34323b;--mr-muted:#6f6974;--mr-line:#eee3df;--mr-soft:#fff0e5;--mr-brand:#b94c30;--mr-on:#ffffff;background:var(--mr-bg);color:var(--mr-text);font-family:system-ui,sans-serif;max-width:470px;margin:auto;border:1px solid var(--mr-line);border-radius:25px;overflow:hidden;font-size:15px;line-height:1.5;box-shadow:0 12px 36px #9a665314}
 #mietklar-app .mr-top{padding:19px 23px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--mr-line);gap:12px}
@@ -54,4 +57,4 @@
 #mietklar-app .mr-number{font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.5px}#mietklar-app .mr-step-panel[hidden]{display:none!important}#mietklar-app .mr-mode{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}#mietklar-app .mr-mode button[aria-pressed=true]{background:var(--mr-brand);color:var(--mr-on);border-color:var(--mr-brand)}
 @media(max-width:380px){#mietklar-app .mr-cost-controls{grid-template-columns:95px minmax(0,1fr)}#mietklar-app .mr-progress{padding-left:18px;padding-right:18px}}
 
-html{color-scheme:light}body{margin:0;padding:20px 12px;background:#fff6f0;font-family:system-ui,sans-serif}#mietklar-app .mr-help.alpha{margin:0;border-radius:0;padding:12px 24px}#mietklar-app .mr-app{max-width:650px}button,summary,select{cursor:pointer}button:disabled{cursor:wait;opacity:.6}
+html{color-scheme:only light}body{margin:0;padding:20px 12px;background:#fff6f0;font-family:system-ui,sans-serif}#mietklar-app .mr-help.alpha{margin:0;border-radius:0;padding:12px 24px}#mietklar-app .mr-app{max-width:650px}button,summary,select{cursor:pointer}button:disabled{cursor:wait;opacity:.6}

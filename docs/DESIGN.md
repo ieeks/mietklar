@@ -24,3 +24,7 @@ Stand: 18.10.2026, nach Feedback zur ersten Alpha.
 ## Noch prüfen
 
 Gemeinsam am iPhone ansehen: Helligkeit, Wärme des Hintergrunds, Kontrast und Lesbarkeit. Der Browser-/Safari-Test steht weiter aus; kein fertiges visuelles Redesign behaupten.
+
+## Darstellungsfehler in eingebetteter Vorschau
+
+Im iPhone-Screenshot waren dunkle Abschnittsflächen und weiße Überschriften innerhalb der hellen App sichtbar. Das deutet auf übernommene Standardstile der Vorschau hin. Ein lokal begrenzter CSS-Grundstil setzt Flächen und Textvererbung im Produkt explizit; die darüberliegenden Komponenten definieren danach ihre eigenen Farben. Die helle Darstellung verwendet `color-scheme: only light`. Die Korrektur ist implementiert, muss auf dem betroffenen iPhone aber noch visuell bestätigt werden. Kein Browser-/Safari-Test in dieser Arbeitsumgebung verfügbar.
