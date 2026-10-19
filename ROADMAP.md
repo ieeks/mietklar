@@ -66,6 +66,7 @@
 ## Alpha 0.7 – Ergebnis zuerst
 
 - [x] Fünf Schritte durch eine Seite mit Live-Ergebnis und aufklappbaren Eingaben ersetzen; Hilfen behalten.
+- [x] „Alles zuklappen“ über allen Bereichen, beim Scrollen erreichbar; auch verschachtelte Hilfen schließen, Werte behalten.
 - [x] Regler plus exaktes Zahlenfeld und beide Richtungen, ohne Platzhalterrechnung.
 - [x] Grafik für gesamte Mietereinnahmen, Kosten, Rücklage/Puffer, Steuer und Cash; Defizit gesondert.
 - [x] Erwarteten Leerstand im typischen Vermietungsjahr ergänzen, Erstattungen/Kosten/AfA getrennt halten.

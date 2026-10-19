@@ -1,9 +1,9 @@
-import { validateTariff } from './calc.js?v=0.7.0-alpha.1';
-import { setupPersistence } from './storage-ui.js?v=0.7.0-alpha.1';
-import { createCostEditor } from './cost-editor.js?v=0.7.0-alpha.1';
-import { renderForm, landSuggestion } from './form-view.js?v=0.7.0-alpha.1';
-import { evaluateScenario } from './scenario.js?v=0.7.0-alpha.1';
-import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.1';
+import { validateTariff } from './calc.js?v=0.7.0-alpha.2';
+import { setupPersistence } from './storage-ui.js?v=0.7.0-alpha.2';
+import { createCostEditor } from './cost-editor.js?v=0.7.0-alpha.2';
+import { renderForm, landSuggestion } from './form-view.js?v=0.7.0-alpha.2';
+import { evaluateScenario } from './scenario.js?v=0.7.0-alpha.2';
+import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.2';
 
 (async () => {
   const root = document.getElementById('mietklar-app');
@@ -82,6 +82,10 @@ import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.1';
     if (button.hasAttribute('data-home')) {
       root.scrollIntoView({ block: 'start' });
       const heading = q('[data-result-title]'); heading.tabIndex = -1; heading.focus({ preventScroll: true });
+    } else if (button.hasAttribute('data-collapse-all')) {
+      all('details[open]').forEach(details => { details.open = false; });
+      button.focus({ preventScroll: true });
+      button.scrollIntoView({ block: 'nearest' });
     } else if (button.hasAttribute('data-calc-mode')) {
       calculationMode = button.dataset.calcMode; changed();
     } else if (button.hasAttribute('data-add-cost')) {
@@ -101,7 +105,7 @@ import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.1';
   window.addEventListener('beforeprint', () => compute(false, true));
 
   try {
-    const response = await fetch(new URL('../data/tarif-2026.json?v=0.7.0-alpha.1', import.meta.url));
+    const response = await fetch(new URL('../data/tarif-2026.json?v=0.7.0-alpha.2', import.meta.url));
     if (!response.ok) throw new Error('Tarifdatei nicht erreichbar');
     tariff = validateTariff(await response.json());
     if (tariff.year !== 2026) throw new Error('Tarifjahr stimmt nicht mit der Oberfläche überein');

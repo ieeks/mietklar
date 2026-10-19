@@ -1,5 +1,5 @@
-import { suggestLandShare } from './afa.js?v=0.7.0-alpha.1';
-import { numericDraft, numeric as parsedNumeric } from './numbers.js?v=0.7.0-alpha.1';
+import { suggestLandShare } from './afa.js?v=0.7.0-alpha.2';
+import { numericDraft, numeric as parsedNumeric } from './numbers.js?v=0.7.0-alpha.2';
 
 export const STORAGE_KEY = 'mietklar:saved-inputs';
 export const SCHEMA_VERSION = 3;

@@ -59,6 +59,9 @@
 #mietklar-app .mr-accordion-body>section>p:first-child{margin-top:14px}
 #mietklar-app .mr-fields,#mietklar-app .mr-cost-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
 #mietklar-app .mr-section{margin-top:24px;padding-top:20px;border-top:1px solid var(--mr-line)}
+#mietklar-app .mr-section-tools{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;background:#f8f5f0;border-bottom:1px solid var(--mr-line)}
+#mietklar-app .mr-section-tools>span{font-size:12px;color:var(--mr-muted)}
+#mietklar-app .mr-section-tools button{font-size:12px;white-space:nowrap}
 #mietklar-app .mr-accordion-body>.mr-section{margin:14px 0 0;border:0;padding:0}
 #mietklar-app .mr-help{background:#fcf0e8;border-radius:10px;padding:12px 14px;font-size:13px;color:#725444;margin:14px 0}
 #mietklar-app .mr-hero>.mr-help{background:none;padding:0;margin-bottom:0;color:var(--mr-muted);font-size:11px}

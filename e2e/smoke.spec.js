@@ -206,4 +206,22 @@ test('responsive layout at 320px, mobile and desktop; preserved focus and safe t
   await expect(page.locator('[data-assumptions] img')).toHaveCount(0);
   await page.locator('[data-home]').click(); await expect(page.locator('[data-result-title]')).toBeFocused();
   await expect(name).toHaveValue('<img src=x onerror=alert(1)>');
+  await openSection(page, 'income');
+  await page.locator('[data-section="costs"] .mr-tax-details').first().evaluate(node => { node.open = true; });
+  await openStorage(page);
+  const beforeCollapse = await exportBackup(page);
+  const headline = await page.locator('[data-out="headline"]').first().textContent();
+  const collapse = page.getByRole('button', { name: 'Alles zuklappen', exact: true });
+  await page.locator('[data-storage-panel] > summary').scrollIntoViewIfNeeded();
+  const bounds = await collapse.boundingBox();
+  expect(bounds.y).toBeGreaterThanOrEqual(0); expect(bounds.y + bounds.height).toBeLessThanOrEqual(844);
+  await collapse.click();
+  await expect(page.locator('#mietklar-app details[open]')).toHaveCount(0);
+  await expect(collapse).toBeFocused();
+  await expect(page.locator('[data-out="headline"]').first()).toHaveText(headline);
+  await openSection(page, 'costs');
+  await expect(page.locator('[data-section="costs"] details[open]')).toHaveCount(0);
+  await expect(name).toHaveValue('<img src=x onerror=alert(1)>');
+  expect((await exportBackup(page)).state).toEqual(beforeCollapse.state);
+
 });

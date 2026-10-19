@@ -1,5 +1,9 @@
 # Änderungen
 
+## 0.7.0-alpha.2 – 19.10.2026
+
+„Alles zuklappen“ schließt sämtliche Bereiche und verschachtelten Hilfen einschließlich Speichern/Sicherung mit einem Klick. Die Leiste bleibt beim Scrollen erreichbar; Eingaben und Ergebnis bleiben bestehen. Browser-Assets auf die neue Version gesetzt.
+
 ## 0.7.0-alpha.1 – 19.10.2026
 
 Einseitenansicht mit echtem Live-Ergebnis, Regler/exaktem Zahlenfeld und erhaltenen Hilfen in aufklappbaren Gruppen. Einnahmenaufteilung auf gemeinsamer Jahresdurchschnittsbasis; Defizit als Zuschuss, AfA nicht als zweite Zahlung. Erwarteter Leerstand im Regeljahr, persönlicher m²-Vergleich und separates Druck-Ergebnisblatt. DOM-freier Szenarioaufbau, eigene Formular-/Ergebnis-/Kostenmodule. Komma-/Punkt-Eingaben als Text mit Schutz vor mehrdeutiger Punktgruppierung, wertgleiche Übernahme alter Sicherungen nach Format 3. Optionale Anschaffungs-/Vergleichsfehler verdecken das Miet-Ergebnis nicht. 80 lokale Tests inklusive 3.000 deterministischer Mietsuchfälle, Browser-Smoke-Tests für Chromium/WebKit als CI. Nativer iPhone-/Safari-Test des Umbaus offen.

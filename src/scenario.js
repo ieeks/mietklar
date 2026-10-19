@@ -1,9 +1,9 @@
-import { aggregateCosts } from './costs.js?v=0.7.0-alpha.1';
-import { resolveAfa } from './afa.js?v=0.7.0-alpha.1';
-import { resolveIncomeBase, calculateScenario } from './planning.js?v=0.7.0-alpha.1';
-import { resolveYear, resolveYearAfa } from './year.js?v=0.7.0-alpha.1';
-import { comparePurchase } from './calc.js?v=0.7.0-alpha.1';
-import { parseAmount, numeric } from './numbers.js?v=0.7.0-alpha.1';
+import { aggregateCosts } from './costs.js?v=0.7.0-alpha.2';
+import { resolveAfa } from './afa.js?v=0.7.0-alpha.2';
+import { resolveIncomeBase, calculateScenario } from './planning.js?v=0.7.0-alpha.2';
+import { resolveYear, resolveYearAfa } from './year.js?v=0.7.0-alpha.2';
+import { comparePurchase } from './calc.js?v=0.7.0-alpha.2';
+import { parseAmount, numeric } from './numbers.js?v=0.7.0-alpha.2';
 
 function amount(raw, label, field) {
   try {
