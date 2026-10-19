@@ -3,6 +3,8 @@ import { comparePurchase, validateTariff } from './calc.js';
 import { aggregateCosts } from './costs.js';
 import { resolveAfa, suggestLandShare } from './afa.js';
 import { resolveIncomeBase, calculateScenario } from './planning.js';
+import { setupPersistence } from './storage-ui.js';
+import { MAX_COST_ROWS } from './persistence.js';
 
 (async () => {
   const root = document.getElementById('mietklar-app');
@@ -11,7 +13,7 @@ import { resolveIncomeBase, calculateScenario } from './planning.js';
   const el = key => q('[data-key="' + key + '"]');
   const val = key => Number(el(key).value);
   const money = value => new Intl.NumberFormat('de-AT', { style: 'currency', currency: 'EUR' }).format(value);
-  let step = 0, tariff, adoptedLandSuggestion = false, calculationMode = 'target';
+  let step = 0, tariff, adoptedLandSuggestion = false, calculationMode = 'target', persistence = null;
   const hints = {
     bk: 'Sammelposten: Einzelpositionen und Mietvertrag prüfen. Nicht pauschal vollständig weiterverrechnen.',
     water: 'Wasser und Abwasser: Kostenanteil, Abrechnung und Vereinbarung prüfen.',
@@ -50,7 +52,35 @@ import { resolveIncomeBase, calculateScenario } from './planning.js';
     { name: 'Steuerberatung', period: 'year', kind: 'adviser', group: 'own' }
   ].forEach(addCost);
 
+  function captureState() {
+    const fields = Object.fromEntries(all('[data-key]').map(node => [node.dataset.key, node.value]));
+    const costs = all('[data-cost-row]').map(row => {
+      const get = key => row.querySelector('[data-cost-' + key + ']').value;
+      return {
+        name: get('name'), amount: get('amount'), period: get('period'),
+        payer: get('payer'), forward: get('forward'), taxStatus: get('tax'),
+        taxAnnual: get('tax-annual'), evidence: get('evidence'), kind: row.dataset.kind, group: row.dataset.group
+      };
+    });
+    return { fields, costs, calculationMode, step, adoptedLandSuggestion };
+  }
+  function applyState(state) {
+    all('[data-key]').forEach(node => { node.value = state.fields[node.dataset.key]; });
+    all('[data-cost-list]').forEach(list => list.replaceChildren());
+    for (const cost of state.costs) {
+      const row = addCost(cost);
+      for (const [selector, value] of [
+        ['payer', cost.payer], ['forward', cost.forward], ['tax', cost.taxStatus],
+        ['tax-annual', cost.taxAnnual], ['evidence', cost.evidence]
+      ]) row.querySelector('[data-cost-' + selector + ']').value = value;
+    }
+    calculationMode = state.calculationMode; step = state.step;
+    adoptedLandSuggestion = state.adoptedLandSuggestion;
+  }
+
   function readCosts() {
+    q('[data-add-cost]').disabled = all('[data-cost-row]').length >= MAX_COST_ROWS;
+    q('[data-add-cost]').title = all('[data-cost-row]').length >= MAX_COST_ROWS ? 'Höchstens 100 Kostenpositionen möglich' : '';
     return all('[data-cost-row]').map(row => {
       const get = key => row.querySelector('[data-cost-' + key + ']').value;
       const line = {
@@ -291,11 +321,13 @@ import { resolveIncomeBase, calculateScenario } from './planning.js';
     q('[data-back]').hidden = step === 0;
     q('[data-next]').hidden = step === 4;
     q('[data-next]').textContent = ['Weiter zu den Kosten →', 'Weiter zur AfA →', 'Ergebnis ansehen →', 'Anschaffung vergleichen →', ''][step];
-    compute();
+    const valid = compute();
     root.scrollIntoView({ block: 'start' });
+    return valid;
   }
   root.addEventListener('click', event => {
-    if (event.target.closest('[data-add-cost]')) {
+    if (event.target.closest('[data-storage-panel]')) return;
+    if (event.target.closest('[data-add-cost]') && all('[data-cost-row]').length < MAX_COST_ROWS) {
       const row = addCost({ name: 'Eigene Position' });
       compute();
       row.querySelector('[data-cost-name]').focus();
@@ -307,6 +339,7 @@ import { resolveIncomeBase, calculateScenario } from './planning.js';
       compute();
       q('[data-add-cost]').focus();
     }
+    persistence?.scheduleSave();
   });
   q('[data-home]').addEventListener('click', () => {
     step = 0; show();
@@ -332,6 +365,7 @@ import { resolveIncomeBase, calculateScenario } from './planning.js';
     el('afaLandPercent').focus();
   });
   function handleInput(event) {
+    if (event.target.closest('[data-storage-panel]')) return;
     if (adoptedLandSuggestion && event.target.hasAttribute('data-land-guide')) {
       el('afaLandStatus').value = 'unknown';
       el('afaLandPercent').value = '';
@@ -339,6 +373,7 @@ import { resolveIncomeBase, calculateScenario } from './planning.js';
     }
     if ([el('afaLandPercent'), el('afaLandStatus')].includes(event.target)) adoptedLandSuggestion = false;
     compute();
+    persistence?.scheduleSave();
   }
   root.addEventListener('input', handleInput);
   root.addEventListener('change', handleInput);
@@ -353,7 +388,12 @@ import { resolveIncomeBase, calculateScenario } from './planning.js';
   }
   q('[data-next]').disabled = false;
   show();
+  persistence = setupPersistence({
+    root, tariffYear: tariff.year, captureState, applyState, refresh: show,
+    isValid: () => q('[data-error]').hidden
+  });
 })();
+
 
 
 

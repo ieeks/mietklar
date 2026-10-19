@@ -1,6 +1,6 @@
 # mietklar.
 
-**Alpha 0.4 · Stand 19.10.2026**
+**Alpha 0.5 · Stand 19.10.2026**
 
 Welche Hauptmiete brauchst du für deinen Wunschüberschuss – und was bleibt bei einer vorgegebenen Hauptmiete nach Kosten, Rücklage und zusätzlicher Einkommensteuer?
 
@@ -40,7 +40,10 @@ npm test
 - Reguläre Startjahr-AfA als gesonderte Information; die Zielmiete bleibt eine Volljahresplanung.
 - Tarif 2026, progressive Zusatzsteuer, vereinfachter Veranlagungsfreibetrag und Rückwärtssuche auf volle Cent.
 - Anschaffungsvergleich bei **unveränderter Hauptmiete**, inklusive Jahres-Steuerwirkung und tatsächlichem Geldverbrauch.
-- Separate reine Rechenfunktionen und 40 automatisierte Rechen-/Kostenmodelltests.
+- Freiwillige Speicherung in diesem Browser, einschließlich unvollständiger Entwürfe, Rechenrichtung und aktuellem Schritt. Anfangs ausgeschaltet.
+- Lokalen Speicherstand löschen, ohne die aktuelle Sitzung zu leeren; versionierte JSON-Sicherung exportieren/importieren und letzten Import rückgängig machen.
+- Unlesbare oder nicht unterstützte Speicherstände werden unverändert aufbewahrt und können heruntergeladen werden. Import anderer Steuerjahre wird abgewiesen.
+- Separate reine Rechenfunktionen und 52 automatisierte Rechen-/Kostenmodell-/Speichertests.
 
 ## Grenzen dieser Alpha
 
@@ -55,8 +58,17 @@ npm test
 - **Offene Gebäude-AfA = 0 €**, kein vorbelegter fiktiver Jahresabzug. Kaufpreis, Grundanteil und Sonderfälle werden nicht aus Dokumenten automatisch bestätigt. Käufe bis 2002, Erbe/Schenkung und frühere Vermietung benötigen einen separat geklärten Jahreswert oder eine Basis.
 - Kaufherleitung nur reguläre Gebäude-AfA; keine automatisch beschleunigte AfA, keine individuelle Bewertung und keine Startjahr-Zielmietrechnung.
 - Mietrechtliche Hinweise berücksichtigen die gewählte Einordnung und den Vertragsstatus. Ein detaillierter Kostenkatalog, Prüfung der Einordnung und rechtliche Vertragsfreigaben fehlen.
-- Keine Speicherung, kein PDF-Upload/OCR, kein Import/Export, keine fertige Druckansicht.
-- Manueller iPhone-/Safari-Bedienungstest der Alpha 0.1 vom Nutzer am 19.10.2026 bestätigt. Die neuen Kosten-, AfA- und Rechenrichtungs-Oberflächen benötigen noch einen eigenen Safari-Durchgang. Kein automatisierter Browser-End-to-End-Test in dieser Arbeitsumgebung.
+- Speicherung gilt nur für diesen Browser und diese Website-Adresse. Kein automatischer Geräteabgleich, kein PDF-Upload/OCR, keine fertige Druckansicht.
+- Speicher-/Importprüfung bestätigt Dateiaufbau und zulässige Feldtypen, keine fachliche Richtigkeit. Leere oder negative Entwurfswerte bleiben erhalten; die normale Rechenprüfung entscheidet über das Ergebnis.
+- Manueller iPhone-/Safari-Bedienungstest der Alpha 0.1 vom Nutzer am 19.10.2026 bestätigt. Die neuen Kosten-, AfA-, Rechenrichtungs- und Speicher-Oberflächen benötigen noch einen eigenen Safari-Durchgang. Kein automatisierter Browser-End-to-End-Test in dieser Arbeitsumgebung.
+
+## Eingaben behalten
+
+Oben **Speichern & Sicherung** aufklappen. „Eingaben in diesem Browser merken“ schaltet die lokale Speicherung ein. Nach Änderungen wird der Stand kurz verzögert gespeichert und beim nächsten Öffnen wiederhergestellt. Ausschalten oder „Lokale Speicherung löschen“ entfernt diese Kopie; die gerade sichtbaren Eingaben bleiben bestehen.
+
+Export und Import funktionieren auch bei ausgeschalteter Speicherung. Eine Sicherungsdatei enthält persönliche Eingaben wie Gehalt, Kosten und AfA im lesbaren JSON-Format. Ein Import schaltet die Speicherung nicht von selbst ein. Ergebnisse und Tarifsätze werden nicht aus der Datei übernommen, sondern neu berechnet. Einzelheiten und Wiederherstellung: [Speicherformat](docs/STORAGE.md).
+
+Die App überträgt Formulareingaben nicht an einen Server. Freiwillig gespeicherte Daten sind unverschlüsselt in den Website-Daten dieses Browsers abgelegt. Sicherungsdateien entsprechend aufbewahren. Website-Daten löschen, privates Surfen oder Browserwechsel können die lokale Kopie entfernen bzw. unzugänglich machen; für einen übertragbaren Stand eine Datei exportieren.
 
 ## GitHub Pages
 
@@ -72,7 +84,8 @@ GitHub Pages ist aktiviert: Deploy from a branch → `main` → `/ (root)`. Die 
 4. [Recherche](docs/RESEARCH.md) – Quellen, bedingte Kostenregeln, offene Rechtsfragen.
 5. [Prüfungen](docs/TESTING.md) – Nachweise und noch offene Abnahme.
 
-Private Rechnungen, Verträge, Grundbuchauszüge, Adressen, Kontodaten und tatsächliche Gehaltszahlen gehören nicht in dieses öffentliche Repository. Eingaben werden aktuell ausschließlich im Arbeitsspeicher des Browsers gehalten.
+Private Rechnungen, Verträge, Grundbuchauszüge, Adressen, Kontodaten, tatsächliche Gehaltszahlen und persönliche Sicherungsdateien gehören nicht in dieses öffentliche Repository.
+
 
 
 

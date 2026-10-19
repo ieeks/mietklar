@@ -99,5 +99,17 @@ html{color-scheme:only light}body{margin:0;padding:20px 12px;background:#fff6f0;
 #mietklar-app .mr-result[data-tone=negative]{border-color:var(--mr-brand)}
 #mietklar-app .mr-good[data-tone=negative]{color:var(--mr-brand)}
 
+#mietklar-app .mr-storage-panel{margin:0;padding:0;border-top:0;border-bottom:1px solid var(--mr-line)}
+#mietklar-app .mr-storage-panel>summary{padding:12px 24px;min-height:48px;font-size:13px;cursor:pointer}
+#mietklar-app .mr-storage-badge{display:inline-block;margin-left:8px;padding:2px 7px;border-radius:6px;background:var(--mr-soft);font-size:11px;color:var(--mr-brand)}
+#mietklar-app .mr-storage-body{padding:4px 24px 18px}
+#mietklar-app .mr-remember{display:flex;align-items:flex-start;gap:10px;font-size:14px;cursor:pointer}
+#mietklar-app .mr-remember input{width:20px;height:20px;min-width:20px;margin:2px 0 0;padding:0;accent-color:var(--mr-brand)}
+#mietklar-app .mr-storage-status{font-size:12px;margin:12px 0}
+#mietklar-app .mr-storage-status[data-state=error]{color:var(--mr-brand)}
+#mietklar-app .mr-storage-actions{display:flex;flex-wrap:wrap;gap:8px}
+#mietklar-app .mr-storage-actions button{font-size:12px}
+
+
 
 

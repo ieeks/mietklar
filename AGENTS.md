@@ -9,3 +9,5 @@ Vor Änderungen README.md, HANDOVER.md und ROADMAP.md lesen. Bei Steuer-/Mietrec
 - Alpha-Annahmen sichtbar halten. Keine vollständige Steuer-/Rechtsprüfung oder erfolgreichen Browser-/Deployment-Test behaupten, wenn diese nicht durchgeführt wurden.
 - Fachliche Änderungen anhand unabhängiger Grenz-/Gegenbeispiele prüfen: npm run check und npm test.
 - HANDOVER und ROADMAP nach relevanten Änderungen auf den tatsächlichen Stand aktualisieren.
+- Speicherformatänderungen zusätzlich mit docs/STORAGE.md abgleichen. Alte/unlesbare Stände nie stillschweigend löschen oder überschreiben; Migration explizit und geprüft durchführen. Persönliche JSON-Sicherungen nicht ins Repo übernehmen.
+

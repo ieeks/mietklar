@@ -35,7 +35,7 @@ Kauf nur als ohnehin geplantes Szenario vergleichen. Bei mehrjähriger AfA nur d
 
 ## UX-Entscheidungen und offene Punkte
 
-Geführter Ablauf und Akzentpunkt bestätigt. Noch feinzuplanen: Fragefolge zur mietrechtlichen Einordnung, Begriffe/Beispiele pro Kostenposition, flexible Einzelpositionen, Ergebnisdarstellung auf iPhone, Speichern/Export, detaillierte Steuerhilfen. Die App soll klein und verständlich bleiben.
+Geführter Ablauf und Akzentpunkt bestätigt. Flexible Einzelpositionen und freiwilliges Speichern/Export sind implementiert. Noch feinzuplanen: Fragefolge zur mietrechtlichen Einordnung, Begriffe/Beispiele pro Kostenposition, Ergebnisdarstellung auf iPhone und detaillierte Steuerhilfen. Die App soll klein und verständlich bleiben.
 
 ## Technische Leitplanken
 
@@ -49,3 +49,6 @@ Alpha-0.3-Stand: AfA-Hilfe mit vier Eingabewegen, einfacher Kaufherleitung nach 
 
 
 Alpha-0.4-Stand: Beide Rechenrichtungen und getrennte Einkommenswege sind implementiert. Fixe Hauptmiete liefert Überschuss oder Zuschuss; bereits bereinigte Gehaltsbasis bleibt ohne erneuten Werbungskostenabzug. Alle weiteren Modellgrenzen gelten in beiden Richtungen identisch.
+
+Alpha-0.5-Stand: Freiwillige lokale Speicherung, Löschen sowie versionierter JSON-Export/-Import mit Rückgängig sind implementiert. Entwürfe bleiben erhalten; Dateiprüfung ersetzt keine fachliche Prüfung. Keine Übernahme gespeicherter Ergebnisse/Tarife und kein automatischer Geräteabgleich. Der nächste größere Rechenblock bleibt Vermietungsbeginn/Leerstand.
+

@@ -3,7 +3,24 @@
 
 
 <div class="mr-app">
-<header class="mr-top"><button type="button" class="mr-wordmark" data-home aria-label="mietklar. – Zur Startseite" title="Zur Startseite">mietklar<span style="color:var(--mr-brand)">.</span></button><span class="mr-year">Alpha 0.4 · 2026</span></header><div class="mr-help alpha"><strong>Alpha · fiktive Beispieldaten.</strong> Bedienungs- und Tarifmodell für 12 vermietete Monate ohne USt. Ungeklärte Steuerabzüge werden mit 0 € angesetzt. Keine vollständige Steuer- oder Mietrechtsprüfung.</div>
+<header class="mr-top"><button type="button" class="mr-wordmark" data-home aria-label="mietklar. – Zur Startseite" title="Zur Startseite">mietklar<span style="color:var(--mr-brand)">.</span></button><span class="mr-year">Alpha 0.5 · 2026</span></header><div class="mr-help alpha"><strong>Alpha · fiktive Beispieldaten.</strong> Bedienungs- und Tarifmodell für 12 vermietete Monate ohne USt. Ungeklärte Steuerabzüge werden mit 0 € angesetzt. Keine vollständige Steuer- oder Mietrechtsprüfung.</div>
+<details class="mr-storage-panel" data-storage-panel>
+<summary>Speichern &amp; Sicherung <span class="mr-storage-badge" data-storage-badge>Aus</span></summary>
+<div class="mr-storage-body">
+<label class="mr-remember"><input type="checkbox" data-remember disabled><span>Eingaben in diesem Browser merken</span></label>
+<div class="mr-hint">Speichert deinen Stand inklusive Gehalt, Kosten und AfA auf diesem Gerät in diesem Browser. Auch unvollständige Eingaben bleiben erhalten. Ergebnisse werden beim Laden neu berechnet.</div>
+<p class="mr-storage-status" data-storage-status role="status" aria-live="polite">Speicherung ist aus. Ohne Sicherung gehen die Eingaben beim Neuladen verloren.</p>
+<div class="mr-storage-actions">
+<button type="button" data-export-backup disabled>Sicherung exportieren</button>
+<button type="button" data-import-backup disabled>Sicherung importieren</button>
+<button type="button" data-delete-saved disabled>Lokale Speicherung löschen</button>
+<button type="button" data-undo-import hidden>Letzten Import rückgängig machen</button>
+<button type="button" data-recover-saved hidden>Nicht geladenen Speicherstand herunterladen</button>
+</div>
+<input type="file" accept=".json,application/json" data-import-file hidden>
+<div class="mr-hint">Die Sicherungsdatei enthält dieselben persönlichen Eingaben. Für ein anderes Gerät exportieren und dort importieren. Lokales Löschen entfernt den gespeicherten Stand; deine aktuelle Sitzung bleibt erhalten.</div>
+</div></details>
+
 <div class="mr-progress"><span data-progress-text>Schritt 1 von 5 · Ziel &amp; Einkommen</span><div class="mr-dots" aria-hidden="true"><span class="mr-dot" data-on="true"></span><span class="mr-dot"></span><span class="mr-dot"></span><span class="mr-dot"></span><span class="mr-dot"></span></div></div>
 <main class="mr-main">
 <section class="mr-step-panel" data-panel="0">
@@ -160,7 +177,7 @@
 </section>
 <section class="mr-step-panel" data-panel="4" hidden>
 <div class="mr-eyebrow">Anschaffung vergleichen</div><h2>Was kostet es dich<br>nach Steuern?</h2><p>Vergleiche eine ohnehin geplante Anschaffung für die vermietete Wohnung.</p>
-<label class="mr-field">Anschaffung<input data-key="item" type="text" value="Kühlschrank"></label>
+<label class="mr-field">Anschaffung<input data-key="item" type="text" maxlength="200" value="Kühlschrank"></label>
 <div class="mr-fields"><label class="mr-field">Kaufpreis (€)<input data-key="purchase" type="number" min="0" value="500" inputmode="decimal"></label><label class="mr-field">Steuerliche Behandlung<select data-key="treatment"><option value="instant">Sofortabzug · Annahme</option><option value="afa">Abschreibung</option></select></label></div>
 <label class="mr-field" data-purchase-afa hidden>Bestätigter AfA-Betrag im Kaufjahr (€)<input data-key="purchaseAfa" type="number" min="0" value="100" inputmode="decimal"></label>
 <div class="mr-help">Beispiel: vollständig für die vermietete Wohnung, ohne Vorsteuerabzug. Sofortabzug und Jahres-AfA müssen im Einzelfall passen.</div>
@@ -168,7 +185,7 @@
 </section>
 <div class="mr-error" role="alert" data-error hidden></div><noscript>Bitte JavaScript aktivieren, um die Alpha zu verwenden.</noscript>
 <nav class="mr-nav" aria-label="Rechenschritte"><button type="button" data-back class="">← Zurück</button><button type="button" disabled data-next class="mr-primary ">Weiter zu den Kosten →</button></nav>
-<div class="mr-note">Alpha 0.4 · Sämtliche vorausgefüllten Zahlen sind fiktive Beispiele. Keine automatische Speicherung.</div>
+<div class="mr-note">Alpha 0.5 · Sämtliche vorausgefüllten Zahlen sind fiktive Beispiele. Speicherung nur nach deiner Auswahl unter „Speichern &amp; Sicherung“.</div>
 </main></div>
 
 </div>
@@ -195,6 +212,7 @@
 
 <script type="module" src="./src/ui.js"></script>
 </body></html>
+
 
 
 

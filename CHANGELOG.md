@@ -1,5 +1,9 @@
 # Änderungen
 
+## 0.5.0-alpha.1 – 19.10.2026
+
+Freiwillige lokale Speicherung inklusive Entwürfen, Rechenrichtung, Schritt, Kostenkarten und AfA-Herkunft. Speicherung zunächst aus; Löschen erhält die aktuelle Sitzung. Versionierter JSON-Export/-Import mit Größen-/Struktur-/Feldprüfung und gleichem Steuerjahr. Letzten Import rückgängig machen. Fehlerhafte Speicherstände bleiben erhalten und können heruntergeladen werden; Änderungen in anderem Tab pausieren lokale Schreibvorgänge. 52 automatisierte Tests; DOM-Funktionen zusätzlich geprüft, visuelle Safari-Abnahme offen. Finanzielle Berechnung gegenüber Alpha 0.4 unverändert.
+
 ## 0.4.0-alpha.1 – 19.10.2026
 
 Vorwärtsmodus mit fester Hauptmiete und Überschuss bzw. nötigem Zuschuss. Rechenrichtung ohne Verlust der Eingaben wechseln. KZ 245 und bereits bereinigte Gehaltsbasis als getrennte Eingabewege, keine doppelten Werbungskostenabzüge. 132-€-Pauschale oder höhere darauf anzurechnende Werbungskosten im einfachen Arbeitnehmer-Modell. Anschaffungsvergleich hält die Miete in beiden Richtungen unverändert. 40 automatisierte Rechentests und erweiterter DOM-Funktionsdurchgang; visuelle Safari-Abnahme weiterhin offen.
@@ -19,6 +23,7 @@ Wortmarke als Home-Button: von jedem Schritt direkt zu Ziel & Einkommen, ohne Ei
 ## 0.1.0-alpha.1 – 18.10.2026
 
 Erster GitHub-Checkpoint des gemeinsam abgestimmten geführten Mietrechners. Laufende Kosten, AfA, 2026-Tarif, Zielmiete und Anschaffungsvergleich mit offen ausgewiesenen Vereinfachungen. Fiktive öffentliche Beispieldaten, separater Rechenkern, 11 Tests, Projektplan, Recherche, Handover und Roadmap. Noch keine produktive Freigabe und kein aktiviertes GitHub Pages.
+
 
 
 

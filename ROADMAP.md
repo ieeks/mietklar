@@ -44,10 +44,18 @@
 - [ ] Abstand zur Tarifgrenze anzeigen und sachlichen Hinweis anbieten: geplante Anschaffung vergleichen, kein Kaufdruck.
 - [ ] Jahres-/Folgejahreswirkung zeigen; Steuerersparnis nicht als Kaufpreis-Rabatt darstellen.
 
+## Alpha 0.5 – Eingaben behalten
+
+- [x] Freiwillige Browserspeicherung, zunächst aus; gültigen vorher gespeicherten Stand wiederherstellen.
+- [x] Unvollständige Entwürfe und dynamische Kostenkarten behalten; Ergebnisse neu berechnen.
+- [x] Ausschalten/Löschen nur für den lokalen App-Stand; aktuelle Sitzung erhalten.
+- [x] Versionierter JSON-Import/-Export mit Struktur-, Größen-, Werte- und Steuerjahresprüfung; letzten Import rückgängig machen.
+- [x] Unlesbare Speicherstände erhalten und herunterladbar machen; Speicherfehler sichtbar melden; bei Änderungen in anderem Tab pausieren.
+- [ ] Speicherung/Neuladen, Dateiexport/-import und Löschverhalten auf iPhone/Safari abnehmen.
+
 ## Komfort und Veröffentlichung
 
 - [ ] Ziel-Sensitivität 500 / 750 / 1.000 / 1.250 / 1.500 €.
-- [ ] Opt-in-Browserspeicherung, Löschen und versionierter JSON-Import/-Export mit Validierung.
 - [ ] Druckansicht als PDF über Browserdruck.
 - [ ] Bedienung mit Tastatur, Fokus, Fehlermeldungen, 320-px-Layout und Safari abnehmen.
 - [x] GitHub Pages aktiviert; Live-Alpha vom Nutzer aufgerufen und auf iPhone/Safari getestet: https://ieeks.github.io/mietklar/.
@@ -56,6 +64,7 @@
 ## Später, bei Bedarf
 
 PDF-/OCR-Import, mehrere Eigentümer/Objekte, Rendite, Kredit oder Airbnb. Diese Erweiterungen sind nicht Voraussetzung für die erste kleine App.
+
 
 
 

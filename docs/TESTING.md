@@ -1,11 +1,11 @@
-# Prüfung der Alpha 0.4
+# Prüfung der Alpha 0.5
 
 Stand: 19.10.2026.
 
 ## Erfolgreich lokal ausgeführt
 
-- `npm run check`: Syntax von UI, Rechenkern, Kosten-, AfA- und Planungsmodul.
-- `npm test`: 40 Rechen-/Kosten-/AfA-/Planungstests bestanden (30 bestehende, 10 neue).
+- `npm run check`: Syntax von UI, Rechenkern, Kosten-, AfA-, Planungs-, Speicher- und Speicherbedienungsmodul.
+- `npm test`: 52 Rechen-/Kosten-/AfA-/Planungs-/Speichertests bestanden (40 bestehende, 12 neue).
 - HTML-Nesting und eindeutige IDs statisch geprüft.
 - Zusätzlicher DOM-Funktionsdurchgang mit temporärem jsdom außerhalb der Projektabhängigkeiten: Navigation/Home und Fokus, Erhalt der Eingaben, getrennte Erstattung/Abzüge, Monat/Jahr, überhöhte Teilbeträge, inaktive leere Felder, neue Position/Entfernen, Textausgabe ohne HTML-Injektion, USt-Ergebnisunterdrückung und Anschaffungsgrenze.
 - Keine zusätzlichen Produktionsabhängigkeiten.
@@ -47,19 +47,43 @@ Weitere Fälle: höhere/niedrigere Werbungskosten, negative Gehaltsbasis als sic
 
 DOM-Funktionsdurchgang erweitert: beide Modi, richtige Überschriften/Beträge, Erhalt aller Eingaben, leeres inaktives Ziel, direkte Einkommensbasis trotz ungültiger inaktiver KZ-245-Felder, keine Doppelabzüge, Custom-Werbungskosten, negative Salden als Zuschuss, Ergebniswechsel mit Fokus, Kaufvergleich ohne Mieterhöhung. Kosten- und AfA-Funktionsfälle erneut enthalten.
 
+## Speichern und Sicherung
+
+Zwölf zusätzliche automatisierte Testgruppen in `tests/persistence.test.js`: vollständiger Roundtrip ohne Ergebnis-/Tarifübernahme und ohne Objekt-Aliasing; leere/negative Entwürfe; ungültiges JSON, fremde App/Version/Jahr; unbekannte oder fehlende Schlüssel inklusive Prototype-Payload; numerische Syntax/Endlichkeit/Größen und Textdaten; Typen/Auswahlen/Schritt/Textlängen; Kostenarten und unveränderliche Rücklagenregel; 100-Positionen- und UTF-8-Größengrenzen; Herkunft des übernommenen Grundanteils; kanonische Zeitstempel und unveränderte beschädigte Speicherstände; eigene Kennung bei Schreiben/Lesen/Löschen; propagierte Zugriffs-/Quota-/Löschfehler.
+
+Zusätzlich zwölf DOM-Funktionsgruppen mit temporärem jsdom, ohne neue Projektabhängigkeit:
+
+1. Anfangs aus; Bearbeiten/Verlassen schreibt nichts. Export funktioniert ohne Opt-in und liefert passenden Dateinamen/Inhalt.
+2. Einschalten, dynamische Karten, Quellen, Rechenrichtung, Schritt und AfA-Herkunft speichern. Neue DOM-Instanz stellt die Werte wieder her und berechnet denselben Ergebniswert. Laden schreibt nicht neu. Grundanteil-Herkunft invalidiert nach Änderung weiterhin korrekt.
+3. Leere aktive Felder bleiben als Entwurf erhalten; nach Laden kein veraltetes Ergebnis. Ausschalten entfernt nur die eigene Kennung, erhält aktuelle Eingaben und verhindert ausstehendes erneutes Speichern.
+4. Import/Rückgängig bei aus- und eingeschalteter Speicherung. Beschädigte, fremde Jahres-/Versionsdateien, Zusatzfelder und übergroße Dateien lassen den Stand unverändert.
+5. Andere Tabs pausieren ausstehende Schreibvorgänge; unlesbarer neuer Stand wird geschützt, fremdes Löschen hebt die Sperre wieder auf. Aktuelle Eingaben bleiben bestehen.
+6. Nicht unterstützte gespeicherte Version bleibt original erhalten und herunterladbar. Gültiger Dateiimport überschreibt sie bei ausgeschalteter Speicherung nicht; bewusstes Löschen entsperrt die App.
+7. Gesperrter Browserzugriff: Import/Export bleiben nutzbar.
+8. Quota-Fehler: kein falsches „gespeichert“, Schalter bleibt nach fehlgeschlagenem Einschalten aus.
+9. Fehlgeschlagenes Löschen: Meldung sichtbar, gespeicherter Stand bleibt erhalten, automatisches Speichern stoppt.
+10. Älteres verzögertes Dateilesen kann einen neueren Import nicht überholen.
+11. 100 importierte Kostenpositionen sperren Hinzufügen; Entfernen erlaubt es wieder.
+12. Unerwartete Ausnahme während der Übernahme setzt den vorherigen Stand zurück und schreibt keine Speicherung.
+
+Der gesamte bisherige Kosten-/AfA-/Planungs-DOM-Durchgang wurde mit Alpha 0.5 erneut erfolgreich ausgeführt. Ein zusätzlicher Controller-Durchgang bestätigt den tatsächlichen 400-ms-Speichertimer, Flush bei verstecktem Dokument, Erhalt des letzten Standes bei späterem Quota-Fehler, erfolgreiches erneutes Speichern und Ignorieren fremder Speicherkennungen. Diese DOM-Durchgänge sind ergänzende lokale Prüfungen, kein im CI eingerichteter echter Browserlauf. Dateidownload wurde über Blob-Inhalt/Dateinamen geprüft; der native iOS-Dateidialog wurde nicht getestet.
+
 ## Manuelle und externe Nachweise
 
 - Nutzer bestätigte am 19.10.2026 den iPhone-/Safari-Bedienungstest der vorherigen Alpha 0.1.
 - GitHub Pages ist aktiviert. Die zuvor veröffentlichte Alpha wurde vom Nutzer aufgerufen.
 - Der alte Alpha-0.1-Safari-Durchgang ist keine Abnahme der neuen Kosten-/AfA-Oberfläche.
 - Alpha 0.2: GitHub Actions und Pages-Deployment für Commit 6a9e5c98bbfda49666aa7d5748aef8d284a12b3e erfolgreich bestätigt.
+- Alpha 0.4: GitHub Actions und Pages-Deployment für Commit b6662037f19c64d2349049f1800aaa04dad7aba8 erfolgreich bestätigt.
 
 ## Nicht durchgeführt / noch offen
 
-- Kein visueller Browserlauf der Alpha 0.4: Chromium fehlt; Installationsversuch lieferte ein unbrauchbares Archiv. DOM-Prüfung ist kein Browser-Rendering-Test.
-- Neue Kostenkarten, AfA-Hilfe, Rechenrichtungen und Einkommenswege auf iPhone/Safari, 320-px-Layout, Fokus/Tastatur und native Dezimaleingabe visuell prüfen.
+- Kein visueller Browserlauf der Alpha 0.5: Chromium fehlt; früherer Installationsversuch lieferte ein unbrauchbares Archiv. DOM-Prüfung ist kein Browser-Rendering-Test.
+- Neue Kostenkarten, AfA-Hilfe, Rechenrichtungen, Einkommenswege und Speicherpanel auf iPhone/Safari, 320-px-Layout, Fokus/Tastatur und native Dezimaleingabe visuell prüfen.
+- Auf iPhone/Safari mit fiktiven Daten: Speicherung einschalten → Werte ändern → neu laden; Datei in „Dateien“ exportieren → Wert ändern → importieren → rückgängig machen; Speichern ausschalten → neu laden. Auch privates Surfen/Speicherverweigerung und mehrere Tabs manuell prüfen.
 - Zeitpunkte/Abfluss, Leerstand, mehrere Eigentümer, USt/Vorsteuer und vollständige persönliche Veranlagung sind nicht implementiert und nicht abgedeckt.
 - Ein lokales Bestehen ist kein Nachweis des GitHub-Actions-/Pages-Laufs für den neuen Commit; dessen Status separat prüfen.
+
 
 
 

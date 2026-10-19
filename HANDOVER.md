@@ -1,4 +1,4 @@
-# Übergabe: mietklar. Alpha 0.4
+# Übergabe: mietklar. Alpha 0.5
 
 Stand: 19.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADMAP, docs/RESEARCH lesen. Danach zuerst den aktuellen Branch/Commit prüfen; die nächste Sitzung nicht aus dem Gesprächsgedächtnis rekonstruieren.
 
@@ -35,7 +35,11 @@ Grundanteil-Hilfe: Bedingungen für 20/30/40 % aus GrundanteilV 2016, gesonderte
 
 Reguläre Startjahr-AfA bei 0/1–6/7–12 Nutzungsmonaten = 0/halb/voll. Diese Vorschau ändert **nicht** die Zielmiete für 12 vermietete Monate. Sonder-/beschleunigte AfA wird nicht automatisch berechnet. Gekaufter Altbestand bis 2002, frühere Vermietung und andere Erwerbsarten führen zur separaten Prüfung statt automatischer neuer Basis. Bestätigte Sonderwerte können über Jahreswert/Basis übernommen werden.
 
-`data/tarif-2026.json`: zentrale Tarifquelle mit Prüfdatum. 40 automatisierte Rechen-/Kosten-/AfA-/Planungstests. Die GitHub-Actions-Prüfung führt Syntax und Tests bei Push/PR aus.
+`src/persistence.js`: striktes versioniertes Eingabeformat, Dateigröße/Feldtypen/Auswahlen prüfen, keine Ergebnisse oder Tarife speichern. Rohwerte einschließlich leerer und negativer Entwürfe bleiben erhalten; fachliche Prüfung weiter im Rechner. Gleiche Tarifjahre erforderlich. Stabile lokale Kennung `mietklar:saved-inputs`, Schema 1. Format, Grenzen und Migrationsregeln in docs/STORAGE.md.
+
+`src/storage-ui.js`: Opt-in zunächst aus, vorhandener gültiger Speicherstand stellt die frühere Auswahl wieder her. Speichern nach 400 ms sowie bei ausstehender Änderung beim Verlassen/Verbergen der Seite. Aus/Löschen entfernt nur die App-Kennung und lässt aktuelle Eingaben stehen. JSON-Import/-Export auch ohne Speichern; Import übernimmt die aktuelle Speicherwahl, schaltet sie nicht ein. Letzten Import innerhalb der Sitzung rückgängig machen. Vor Übernahme vollständig strukturell prüfen; bei unerwartetem Anwendungsfehler Formular zurücksetzen. Unlesbare/neuere/fremde Jahresstände nicht überschreiben: automatische Speicherung sperren, Original herunterladen oder löschen lassen. Speicherfehler sichtbar melden; keine falsche Erfolgsbestätigung. Änderung in anderem Tab pausiert hier die Speicherung, kein automatischer Geräte-/Tab-Abgleich.
+
+`data/tarif-2026.json`: zentrale Tarifquelle mit Prüfdatum. 52 automatisierte Rechen-/Kosten-/AfA-/Planungs-/Speichertests. Die GitHub-Actions-Prüfung führt Syntax und Tests bei Push/PR aus. Keine neuen Produktionsabhängigkeiten.
 
 ## Wichtige Alpha-Annahmen und offene Punkte
 
@@ -58,9 +62,9 @@ Die Vorschreibung enthält getrennte BK, Wasser, Heizung, Warmwasser, I-Fonds. J
 
 ## Sinnvoller nächster Arbeitsblock
 
-1. Neue Kosten-/AfA-Oberfläche und beide Rechenrichtungen auf iPhone/Safari ausprobieren. Der Nutzer hat die Bedienung der vorherigen Alpha 0.1 am 19.10.2026 bestätigt; das ist keine Abnahme der neuen Karten.
+1. Neue Kosten-/AfA-Oberfläche, beide Rechenrichtungen und Speichern auf iPhone/Safari ausprobieren. Insbesondere Neuladen, Export in Dateien, erneuter Import und Ausschalten/Löschen. Der Nutzer hat die Bedienung der vorherigen Alpha 0.1 am 19.10.2026 bestätigt; das ist keine Abnahme der neuen Karten.
 2. Detaillierte bedingte Kostenhinweise/Kostenarten ausbauen und Garage fachlich führen. MRG-/Vertragseinordnung nicht automatisch freigeben.
-3. Opt-in-Browserspeicherung mit Löschen und versioniertem Import/Export ergänzen. Danach Jahresmodell mit Vermietungsbeginn/Leerstand. AfA-Sonderfälle und weitere Erwerbsarten nur mit eigenen fachlichen Regeln ausbauen.
+3. Nächster größerer Rechenblock: tatsächliches Vermietungsjahr mit Vermietungsbeginn/Leerstand. Vorher Regeln und Gegenbeispiele festlegen; Zahlung, Ertrag, Steuerabzug und AfA nicht pauschal gemeinsam kürzen. AfA-Sonderfälle und weitere Erwerbsarten nur mit eigenen fachlichen Regeln ausbauen.
 4. Persönlichen Fall anhand privater Unterlagen gegenprüfen, ohne Daten zu veröffentlichen. USt-Voraussetzungen separat verifizieren.
 
 GitHub Pages ist aktiviert: https://ieeks.github.io/mietklar/. Änderungen auf main veröffentlichen automatisch.
@@ -73,11 +77,12 @@ npm test
 python3 -m http.server 8080
 ```
 
-Syntax und 40 Rechen-/Kosten-/AfA-/Planungstests erfolgreich. Browser-Rendering der neuen Oberfläche ist nicht bestätigt: Chromium fehlt; Downloadversuch lieferte ein unbrauchbares Archiv. Ein zusätzlicher DOM-Funktionsdurchgang (ohne Browser-Rendering) mit temporärem jsdom bestand: Kosten-/AfA-Regression plus beide Rechenrichtungen, Erhalt der Werte, inaktive Felder, direkte Einkommensbasis, Werbungskosten, Zuschuss-Ergebnis und unveränderte Hauptmiete im Kaufvergleich. Details in docs/TESTING.md. Manueller Safari-Test der vorherigen Version bleibt als historischer Nachweis erhalten.
+Syntax und 52 Rechen-/Kosten-/AfA-/Planungs-/Speichertests erfolgreich. Browser-Rendering der neuen Oberfläche ist nicht bestätigt: Chromium fehlt; früherer Downloadversuch lieferte ein unbrauchbares Archiv. Zusätzlich DOM-Funktionsdurchgänge mit temporärem jsdom, ohne Browser-Rendering; tatsächliche Fälle und Status stehen in docs/TESTING.md. Manueller Safari-Test der vorherigen Version bleibt als historischer Nachweis erhalten.
 
 ## Projektpflege
 
 Kleine statische App ohne unnötiges Framework. Keine echten Finanzdaten in Fixtures. Rechenkern und UI getrennt halten. Bei fachlicher Änderung Gegenbeispiele ergänzen. Dokumente nach dem endgültigen Stand umschreiben; ROADMAP erledigte Punkte markieren. Nicht versehentlich persönliche PDFs, OCR-Zwischendateien oder den gesamten Scratch-Ordner committen.
+
 
 
 
