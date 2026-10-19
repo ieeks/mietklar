@@ -5,6 +5,7 @@ const key = 'mietklar:saved-inputs';
 async function openSection(page, name) {
   const details = page.locator('[data-section="' + name + '"]');
   if (!await details.evaluate(node => node.open)) await details.locator(':scope > summary').click();
+  await expect(details).toHaveAttribute('open', '');
 }
 async function openStorage(page) {
   const details = page.locator('[data-storage-panel]');

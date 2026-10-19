@@ -10,3 +10,5 @@ const files = walk('test-results');
 files.filter(path => path.endsWith('error-context.md')).forEach(path => console.log('BROWSER_CONTEXT ' + path + '\n' + readFileSync(path, 'utf8').slice(0, 12000)));
 const screenshot = files.find(path => path.includes('chromium') && path.endsWith('/mobile.png'));
 if (screenshot) console.log('QA_MOBILE_PNG=' + readFileSync(screenshot).toString('base64'));
+const pdf = files.find(path => path.includes('chromium') && path.endsWith('/ergebnis.pdf'));
+if (pdf) console.log('QA_RESULT_PDF=' + readFileSync(pdf).toString('base64'));

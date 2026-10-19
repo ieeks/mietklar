@@ -21,7 +21,7 @@ function assumptionsFor(result) {
 function renderFlow(root, result) {
   const q = s => root.querySelector(s), doc = root.ownerDocument;
   const flow = buildFlow(result);
-  q('[data-flow-title]').textContent = flow.shortfall > 0 ? 'Diese Ausgaben musst du decken' : 'So verteilen sich deine Mietereinnahmen';
+  q('[data-flow-title]').textContent = flow.shortfall > 0 ? 'Diese Ausgaben musst du decken' : 'Aufteilung der Einnahmen';
   const bar = q('[data-flow-bar]'), legend = q('[data-flow-legend]');
   bar.replaceChildren(); legend.replaceChildren();
   flow.segments.forEach(segment => {
@@ -37,7 +37,7 @@ function renderFlow(root, result) {
   bar.setAttribute('aria-label', flow.segments.map(row => row.label + ': ' + money(row.displayValue)).join('; '));
   q('[data-flow-note]').textContent = flow.shortfall > 0
     ? 'Mietereinnahmen ' + money(flow.income) + ' + nötiger Zuschuss ' + money(flow.shortfall) + ' = Ausgaben ' + money(flow.total) + ' im Monatsdurchschnitt. Kein positiver Überschuss.'
-    : 'Gesamte Mietereinnahmen inkl. Kostenersatz: ' + money(flow.income) + ' im Monatsdurchschnitt über zwölf Monate. AfA ist in der Steuer enthalten, keine zusätzliche Zahlung.';
+    : money(flow.income) + ' Mietereinnahmen inkl. Kostenersatz · Ø/Monat. AfA ist keine zusätzliche Zahlung.';
 }
 
 function renderPrint(root, result, notes, reference) {
@@ -95,7 +95,7 @@ export function renderResult(root, result, tariff) {
   q('[data-result-content]').hidden = !allowed; q('[data-result-details]').hidden = !allowed;
   q('[data-print]').disabled = !allowed;
   q('[data-caveat]').textContent = allowed
-    ? period.rentMonths + ' Mietmonate · Monatsüberschuss = Jahresergebnis ÷ 12. Offene Abzüge sind vorerst 0 €. Kleinunternehmerbefreiung als Annahme.'
+    ? period.rentMonths + ' Mietmonate · Saldo = Jahresergebnis ÷ 12. Offene Abzüge: 0 €. Ohne USt (Annahme).'
     : 'Für diesen Umsatzsteuerstatus gibt es kein Ergebnis. Bitte unter „Gebäude-AfA & Umsatzsteuer“ den Status prüfen.';
   q('[data-shortfall-note]').hidden = !shortfall || !allowed;
   q('[data-shortfall-note]').textContent = 'Im Jahresdurchschnitt fehlen dir ' + money(Math.abs(cash)) + ' pro Monat. Ein möglicher steuerlicher Verlustausgleich ist nicht berücksichtigt.';
@@ -117,6 +117,7 @@ export function renderResult(root, result, tariff) {
   q('[data-summary="purchase"]').textContent = result.purchaseError ? 'Bitte prüfen' : money(purchase.price) + ' · optional';
   const reference = comparePerSquareMetre(solved.rent, f.area, f.referenceRent);
   q('[data-per-area]').textContent = reference.value === null ? reference.message : money(reference.value) + ' / m² bei ' + decimal(numeric(f.area)) + ' m²';
+  q('[data-per-area]').hidden = f.area === '' && f.referenceRent === '';
   q('[data-reference-note]').hidden = !reference.above;
   q('[data-reference-note]').textContent = reference.above ? 'Über deinem Vergleichswert von ' + money(reference.reference) + '/m². Eigene Orientierung, keine gesetzliche Mietpreisgrenze.' : '';
   q('[data-summary="reference"]').textContent = reference.value === null ? 'Optional' : money(reference.value) + ' / m²';

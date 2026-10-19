@@ -20,7 +20,7 @@ export function renderForm(root, state) {
   all('[data-year-afa-section]').forEach(node => node.hidden = node.dataset.yearAfaSection !== f.yearAfaMode);
   q('[data-afa-evidence-wrap]').hidden = f.afaMode === 'unknown';
   q('[data-purchase-afa]').hidden = f.treatment !== 'afa';
-  q('[data-target-label]').textContent = 'Wunschüberschuss · Durchschnitt / Monat (€)';
+  q('[data-target-label]').textContent = 'Wunschüberschuss · Ø / Monat (€)';
   q('[data-year-result]').hidden = false;
   all('[data-total-label]').forEach(node => node.textContent = 'Mietereinnahmen · Durchschnitt / Monat');
   all('[data-tenant-label]').forEach(node => node.textContent = 'Kostenersatz · Durchschnitt / Monat');

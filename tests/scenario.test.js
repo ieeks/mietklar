@@ -78,6 +78,7 @@ test('flow uses total annual receipts including reimbursements, with no duplicat
   assert.equal(flow.segments.find(row => row.key === 'costs').value, 260);
   assert.ok(Math.abs(flow.total - flow.income) < 1e-9);
   assert.equal(Math.round(flow.segments.reduce((sum, row) => sum + row.displayValue, 0) * 100), Math.round(flow.total * 100));
+  assert.equal(flow.segments[3].displayValue, Math.round(result.solved.monthlyCash * 100) / 100);
   assert.ok(Math.abs(flow.segments.reduce((sum, row) => sum + row.percent, 0) - 100) < 1e-9);
 });
 

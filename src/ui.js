@@ -12,6 +12,7 @@ import { renderResult, renderError } from './result-view.js';
   const field = key => q('[data-key="' + key + '"]');
   const editor = createCostEditor(root);
   let tariff, persistence, calculationMode = 'target', adoptedLandSuggestion = false, legacyStep = 0;
+  let lastFingerprint = null, lastValid = false;
 
   function captureState() {
     return { fields: Object.fromEntries(all('[data-key]').map(node => [node.dataset.key, node.value])),
@@ -21,6 +22,7 @@ import { renderResult, renderError } from './result-view.js';
     all('[data-key]').forEach(node => { node.value = state.fields[node.dataset.key]; });
     editor.restore(state.costs); calculationMode = state.calculationMode;
     legacyStep = state.step; adoptedLandSuggestion = state.adoptedLandSuggestion;
+    lastFingerprint = null;
   }
   function locateField(key) {
     if (!key?.startsWith('cost:')) return key ? field(key) : null;
@@ -28,9 +30,14 @@ import { renderResult, renderError } from './result-view.js';
     const suffix = { taxAnnual: 'tax-annual', paymentMonths: 'payment-months', yearTaxAnnual: 'year-tax-annual' }[name] || name;
     return all('[data-cost-row]')[Number(index)]?.querySelector('[data-cost-' + suffix + ']');
   }
-  function compute(light = false) {
+  function compute(light = false, force = false) {
     if (!tariff) return false;
     const state = captureState();
+    const fingerprint = JSON.stringify(state);
+    // A native change event often repeats the preceding input on blur. Avoid
+    // replacing summary text during the pointer event that opens its details.
+    if (!force && fingerprint === lastFingerprint) return lastValid;
+    lastFingerprint = fingerprint;
     all('[aria-invalid="true"]').forEach(node => node.setAttribute('aria-invalid', 'false'));
     try {
       renderForm(root, state);
@@ -38,12 +45,12 @@ import { renderResult, renderError } from './result-view.js';
       const result = evaluateScenario(state, tariff);
       q('[data-error]').hidden = true;
       renderResult(root, result, tariff);
-      return true;
+      lastValid = true; return true;
     } catch (error) {
       renderError(root, error);
       const input = locateField(error.field);
       if (input) input.setAttribute('aria-invalid', 'true');
-      return false;
+      lastValid = false; return false;
     }
   }
   function changed(light = false) { compute(light); persistence?.scheduleSave(); }
@@ -87,11 +94,11 @@ import { renderResult, renderError } from './result-view.js';
       if (suggestion.percent === null) return;
       field('afaLandPercent').value = String(suggestion.percent); field('afaLandStatus').value = 'estimate';
       adoptedLandSuggestion = true; changed(); field('afaLandPercent').focus();
-    } else if (button.hasAttribute('data-print') && compute() && field('vat').value === 'exempt') {
+    } else if (button.hasAttribute('data-print') && compute(false, true) && field('vat').value === 'exempt') {
       window.print();
     }
   });
-  window.addEventListener('beforeprint', () => compute());
+  window.addEventListener('beforeprint', () => compute(false, true));
 
   try {
     const response = await fetch(new URL('../data/tarif-2026.json', import.meta.url));

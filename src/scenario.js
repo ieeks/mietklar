@@ -107,15 +107,16 @@ export function buildFlow(result) {
   const shortfall = Math.max(0, -solved.monthlyCash);
   const segments = [
     { key: 'costs', label: 'Kosten', value: (costs.annualCashCosts - reserve) / 12 },
-    { key: 'reserve', label: 'Rücklage & Puffer', value: reserve / 12 },
-    { key: 'tax', label: 'Zusätzliche Steuer', value: solved.annualTax / 12 },
-    { key: 'cash', label: 'Für dich übrig', value: Math.max(0, solved.monthlyCash) }
+    { key: 'reserve', label: 'Rücklage/Puffer', value: reserve / 12 },
+    { key: 'tax', label: 'Steuer', value: solved.annualTax / 12 },
+    { key: 'cash', label: 'Überschuss', value: Math.max(0, solved.monthlyCash) }
   ];
   const total = segments.reduce((sum, row) => sum + row.value, 0);
   // Allocate display cents once so legend values add up to the displayed total.
   const cents = segments.map(row => Math.floor(Math.max(0, row.value) * 100));
+  cents[3] = Math.round(segments[3].value * 100); // Keep cash identical to the headline.
   let remainder = Math.round(total * 100) - cents.reduce((a, b) => a + b, 0);
-  const order = segments.map((row, i) => ({ i, fraction: row.value * 100 - cents[i] })).sort((a, b) => b.fraction - a.fraction);
+  const order = segments.slice(0, 3).map((row, i) => ({ i, fraction: row.value * 100 - cents[i] })).sort((a, b) => b.fraction - a.fraction);
   for (let i = 0; i < remainder; i++) cents[order[i % order.length].i]++;
   return { income, shortfall, total, segments: segments.map((row, i) => ({ ...row, displayValue: cents[i] / 100,
     percent: total > 0 ? Math.max(0, row.value) / total * 100 : 0 })) };
