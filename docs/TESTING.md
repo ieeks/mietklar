@@ -45,7 +45,7 @@ Chromium und WebKit prüfen jeweils:
 5. Opt-in, Neuladen, Dateiexport, Import/Undo und ausschließlich eigene lokale Löschung.
 6. Tatsächliche Dateiimporte der alten Formate 1 und 2 bei ausgeschalteter Speicherung.
 7. Aktuelles Druckblatt und Print-CSS; zusätzlich PDF-Erzeugung in Chromium. Kein Nachweis des nativen OS-Druckdialogs.
-8. 320/390/1280-px-Breiten ohne Dokument-Überlauf, Fokus/Home, eigene Position und Textausgabe ohne HTML-Injektion.
+8. 320/390/1280-px-Breiten ohne Dokument-Überlauf, Fokus/Home, eigene Position und Textausgabe ohne HTML-Injektion. Ab Alpha 0.7.0-alpha.2 zusätzlich: „Alles zuklappen“ beim Scrollen erreichbar, alle Haupt-/Unterbereiche und Sicherung geschlossen, Fokus erhalten, Ergebnis und exportierte Eingabewerte unverändert; beim Wiederöffnen bleiben Untergruppen geschlossen.
 
 Browser-Nachweis: Commit `84d28f6889a0f0a01946639b26b763a38c528e26`, [Actions-Lauf 39296249582](https://github.com/ieeks/mietklar/actions/runs/39296249582): 80 reine Tests, Syntax und alle 16 Browserfälle erfolgreich, ohne Testwiederholung. Ein zunächst beobachteter WebKit-Aufklappfehler nach Zahlen-Blur wurde durch Vermeidung unveränderter doppelter Renderläufe korrigiert. Erneut bestanden nach letzter Druckkorrektur: Commit `a12c1e4002a2b840a6461932988a13070fdca419`, [Actions-Lauf 39296676398](https://github.com/ieeks/mietklar/actions/runs/39296676398), wiederum 80 + 16 ohne Retry. Die mobile 390-px-Aufnahme und beide Seiten des in Chromium erzeugten Ergebnisblatts wurden visuell geprüft: keine abgeschnittenen Spalten, Annahmen mit eigener Überschrift auf der Folgeseite. Abschließende Asset-Prüfung ebenfalls bestanden: Commit `862408a91f5240c735e253d0f7419f037827a57d`, [Actions-Lauf 39297708469](https://github.com/ieeks/mietklar/actions/runs/39297708469), Syntax/80 Tests und 16 Browserfälle ohne Retry. Alle angefragten Browsermodule, Stylesheet und Tarifdaten trugen die aktuelle Versionskennung. Danach nur Dokumentationsabschluss; den aktuellen Pages-Status bei späteren Sitzungen direkt auf GitHub prüfen. Automatische Screenshots/PDF/Report werden für sieben Tage als GitHub-Testartefakt mit ausschließlich fiktiven Daten aufbewahrt. Sie werden nicht ins Repository übernommen. Ein erzeugter Screenshot ist allein keine manuelle visuelle Abnahme.
 
@@ -60,3 +60,7 @@ Browser-Nachweis: Commit `84d28f6889a0f0a01946639b26b763a38c528e26`, [Actions-La
 - Neue Einseitenansicht mit echtem iPhone/Safari: Lesbarkeit, Einklappen, virtuelle Kommatastatur, Dateiablage/-auswahl und Druck-/PDF-Dialog. Linux-WebKit mit Mobile-Viewport ersetzt diesen Test nicht.
 - Neue Kalender-/Regeljahresbedienung manuell abnehmen; bisherige Speicher-Abnahme nicht still auf den ganzen Umbau übertragen.
 - Teilmonate, abweichende Zu-/Abflusszeitpunkte, Ausfälle, mehrere Eigentümer, USt/Vorsteuer und vollständige persönliche Veranlagung sind außerhalb des implementierten Modells.
+
+## Komfortänderung Alpha 0.7.0-alpha.2
+
+Commit `c903019d44b7e37132fca5fd3374d1fa938ffe63`, [Actions-Lauf 39300301463](https://github.com/ieeks/mietklar/actions/runs/39300301463): Syntax, Asset-Zuordnung, 80 reine Tests und alle 16 Chromium-/WebKit-Fälle erfolgreich. Der bestehende mobile Bedienungsfall prüft zusätzlich den erreichbaren Zuklapp-Button, geschlossene Untergruppen, Fokus und unveränderte Sicherungswerte. Die native iPhone-Abnahme bleibt offen.
