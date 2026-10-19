@@ -2,7 +2,7 @@
 
 ## Zwei getrennte Planungen
 
-**Volles Vermietungsjahr** behält das bisherige Modell: zwölf Mietmonate und voller Jahres-AfA-Wert. Ungenutzte Kalenderjahresfelder beeinflussen diesen Weg nicht.
+**Typisches Vermietungsjahr** verwendet seit Alpha 0.7 zusätzlich eigene erwartete Leerstandsmonate: Mietmonate = 12 minus erwarteter Leerstand (0–12). Zahlungen bleiben zwölf Monate, monatliche Erstattungen folgen Mietmonaten, Jahresabzüge und voller Jahres-AfA-Wert bleiben separat. Bei 0 erwartetem Leerstand bleibt das frühere Volljahresergebnis unverändert. Ungenutzte Kalenderjahresfelder beeinflussen diesen Weg nicht.
 
 **Kalenderjahr 2026** verwendet einen ersten möglichen Mietmonat und die Zahl voller Monate ohne Mieter ab diesem Monat. Laufende Mietverhältnisse beginnen für diese Planung im Jänner. Mietmonate = 13 − Startmonat − Leerstandsmonate. Leerstand darf die verfügbaren Monate nicht überschreiten. Die Monate davor erzeugen ebenfalls keine Hauptmiete. Die App entscheidet nicht, ob sie privat genutzt, zur Vermietung vorbereitet oder anderweitig verwendet wurden.
 
@@ -38,4 +38,4 @@ Fiktiver Gegenfall: Start Juli, kein weiterer Leerstand, Miete 2.000 €, Kosten
 
 ## Speicherung
 
-Schema 2 speichert Zeitraum, Startmonat, Leerstand, Jahres-AfA und je Kostenposition Zahlungsmonate/Jahresabzug zusätzlich. Gültige Schema-1-Sicherungen werden strikt geprüft und um sichere Defaults ergänzt. Alle alten Werte bleiben erhalten, Modus bleibt Volljahr. Keine stille Änderung der bisherigen Rechnung. Einzelheiten: [STORAGE.md](STORAGE.md).
+Schema 3 ergänzt erwarteten Regeljahres-Leerstand und optionalen m²-Vergleich. Bereits Schema 2 speicherte Zeitraum, Startmonat, Leerstand, Jahres-AfA und je Kostenposition Zahlungsmonate/Jahresabzug zusätzlich. Gültige Schema-1- und Schema-2-Sicherungen werden strikt geprüft und um sichere Defaults ergänzt. Alle alten Werte bleiben erhalten, Modus bleibt Volljahr. Keine stille Änderung der bisherigen Rechnung. Einzelheiten: [STORAGE.md](STORAGE.md).

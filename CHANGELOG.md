@@ -1,5 +1,9 @@
 # Änderungen
 
+## 0.7.0-alpha.1 – 19.10.2026
+
+Einseitenansicht mit echtem Live-Ergebnis, Regler/exaktem Zahlenfeld und erhaltenen Hilfen in aufklappbaren Gruppen. Einnahmenaufteilung auf gemeinsamer Jahresdurchschnittsbasis; Defizit als Zuschuss, AfA nicht als zweite Zahlung. Erwarteter Leerstand im Regeljahr, persönlicher m²-Vergleich und separates Druck-Ergebnisblatt. DOM-freier Szenarioaufbau, eigene Formular-/Ergebnis-/Kostenmodule. Komma-/Punkt-Eingaben als Text mit Schutz vor mehrdeutiger Punktgruppierung, wertgleiche Übernahme alter Sicherungen nach Format 3. Optionale Anschaffungs-/Vergleichsfehler verdecken das Miet-Ergebnis nicht. 80 lokale Tests inklusive 3.000 deterministischer Mietsuchfälle, Browser-Smoke-Tests für Chromium/WebKit als CI. Nativer iPhone-/Safari-Test des Umbaus offen.
+
 ## 0.6.0-alpha.1 – 19.10.2026
 
 Volljahres- oder Kalenderjahresplanung mit Startmonat und ganzen Leerstandsmonaten. Hauptmiete und monatliche Erstattungen nach Mietmonaten, Zahlungen mit eigenen Zahlungsmonaten; Jahresbeträge bleiben ungekürzt. Separate Steuerabzüge und bewusste Jahres-AfA-Auswahl verhindern eine ungeprüfte Übernahme aus dem Volljahr. Jahresaufschlüsselung, Ziel als Durchschnitt über zwölf Monate und erklärter Null-Mietmonatsfall. Schema 2 mit geprüfter Übernahme aller alten Eingaben aus Alpha 0.5. 68 automatisierte Tests. Nutzer hat Speichern/Sicherung der Alpha 0.5 abgenommen; neue Jahresplanung noch nicht manuell abgenommen.

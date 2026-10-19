@@ -63,10 +63,24 @@
 - [x] Schema-1-Sicherungen geprüft in Schema 2 übernehmen, alte Volljahreswerte erhalten.
 - [ ] Neue Jahresplanung auf iPhone/Safari abnehmen.
 
+## Alpha 0.7 – Ergebnis zuerst
+
+- [x] Fünf Schritte durch eine Seite mit Live-Ergebnis und aufklappbaren Eingaben ersetzen; Hilfen behalten.
+- [x] Regler plus exaktes Zahlenfeld und beide Richtungen, ohne Platzhalterrechnung.
+- [x] Grafik für gesamte Mietereinnahmen, Kosten, Rücklage/Puffer, Steuer und Cash; Defizit gesondert.
+- [x] Erwarteten Leerstand im typischen Vermietungsjahr ergänzen, Erstattungen/Kosten/AfA getrennt halten.
+- [x] Optionaler eigener Vergleichswert je m²; keine gesetzliche Grenze behaupten.
+- [x] DOM-freien Szenarioaufbau und getrennte Darstellungs-/Kostenmodule einführen.
+- [x] Komma-/Punkt-Eingabe, Schutz vor mehrdeutigen Tausenderpunkten und Migration der Formate 1/2 nach 3.
+- [x] 80 lokale Tests inklusive 3.000 deterministischer Mietsuchfälle.
+- [x] Chromium-/WebKit-Smoke-Tests in CI einrichten.
+- [ ] Endgültigen Browserlauf und Pages-Deployment anhand des finalen Commits bestätigen.
+- [ ] Neue Einseitenansicht und native iPhone-/Safari-Dialoge manuell abnehmen.
+
 ## Komfort und Veröffentlichung
 
 - [ ] Ziel-Sensitivität 500 / 750 / 1.000 / 1.250 / 1.500 €.
-- [ ] Druckansicht als PDF über Browserdruck.
+- [x] Alpha 0.7: separates aktuelles Ergebnisblatt über Browserdruck/PDF, keine Form-Bedienelemente.
 - [ ] Bedienung mit Tastatur, Fokus, Fehlermeldungen, 320-px-Layout und Safari abnehmen.
 - [x] GitHub Pages aktiviert; Live-Alpha vom Nutzer aufgerufen und auf iPhone/Safari getestet: https://ieeks.github.io/mietklar/.
 - [ ] Herkunft/Stand aller Tarif- und Regelwerte anzeigen; fremdes Tarifjahr nicht stillschweigend übernehmen.

@@ -1,99 +1,79 @@
 # mietklar.
 
-**Alpha 0.6 · Stand 19.10.2026**
+**Alpha 0.7 · Stand 19.10.2026**
 
-Welche Hauptmiete brauchst du für deinen Wunschüberschuss – und was bleibt bei einer vorgegebenen Hauptmiete nach Kosten, Rücklage und zusätzlicher Einkommensteuer?
+Welche Hauptmiete brauchst du für deinen Wunschüberschuss – und was bleibt von einer vorgegebenen Miete nach Zahlungen, Rücklage und zusätzlicher Einkommensteuer?
 
-Diese Alpha enthält den gemeinsam abgestimmten geführten Entwurf und einen separat geprüften Rechenkern. Sie ist eine **Bedienungs- und Modellvorschau**, keine vollständige Steuerveranlagung und keine automatische Mietrechtsprüfung. Alle vorausgefüllten Werte sind fiktiv.
+Live: https://ieeks.github.io/mietklar/
 
-## Starten
+Eine Seite mit Ergebnis oben, Regler plus genauem Zahlenfeld und aufklappbaren Eingaben. Die bisherigen Erklärungen zu Einkommen, Kosten und AfA bleiben erhalten. Alle Startwerte sind fiktiv. Bedienungs- und Modellvorschau, keine vollständige Steuerveranlagung oder automatische Mietrechtsprüfung.
 
-Voraussetzung: Python 3 für den lokalen Webserver; Node.js ab 22 für Prüfungen. Keine npm-Abhängigkeiten.
+## Starten und prüfen
+
+Statische HTML/CSS/ES-Module, kein Backend, keine Produktionsabhängigkeiten. Node.js ab 22 für Prüfungen. Für einen lokalen Aufruf genügt ein Webserver:
 
 ```sh
 python3 -m http.server 8080
 ```
 
-Danach `http://localhost:8080` öffnen. HTML nicht direkt als lokale Datei öffnen: Die Tarifdatei wird vom gleichen Webserver geladen.
+Danach http://localhost:8080 öffnen. Alternativ `node scripts/serve.mjs` und http://127.0.0.1:4173/mietklar/ – diese Variante prüft zugleich den Pages-Unterpfad. Nicht direkt als lokale HTML-Datei öffnen, da die Tarifdatei geladen wird.
 
 ```sh
 npm run check
 npm test
 ```
 
-## Enthalten
+Die Syntaxprüfung findet JavaScript-Dateien automatisch. 80 reine Rechen-, Kosten-, AfA-, Jahres-, Speicher- und Szenariotests, einschließlich 3.000 deterministischer Zielmietfälle. Für die zusätzlichen Browserprüfungen ist Playwright ausschließlich als Entwicklungsabhängigkeit enthalten:
 
-- Zwei Rechenrichtungen im geführten Ablauf: Wunschüberschuss → benötigte Hauptmiete oder Hauptmiete → verbleibender Überschuss.
-- Negative Ergebnisse im Vorwärtsmodus als notwendiger monatlicher Zuschuss; Rechenrichtung wechseln ohne Eingaben zu löschen.
-- Weiterhin fünf Schritte: Ziel/Miete und Einkommen → Wohnungskosten → AfA und Steuerannahmen → Ergebnis → Anschaffung.
-- Wortmarke **mietklar.** mit farbigem Punkt; responsive, helle Darstellung mit Terrakotta-Akzent und Home-Button.
-- Monatliche Vorschreibung: Betriebskosten, Wasser/Abwasser, Heizung, Warmwasser und separate WEG-Rücklage.
-- Pro Position getrennt: Zahlbetrag, erwartete Mietererstattung und angegebener steuerlicher Jahresabzug. Monat/Jahr, volle/teilweise/keine Erstattung, offene Prüfung und optionale Quelle.
-- Eigene Positionen hinzufügen/entfernen; eigene Kosten und Garage in einer zusätzlichen Gruppe.
-- Mietrechtsszenario und Vertragsstatus mit bedingten Hinweisen; keine automatische Vertragsprüfung.
-- Offene Erstattungen und Steuerabzüge werden im Ergebnis einzeln aufgelistet.
-- Fiktive Jahresabrechnung als Detailansicht; wird nicht zusätzlich in die laufenden Kosten eingerechnet.
-- Einkommensbasis wahlweise KZ 245 mit einmaliger 132-€-Pauschale bzw. höheren darauf anzurechnenden Werbungskosten oder bereits bereinigte Tarifbasis ohne diese Vermietung.
-- Bereinigte Tarifbasis wird direkt übernommen; keine weitere Pauschale und keine erneuten Abzüge aus dem anderen Eingabeweg.
-- AfA: offen (0 €), bekannter Volljahreswert, eigene Gebäude-Basis/Satz oder Kaufherleitung für erstmalige Vermietung nach Privatnutzung.
-- Kaufherleitung ab Kaufjahr 2003: Kaufpreis und Nebenkosten, Grundanteil, reguläre 1,5 % Jahres-AfA. Bedingte Grundanteil-Hilfe mit bewusster Übernahme als Planungsannahme.
-- Zwei Zeiträume: volles Vermietungsjahr oder Kalenderjahr 2026 mit Startmonat und ganzen Leerstandsmonaten.
-- Kalenderjahr: Hauptmiete und monatliche Erstattungen nur für Mietmonate; monatliche Kosten mit eigenen Zahlungsmonaten, Jahresbeträge unverändert.
-- Steuerabzüge im Kalenderjahr separat angeben; keine automatische Übernahme des Volljahresabzugs oder Kürzung nach Belegung.
-- Gebäude-AfA im Kalenderjahr offen, eigener Jahresbetrag oder reguläre erste Halb-/Ganzjahres-AfA mit separat angegebenen AfA-Nutzungsmonaten.
-- Jahresaufschlüsselung und Kalender-Monatsdurchschnitt; Ziel 1.000 €/Monat bedeutet auch beim Start im Juli 12.000 € Jahresziel.
-- Tarif 2026, progressive Zusatzsteuer, vereinfachter Veranlagungsfreibetrag und Rückwärtssuche auf volle Cent.
-- Anschaffungsvergleich bei **unveränderter Hauptmiete**, inklusive Jahres-Steuerwirkung und tatsächlichem Geldverbrauch.
-- Freiwillige Speicherung in diesem Browser, einschließlich unvollständiger Entwürfe, Rechenrichtung und aktuellem Schritt. Anfangs ausgeschaltet.
-- Lokalen Speicherstand löschen, ohne die aktuelle Sitzung zu leeren; versionierte JSON-Sicherung exportieren/importieren und letzten Import rückgängig machen.
-- Unlesbare oder nicht unterstützte Speicherstände werden unverändert aufbewahrt und können heruntergeladen werden. Import anderer Steuerjahre wird abgewiesen.
-- Separate reine Rechenfunktionen und 68 automatisierte Rechen-/Kostenmodell-/Speichertests.
+```sh
+npm ci
+npx playwright install --with-deps chromium webkit
+npm run test:e2e
+```
 
-Details zur Jahresplanung: [Jahresmodell](docs/YEAR_MODEL.md).
+GitHub Actions prüft Syntax und Rechenfälle sowie acht Bedienungsfälle in Chromium und WebKit. Nachweise und verbleibende manuelle Abnahme: [TESTING.md](docs/TESTING.md).
 
-## Grenzen dieser Alpha
+## Bedienung
 
-- **Kein Kredit, ein Eigentümer mit 100 % Anteil.** Kalenderjahr nur als Planmodell ganzer Monate mit gleicher Miete je Mietmonat und Zahlung im selben Jahr. Keine Teilmonate, Mietausfälle, Nachzahlungen oder automatische Abgrenzung am Jahreswechsel.
-- **Nur ohne Umsatzsteuer.** Bei unbekanntem oder steuerpflichtigem Status wird kein Ergebnis ausgegeben.
-- **Ungeklärter Steuerabzug = vorerst 0 € Abzug**, unabhängig von einer Mietererstattung. Abzüge werden vom Nutzer als geklärt angegeben, nicht von der App geprüft. Akontozahlungen ersetzen keine tatsächliche steuerliche Jahresermittlung.
-- Geplanter Kostenersatz wird vollständig als Einnahme erfasst; nur separat eingegebene Abzüge mindern die Steuerbasis. Kein pauschales Neutralisieren von Nebenkosten.
-- Bestätigte Jahresabzüge können von den Jahreszahlungen abweichen (z. B. Verteilungsbeträge). Keine automatische Einordnung solcher Beträge, keine Verlustgutschrift.
-- KZ-245-Weg ist das einfache aktive Arbeitnehmer-Modell. Höhere Werbungskosten mit Anrechnung auf die Pauschale ersetzen diese; zusätzlich zur Pauschale abziehbare Beträge und andere persönliche Abzüge über eine passend bereinigte Basis berücksichtigen. Negative Gehaltsbasis wird auf 0 begrenzt und als offene Modellgrenze angezeigt.
-- Kein vollständiger Lohn-/Steuerbescheid: unter anderem keine einkommensabhängigen Absetzbeträge, Sonderausgaben-Automatik, Familienbonus-Ausschöpfung oder Progressionsvorbehalte. Keine weiteren nicht lohnsteuerpflichtigen Einkünfte im Freibetragsmodell.
-- Keine automatische Verlustverwertung; negative Vermietungseinkünfte erzeugen keine Steuererstattung.
-- **Offene Gebäude-AfA = 0 €**, kein vorbelegter fiktiver Jahresabzug. Kaufpreis, Grundanteil und Sonderfälle werden nicht aus Dokumenten automatisch bestätigt. Käufe bis 2002, Erbe/Schenkung und frühere Vermietung benötigen einen separat geklärten Jahreswert oder eine Basis.
-- Kaufherleitung nur reguläre Gebäude-AfA; keine automatisch beschleunigte AfA oder individuelle Bewertung. Leerstand bestimmt nicht automatisch die AfA-Nutzung. Laufende Fälle/Sonderfälle über einen passend geklärten Jahresbetrag führen.
-- Mietrechtliche Hinweise berücksichtigen die gewählte Einordnung und den Vertragsstatus. Ein detaillierter Kostenkatalog, Prüfung der Einordnung und rechtliche Vertragsfreigaben fehlen.
-- Speicherung gilt nur für diesen Browser und diese Website-Adresse. Kein automatischer Geräteabgleich, kein PDF-Upload/OCR, keine fertige Druckansicht.
-- Speicher-/Importprüfung bestätigt Dateiaufbau und zulässige Feldtypen, keine fachliche Richtigkeit. Leere oder negative Entwurfswerte bleiben erhalten; die normale Rechenprüfung entscheidet über das Ergebnis.
-- Manueller iPhone-/Safari-Bedienungstest der Alpha 0.1 vom Nutzer am 19.10.2026 bestätigt. Speichern/Sicherung wurde vom Nutzer am 19.10.2026 abgenommen. Die neue Jahresplanung benötigt noch einen eigenen Safari-Durchgang; die übrigen Detailprüfungen stehen in docs/TESTING.md. Kein automatisierter Browser-End-to-End-Test in dieser Arbeitsumgebung.
+- Oben zwischen **Wunschbetrag** und **Miete vorgeben** wechseln. Regler und Zahlenfeld steuern dieselbe Berechnung. Centbeträge im Zahlenfeld möglich; der Regler verändert ganze Euro. Größere Zahlenwerte erweitern den Reglerbereich.
+- Kosten, Rücklage/Puffer, zusätzliche Steuer und Überschuss stammen aus dem Rechenkern. Die Grafik verwendet gesamte Mietereinnahmen einschließlich Kostenersatz, durchgehend als Jahresdurchschnitt ÷ 12. Bei einem Defizit zeigt sie Ausgaben und zusätzlichen Finanzierungsbedarf; keinen positiven Überschuss.
+- Einkommen, Kosten, Gebäude-AfA/USt, Zeitraum, optionalen m²-Vergleich und Anschaffungen aufklappen. Zusammenfassungen bleiben im eingeklappten Zustand sichtbar. Die Wortmarke springt zum Ergebnis und behält Eingaben.
+- Komma oder Punkt als Dezimaltrennzeichen verwenden: `1400,50` oder `1400.50`. Deutsche Gruppierung mit Komma ist möglich: `45.000,00`. Mehrdeutige reine Punktangaben wie `45.000` werden zur Klärung zurückgewiesen, damit daraus nicht still 45 € oder 45.000 € werden.
+- Optional Wohnfläche und eigenen Vergleichswert pro m² eingeben. Oberhalb dieses Werts erscheint ein Hinweis. Keine gesetzliche Mietpreisgrenze, keine automatische mietrechtliche Freigabe.
+- **Drucken / PDF** öffnet den Browser-Druckdialog. Das Ergebnisblatt enthält aktuellen Jahressaldo, Miete, Einkommensbasis, Kosten-/Steuerbeträge und offene Annahmen. Die App-Bedienelemente werden ausgeblendet. Bei ungültigen Eingaben oder unpassendem USt-Status wird kein veraltetes Ergebnisblatt ausgegeben. Anschaffungen bleiben ein separater Vergleich.
+
+## Rechenumfang
+
+- Österreichische Dauervermietung, ein Eigentümer mit 100 % Anteil, kein Kredit, ohne USt. Unbekannter/steuerpflichtiger USt-Status unterdrückt Ergebnisse.
+- Beide Richtungen verwenden dasselbe Jahresmodell und dieselbe minimale Cent-Miete.
+- Typisches Vermietungsjahr mit erwartetem Leerstand: Miete und monatliche Erstattungen nach Mietmonaten; laufende Zahlungen weiterhin zwölf Monate, Jahresabzüge und volle AfA separat. Kein automatischer Abzug allein wegen Leerstands.
+- Konkretes Kalenderjahr 2026: erster möglicher Mietmonat und volle Leerstandsmonate; Kosten mit eigenen Zahlungsmonaten, ungekürzte eingegebene Jahresbeträge, getrennte Jahresabzüge und eigene Jahres-AfA-Auswahl. [Jahresmodell](docs/YEAR_MODEL.md).
+- Wunschüberschuss ist immer der Durchschnitt über zwölf Kalendermonate. 1.000 €/Monat bedeuten 12.000 € Jahresziel, auch bei spätem Beginn. Hauptmiete gilt je Mietmonat. Bei null Mietmonaten ist der Vorwärtsmodus möglich, eine Zielmiete jedoch nicht bestimmbar.
+- Zahlung, erwartete Mietererstattung und angegebener steuerlicher Abzug sind unabhängig. Ungeklärt heißt getrennt 0 € Erstattung bzw. Abzug. Kein pauschales Neutralisieren von Betriebskosten; Kostenersatz zählt als Einnahme. Rücklage/Puffer sind Zahlungen ohne automatischen Abzug, AfA keine erneute Zahlung.
+- KZ 245 mit einmal 132 € Pauschale oder höheren darauf anzurechnenden Werbungskosten; alternativ bereits passend bereinigte Gehalts-Tarifbasis ohne diese Vermietung, ohne erneute Abzüge. Zusätzlich zur Pauschale abziehbare Beträge und weitere persönliche Anpassungen über die bereinigte Basis führen. Negative Gehaltsbasis wird mit Hinweis auf 0 begrenzt.
+- AfA offen = 0 €, bekannter voller Jahreswert, eigene Gebäudebasis/Satz oder Kaufherleitung ab Kaufjahr 2003 nach ausschließlich privater Nutzung. Grundanteilhilfe nur mit bewusster Übernahme. Kalenderjahres-AfA gesondert: offen, eigener Betrag oder reguläres erstes Halb-/Ganzjahr mit separat angegebenen AfA-Nutzungsmonaten.
+- Anschaffungsvergleich hält die Hauptmiete unverändert, berücksichtigt volle Zahlung und tatsächlichen Jahresabzug. Ein Fehler im optionalen Vergleich verdeckt das gültige Miet-Ergebnis nicht.
+
+## Grenzen und offene Prüfung
+
+Keine vollständige persönliche Veranlagung: insbesondere keine automatische Verlustgutschrift, einkommensabhängigen Absetzbeträge, Sonderausgaben, Familienbonus-Ausschöpfung oder Progressionsvorbehalte; Freibetragsmodell nur Gehalt plus eine Vermietung ohne weitere einschlägige Einkünfte. Kleinunternehmerbefreiung bleibt eine Planungsannahme mit separat zu prüfenden Voraussetzungen.
+
+Ganze Monate, gleiche Miete je Mietmonat, Zahlung im selben Jahr. Keine Teilmonate, Mietausfälle, Nachzahlungen oder automatische Abgrenzung rund um den Jahreswechsel. Abzüge, Vermietungsanteile, private Vorperioden, Verteilung und ernsthafte Vermietungsabsicht sind selbst zu klären. Ein Akonto ersetzt keine steuerliche Jahresermittlung. Gebäude-AfA nicht doppelt als Kostenposition erfassen.
+
+Keine automatische Bewertung oder beschleunigte AfA. Ältere Käufe, Erbe/Schenkung und frühere Vermietung benötigen passende gesonderte Werte. Mietrechtliche Einordnung und Kostenüberwälzung werden nicht automatisch bestätigt; Details/Garage bleiben ausbaufähig. Die historische Jahresabrechnung ist nur eine fiktive Zusatzansicht und wird nicht ein zweites Mal eingerechnet.
+
+WebKit-Prüfung ersetzt keinen Test des echten iPhone-/Safari-Datei- oder Druckdialogs. Nutzerabnahme von Speichern/Sicherung der Alpha 0.5 bleibt dokumentiert; die neue Oberfläche benötigt eine eigene Abnahme.
 
 ## Eingaben behalten
 
-Sicherungen aus Alpha 0.5 werden geprüft übernommen; alle alten Werte bleiben erhalten und starten weiter in der Volljahresplanung. Neue Jahresfelder werden ergänzt.
+**Speichern & Sicherung** öffnen und bewusst einschalten; anfangs aus. Auch zulässige unvollständige Zahlenentwürfe bleiben erhalten. Ausschalten/Löschen entfernt nur die eigene lokale Kopie und lässt die aktuelle Sitzung stehen. JSON-Import/-Export funktionieren ohne Opt-in; Import schaltet Speichern nicht ein. Letzten Import innerhalb der Sitzung rückgängig machen.
 
-Oben **Speichern & Sicherung** aufklappen. „Eingaben in diesem Browser merken“ schaltet die lokale Speicherung ein. Nach Änderungen wird der Stand kurz verzögert gespeichert und beim nächsten Öffnen wiederhergestellt. Ausschalten oder „Lokale Speicherung löschen“ entfernt diese Kopie; die gerade sichtbaren Eingaben bleiben bestehen.
+Format 3 übernimmt geprüfte Sicherungen der Formate 1 und 2. Neue Leerstands-/Vergleichsfelder starten mit 0 bzw. leer. Frühere Werte bleiben inhaltlich erhalten; mehrdeutige alte Dezimalpunkte werden bei Bedarf wertgleich als Dezimalkomma dargestellt. Ergebnisse/Tarife werden nicht importiert, sondern neu berechnet. Unlesbare/unbekannte/fremde Jahresstände bleiben geschützt und herunterladbar. [Speicherformat](docs/STORAGE.md).
 
-Export und Import funktionieren auch bei ausgeschalteter Speicherung. Eine Sicherungsdatei enthält persönliche Eingaben wie Gehalt, Kosten und AfA im lesbaren JSON-Format. Ein Import schaltet die Speicherung nicht von selbst ein. Ergebnisse und Tarifsätze werden nicht aus der Datei übernommen, sondern neu berechnet. Einzelheiten und Wiederherstellung: [Speicherformat](docs/STORAGE.md).
+Die App überträgt Formulareingaben nicht an einen Server. Die freiwillige lokale Kopie und exportierte Dateien enthalten persönliche Angaben unverschlüsselt. Speicherung gilt für diesen Browser und diese Herkunft; kein Geräteabgleich. Persönliche Sicherungen, echte Gehaltszahlen, Adressen und Originaldokumente gehören nicht ins öffentliche Repo.
 
-Die App überträgt Formulareingaben nicht an einen Server. Freiwillig gespeicherte Daten sind unverschlüsselt in den Website-Daten dieses Browsers abgelegt. Sicherungsdateien entsprechend aufbewahren. Website-Daten löschen, privates Surfen oder Browserwechsel können die lokale Kopie entfernen bzw. unzugänglich machen; für einen übertragbaren Stand eine Datei exportieren.
+## Weiterarbeiten
 
-## GitHub Pages
+[HANDOVER.md](HANDOVER.md) · [ROADMAP.md](ROADMAP.md) · [Projektplan](docs/PROJECT_PLAN.md) · [Recherche](docs/RESEARCH.md) · [Review-Follow-up](docs/REVIEW_FOLLOWUP.md)
 
-Live-Alpha: https://ieeks.github.io/mietklar/
-
-GitHub Pages ist aktiviert: Deploy from a branch → `main` → `/ (root)`. Die Dateien sind statisch und verwenden relative Pfade. Änderungen auf `main` werden automatisch veröffentlicht.
-
-## Beim nächsten Mal weiterlesen
-
-1. [HANDOVER.md](HANDOVER.md) – Wiederaufnahme, Entscheidungen, Implementierungsstand.
-2. [ROADMAP.md](ROADMAP.md) – Reihenfolge bis zur belastbaren ersten Version.
-3. [Projektplan](docs/PROJECT_PLAN.md) – Gesamtumfang und fachliches Modell.
-4. [Recherche](docs/RESEARCH.md) – Quellen, bedingte Kostenregeln, offene Rechtsfragen.
-5. [Prüfungen](docs/TESTING.md) – Nachweise und noch offene Abnahme.
-
-Private Rechnungen, Verträge, Grundbuchauszüge, Adressen, Kontodaten, tatsächliche Gehaltszahlen und persönliche Sicherungsdateien gehören nicht in dieses öffentliche Repository.
-
-
-
-
+GitHub Pages veröffentlicht statisch aus `main` und `/ (root)` mit relativen Asset-Pfaden.

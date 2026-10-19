@@ -54,3 +54,5 @@ Alpha-0.5-Stand: Freiwillige lokale Speicherung, Löschen sowie versionierter JS
 
 
 Alpha-0.6-Stand: Kalenderjahr mit Startmonat und vollen Leerstandsmonaten, separaten Zahlungsmonaten, unabhängigen Jahresabzügen und bewusster AfA-Auswahl. Hauptmiete je Mietmonat; Überschuss immer Jahresergebnis ÷ 12. Alte Sicherungen werden ohne Änderung ihrer Volljahreswerte übernommen. Teilmonate und ein vollständiger Zahlungs-/Abgrenzungsassistent bleiben offen.
+
+Alpha-0.7-Stand: Nach Review bestätigter Wechsel zur Einseitenansicht mit Ergebnis oben, Regler und genauen Zahlenfeldern; alle bisherigen Hilfen in aufklappbaren Gruppen. Echte Grafik inkl. Kostenersatz und Zuschussfall, Regeljahr-Leerstand, persönlicher m²-Vergleich und Druckblatt. DOM-freier Eingabeaufbau und Browser-Smoke-Tests. Keine Ausweitung auf Kredit/USt oder automatische Mietpreisfreigabe.

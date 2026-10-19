@@ -1,100 +1,62 @@
-# Prüfung der Alpha 0.6
+# Prüfstand Alpha 0.7
 
-Stand: 19.10.2026.
+Stand: 19.10.2026. Die Abnahme gilt jeweils für den genannten Umfang, nicht pauschal für spätere Oberflächen.
 
-## Erfolgreich lokal ausgeführt
+## Lokal erfolgreich
 
-- `npm run check`: Syntax von UI, Rechenkern, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Speicherbedienungsmodul.
-- `npm test`: 68 Rechen-/Kosten-/AfA-/Planungs-/Speicher-/Jahrestests bestanden (52 bestehende, 13 Jahresgruppen, 3 Migrations-/Jahresspeichergruppen).
-- HTML-Nesting und eindeutige IDs statisch geprüft.
-- Zusätzlicher DOM-Funktionsdurchgang mit temporärem jsdom außerhalb der Projektabhängigkeiten: Navigation/Home und Fokus, Erhalt der Eingaben, getrennte Erstattung/Abzüge, Monat/Jahr, überhöhte Teilbeträge, inaktive leere Felder, neue Position/Entfernen, Textausgabe ohne HTML-Injektion, USt-Ergebnisunterdrückung und Anschaffungsgrenze.
-- Keine zusätzlichen Produktionsabhängigkeiten.
+- `npm test`: 80 reine Tests in Tarif-, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Szenariomodulen.
+- Enthalten: 3.000 deterministische Modelle mit unterschiedlichen Einkommen, Kosten, AfA, Erstattungen, 1–12 Mietmonaten und Zielbeträgen. Jedes Ergebnis erreicht das Ziel; ein Cent weniger Miete reicht nicht, sofern die Lösung nicht bereits 0 € ist. Fester Seed für reproduzierbare Fehler.
+- `npm run check`: Syntaxprüfung aller automatisch gefundenen JavaScript-Dateien in src, tests, e2e und scripts sowie Playwright-Konfiguration. Kein ESLint-/Typprüfungsnachweis.
+- Playwright-Testliste: acht Fälle × zwei Engines = 16 Fälle gefunden. Dies allein ist kein Browserlauf.
+- DOM-Funktionsdurchgang mit temporärem jsdom: zwölf Speichergruppen erfolgreich mit neuer Oberfläche, einschließlich Restore/Neuberechnung, Drafts, Delete ohne Sitzungsverlust, Import/Undo an/aus, fehlerhafte/zu große/fremde Versions-/Jahresdateien, Mehrtab-Pause, geschützter Recovery-Download, verweigertem Speicher, Quota-/Löschfehlern, überholten Dateilesungen, 100 Kostenpositionen und Rollback bei Anwendungsfehler.
+- Kein lokaler echter Browserlauf in dieser Arbeitsumgebung. Browsertests sind deshalb auf GitHub Actions eingerichtet.
 
-## Rechenfälle
+## Unabhängige Referenzfälle
 
-Die ursprünglichen 11 Fälle bleiben erhalten: Tarifgrenzen, 40/48-%-Wechsel, Freibetrag, negative Vermietung ohne Gutschrift, centgenaue Zielsuche, Cash-Rücklage, AfA und Anschaffungen.
+| Fall | Zusatzsteuer/Jahr | Frei pro Monat im Jahresdurchschnitt |
+| --- | ---: | ---: |
+| Gehaltsbasis 45.000 €, Miete 1.400 € × 12, Zahlungen 335 € × 12, AfA/Abzüge offen = 0 | 6.720 € | 505 € |
+| Gleiches Modell, ein erwarteter Leerstandsmonat, Zahlungen laufen weiter | 6.160 € | 435 € |
+| Start Juli, Miete 2.000 € × 6, Erstattung 100 € × 6, Zahlungen 100 € × 12, Kostenabzug 600 €, Jahres-AfA 1.200 €, Basis 45.000 € | 4.320 € | 590 € |
 
-Neue unabhängige Gegenbeispiele bei 45.000 € Gehalts-Tarifbasis, 2.000 € monatlicher Hauptmiete, ohne Gebäude-AfA:
+Im letzten Fall Jahres-Cash 7.080 €. Ohne Erstattung, bei sonst gleichem Modell und Ziel 12.000 € Jahres-Cash: minimale Miete 3.466,67 € je Mietmonat.
 
-| Fall | Steuerlicher Vermietungsüberschuss / Jahr | Zusatzsteuer / Jahr | Verfügbar / Monat |
-| --- | ---: | ---: | ---: |
-| Zahlung 100 €/Monat, Erstattung und Abzug ungeklärt | 24.000 € | 9.600 € | 1.100 € |
-| Gleiche Zahlung, Mieter erstattet 100 €/Monat, kein angesetzter Abzug | 25.200 € | 10.080 € | 1.160 € |
-| Gleiche Zahlung, volle Erstattung und voller bestätigter Abzug | 24.000 € | 9.600 € | 1.200 € |
-| Gleiche Zahlung, keine Erstattung, voller bestätigter Abzug | 22.800 € | 9.120 € | 1.140 € |
+Die bisherigen Tarifgrenzen, Freibetragsfälle, Rückwärts-Centgrenzen, unabhängigen Zahlungen/Erstattungen/Abzüge, Rücklagen, AfA-Herleitung, 6/7-AfA-Monatsgrenze, Verlust ohne Gutschrift, Einkommenswege und unveränderte Miete im Anschaffungsvergleich bleiben in der Suite enthalten.
 
-Weitere neue Fälle: Monats-/Jahresäquivalenz, eigenständiger Jahresabzug auch ohne neue Zahlung, Rücklage und Puffer ohne automatischen Abzug, ignorierte inaktive Felder, ungültige Status/Einheiten/Beträge, Erstattung über Zahlung, Manipulation von Rücklage/Puffer sowie 16 Kombinationen aus Erstattungs- und Steuerstatus mit minimalem Cent-Mietbetrag.
+## Neue Darstellungs- und Eingabefälle
 
-## AfA-Fälle
+- DOM-freier Rohwertaufbau reproduziert die obigen Rechenfälle. Inaktive Felder werden nicht zur Berechnung herangezogen.
+- Komma/Punkt/Gruppierung mit Komma; mehrdeutige reine Punktgruppen werden erklärt abgewiesen. Keine Rundung des Rechenkerns zur Eingabe/Anzeige.
+- Vergleich pro m²: eigener Wert, strikte Über-Grenze, Gleichheit ohne Warnung, leere/ungültige optionale Metadaten ohne Veränderung der Mietrechnung.
+- Grafik: Kostenersatz enthalten; gleiche Jahresdurchschnittsbasis, Rücklage/Puffer getrennt, AfA keine zusätzliche Zahlung. Defizit als Zuschuss; kein falscher positiver Überschuss. Legenden-Cents summieren sich zur angezeigten Gesamtsumme, auch wenn interne Beträge Bruchteile eines Cents haben.
+- Fehler im optionalen Kaufvergleich verdecken das gültige Miet-Ergebnis nicht.
+- Format 1/2 nach 3 mit neuen Defaults, unveränderten Geldwerten und wertgleicher Umschreibung technisch mehrdeutiger alter Dezimalpunkte. Fehlerhafte/vermischte Versionen werden nicht still repariert. Aktuelle Rohwerte einschließlich Dezimalkomma werden nicht als Tarife/Ergebnisse übernommen, sondern neu berechnet.
 
-Fiktives Kaufbeispiel: 300.000 € Kaufpreis + 15.000 € Nebenkosten = 315.000 €. Bei 30 % Grundanteil sind 94.500 € auszuscheiden; Gebäude-Basis 220.500 €, reguläre Jahres-AfA 3.307,50 €. In der gesonderten Startjahr-Vorschau 6 Monate → 1.653,75 €, 7 Monate → 3.307,50 €.
+## Browser-Smoke-Tests in CI
 
-Getestet: offene/fehlende AfA ohne versteckten Default, bekannter Jahreswert, eingegebene Basis/Satz, alle Nebenkostenkomponenten, Grundanteil 0/100 %, fehlende/ungeklärte Grundlage, Käufe bis 2002 vs. ab 2003, Erbe/andere Erwerbsart/frühere Vermietung als Prüfpfad, bedingte 20/30/40-%-Vorschläge und Sonderfälle, 0/1/6/7/12 Nutzungsmonate, ungültige Werte. Bei unveränderter Miete ist AfA nur eine Steuerwirkung, keine erneute Kaufpreiszahlung.
+Workflow `Alpha checks`, Job `browser`: `npm ci`, Playwright-Browser/Abhängigkeiten installieren, `npm run test:e2e`. Statischer Testserver läuft ausschließlich auf localhost und verwendet `/mietklar/` wie Pages. Playwright ist eine Entwicklungsabhängigkeit, kein Bestandteil der ausgelieferten App.
 
-DOM-Funktionsdurchgang zusätzlich erweitert: vier AfA-Wege, fehlende Angaben → 0, Kaufaufteilung, Startjahr-Vorschau ohne Änderung der Volljahres-Zielmiete, ausdrückliche Grundanteil-Übernahme und Invalidierung nach Hilfsänderung, gesonderte Nachweise, Erbe-Prüfpfad, negative/überhöhte Werte, ignorierte inaktive Felder und offene AfA im Ergebnis. Alle bisherigen Kosten-/Navigationsfälle dabei erneut bestanden.
+Chromium und WebKit prüfen jeweils:
 
-## Rechenrichtungen und Einkommenswege
+1. Live-Ergebnis, beide Richtungen, Komma/Punkt und Tastatur am Regler.
+2. Regeljahr-Leerstand, Kalenderjahr, AfA-Nutzungsmonate und ungültige Zustände/Ergebnisunterdrückung.
+3. Einnahmenaufteilung, stimmige Summen und Defizitdarstellung.
+4. Eigener m²-Vergleich, isolierter Kaufvergleichsfehler und USt-Sperre.
+5. Opt-in, Neuladen, Dateiexport, Import/Undo und ausschließlich eigene lokale Löschung.
+6. Tatsächliche Dateiimporte der alten Formate 1 und 2 bei ausgeschalteter Speicherung.
+7. Aktuelles Druckblatt und Print-CSS; zusätzlich PDF-Erzeugung in Chromium. Kein Nachweis des nativen OS-Druckdialogs.
+8. 320/390/1280-px-Breiten ohne Dokument-Überlauf, Fokus/Home, eigene Position und Textausgabe ohne HTML-Injektion.
 
-Neue unabhängige Beispiele:
+Aktueller endgültiger CI-Lauf ist vor Veröffentlichung separat zu bestätigen. Automatische Screenshots/PDF/Report werden für sieben Tage als GitHub-Testartefakt mit ausschließlich fiktiven Daten aufbewahrt. Sie werden nicht ins Repository übernommen. Ein erzeugter Screenshot ist allein keine manuelle visuelle Abnahme.
 
-- KZ 245 = 45.132 € minus einmal 132 € → Basis 45.000 €. Direkte Basis 45.000 € → unverändert 45.000 €, ohne erneute Abzüge.
-- Bei 1.200 € auf die Pauschale anzurechnenden Werbungskosten: 45.132 € minus 1.200 € = 43.932 €, nicht zusätzlich minus 132 €.
-- Fixe Hauptmiete 1.400 €, Basis 45.000 €, jährliche Zahlungen/Steuerabzüge je 3.600 €, AfA 2.400 € → Vermietungsüberschuss 10.800 €, Zusatzsteuer 4.320 €, monatlich frei 740 €.
-- Öffentliches Startbeispiel bei noch offenen Abzügen: Miete 1.400 €, monatliche Zahlungen 335 €, AfA/sonstige Steuerabzüge 0 € → monatlich frei 505 €.
-- Fixe Miete 100 € im 3.600-€-Kosten-/2.400-€-AfA-Modell → Zuschuss 200 €/Monat, keine erfundene Verlust-Steuergutschrift.
+## Historische und manuelle Nachweise
 
-Weitere Fälle: höhere/niedrigere Werbungskosten, negative Gehaltsbasis als sichtbare Modellgrenze, ungültige aktive und ignorierte inaktive Einkommenswerte, gleiche Ergebnisse vorwärts/rückwärts bei identischer Miete und Mietererstattung, unveränderte Miete bei Anschaffung, ungültige Rechenrichtung und Modellwerte.
+- Nutzer bestätigte am 19.10.2026 die iPhone-/Safari-Bedienung der Alpha 0.1.
+- Nutzer hat Speichern/Sicherung der Alpha 0.5 am 19.10.2026 ausdrücklich abgenommen.
+- Alpha 0.6: Syntax, 68 Tests, Kosten-/AfA-/Planungs-DOM-Regressionen, Speicher- und Kalenderjahresfälle sowie Migration bestanden. GitHub Actions und Pages für Commit `09edeb6d9f3ffbd9fa46cd3ed4b26d1628c33ee7` erfolgreich bestätigt.
 
-DOM-Funktionsdurchgang erweitert: beide Modi, richtige Überschriften/Beträge, Erhalt aller Eingaben, leeres inaktives Ziel, direkte Einkommensbasis trotz ungültiger inaktiver KZ-245-Felder, keine Doppelabzüge, Custom-Werbungskosten, negative Salden als Zuschuss, Ergebniswechsel mit Fokus, Kaufvergleich ohne Mieterhöhung. Kosten- und AfA-Funktionsfälle erneut enthalten.
+## Noch offen
 
-## Speichern und Sicherung
-
-Zwölf zusätzliche automatisierte Testgruppen in `tests/persistence.test.js`: vollständiger Roundtrip ohne Ergebnis-/Tarifübernahme und ohne Objekt-Aliasing; leere/negative Entwürfe; ungültiges JSON, fremde App/Version/Jahr; unbekannte oder fehlende Schlüssel inklusive Prototype-Payload; numerische Syntax/Endlichkeit/Größen und Textdaten; Typen/Auswahlen/Schritt/Textlängen; Kostenarten und unveränderliche Rücklagenregel; 100-Positionen- und UTF-8-Größengrenzen; Herkunft des übernommenen Grundanteils; kanonische Zeitstempel und unveränderte beschädigte Speicherstände; eigene Kennung bei Schreiben/Lesen/Löschen; propagierte Zugriffs-/Quota-/Löschfehler.
-
-Zusätzlich zwölf DOM-Funktionsgruppen mit temporärem jsdom, ohne neue Projektabhängigkeit:
-
-1. Anfangs aus; Bearbeiten/Verlassen schreibt nichts. Export funktioniert ohne Opt-in und liefert passenden Dateinamen/Inhalt.
-2. Einschalten, dynamische Karten, Quellen, Rechenrichtung, Schritt und AfA-Herkunft speichern. Neue DOM-Instanz stellt die Werte wieder her und berechnet denselben Ergebniswert. Laden schreibt nicht neu. Grundanteil-Herkunft invalidiert nach Änderung weiterhin korrekt.
-3. Leere aktive Felder bleiben als Entwurf erhalten; nach Laden kein veraltetes Ergebnis. Ausschalten entfernt nur die eigene Kennung, erhält aktuelle Eingaben und verhindert ausstehendes erneutes Speichern.
-4. Import/Rückgängig bei aus- und eingeschalteter Speicherung. Beschädigte, fremde Jahres-/Versionsdateien, Zusatzfelder und übergroße Dateien lassen den Stand unverändert.
-5. Andere Tabs pausieren ausstehende Schreibvorgänge; unlesbarer neuer Stand wird geschützt, fremdes Löschen hebt die Sperre wieder auf. Aktuelle Eingaben bleiben bestehen.
-6. Nicht unterstützte gespeicherte Version bleibt original erhalten und herunterladbar. Gültiger Dateiimport überschreibt sie bei ausgeschalteter Speicherung nicht; bewusstes Löschen entsperrt die App.
-7. Gesperrter Browserzugriff: Import/Export bleiben nutzbar.
-8. Quota-Fehler: kein falsches „gespeichert“, Schalter bleibt nach fehlgeschlagenem Einschalten aus.
-9. Fehlgeschlagenes Löschen: Meldung sichtbar, gespeicherter Stand bleibt erhalten, automatisches Speichern stoppt.
-10. Älteres verzögertes Dateilesen kann einen neueren Import nicht überholen.
-11. 100 importierte Kostenpositionen sperren Hinzufügen; Entfernen erlaubt es wieder.
-12. Unerwartete Ausnahme während der Übernahme setzt den vorherigen Stand zurück und schreibt keine Speicherung.
-
-Der gesamte bisherige Kosten-/AfA-/Planungs-DOM-Durchgang und die zwölf Speichergruppen wurden mit Alpha 0.6 erneut erfolgreich ausgeführt. Ein zusätzlicher Controller-Durchgang der Alpha 0.5 bestätigte den tatsächlichen 400-ms-Speichertimer, Flush bei verstecktem Dokument, Erhalt des letzten Standes bei späterem Quota-Fehler, erfolgreiches erneutes Speichern und Ignorieren fremder Speicherkennungen. Diese DOM-Durchgänge sind ergänzende lokale Prüfungen, kein im CI eingerichteter echter Browserlauf. Dateidownload wurde über Blob-Inhalt/Dateinamen geprüft; der native iOS-Dateidialog wurde nicht getestet.
-
-## Kalenderjahr und Migration
-
-13 neue Jahres-Testgruppen: Startmonat/Leerstand und Grenzen; zwölf weiterlaufende Kostenzahlungen trotz sechs Mietmonaten; kein automatischer Volljahresabzug; eigene Zahlungsmonate und ungekürzte Jahresbeträge; Rücklage/Puffer bei Leerstand; ungültige Jahres-Kostenangaben; Ziel = Monatsdurchschnitt × 12 mit minimalem Centbetrag für 1/3/6/9/12 Mietmonate; Vorwärtsrechnung und gesperrte Zielsuche bei 0 Mietmonaten; Gleichheit des zwölfmonatigen Modells; unabhängige AfA-Nutzungsmonate mit 6/7-Grenze; offene/eigene Jahres-AfA und Sonderpfade; Anschaffung bei unveränderter Miete.
-
-Unabhängiges Beispiel: sechs Monate × 2.000 € Miete, 600 € Erstattungen, 1.200 € Zahlungen, 600 € Kostenabzug, 1.200 € AfA, Basis 45.000 € → Einkünfte 10.800 €, Zusatzsteuer 4.320 €, Jahres-Cash 7.080 €, Durchschnitt 590 €/Monat. Bei demselben Kosten-/Abzugsmodell ohne Erstattung verlangt ein Ziel von 1.000 €/Monat genau 3.466,67 € Miete je Mietmonat; ein Cent weniger unterschreitet das Jahresziel.
-
-Drei neue Speichergruppen: vollständige Übernahme aller alten Felder/Schritte/Rechenrichtungen unter Volljahresmodus, kein Überschreiben beim Lesen, Rücklagenmigration, Ablehnen beschädigter oder gemischter Schema-Versionen, Roundtrip neuer Jahresfelder und unvollständiger Jahresentwürfe.
-
-Zusätzlicher DOM-Durchgang erfolgreich: Volljahr → Kalenderjahr → Volljahr mit erhaltenen Werten; Jahresaufschlüsselung und richtige Durchschnitts-Gesamteinnahmen; separate Jahresabzüge/AfA; Wechsel 6/7 AfA-Monate und Leerstand ohne automatische AfA-Kürzung; ungültige/fractionale Leerstände und Zahlungsmonate; ungenutzte Felder; ungekürzte Jahresbeträge; Null-Mietmonatsfall; explizite Jahres-AfA trotz ungültiger ungenutzter Volljahresbasis; Schema-2-Speicherung/Neuladen/Export/Import/Rückgängig; tatsächliches Schema-1-Laden und Dateiimport mit identischem Volljahresergebnis und sichtbarem Übernahmehinweis.
-
-## Manuelle und externe Nachweise
-
-- Nutzer bestätigte am 19.10.2026 den iPhone-/Safari-Bedienungstest der vorherigen Alpha 0.1.
-- Nutzer hat am 19.10.2026 Speichern/Sicherung der Alpha 0.5 ausdrücklich abgenommen. Dies ersetzt keine gesonderte Abnahme der neuen Jahresplanung.
-- GitHub Pages ist aktiviert. Die zuvor veröffentlichte Alpha wurde vom Nutzer aufgerufen.
-- Der alte Alpha-0.1-Safari-Durchgang ist keine Abnahme der neuen Kosten-/AfA-Oberfläche.
-- Alpha 0.2: GitHub Actions und Pages-Deployment für Commit 6a9e5c98bbfda49666aa7d5748aef8d284a12b3e erfolgreich bestätigt.
-- Alpha 0.4: GitHub Actions und Pages-Deployment für Commit b6662037f19c64d2349049f1800aaa04dad7aba8 erfolgreich bestätigt.
-- Alpha 0.5: GitHub Actions und Pages-Deployment für Commit ef95c2430dfc7b53c635f1ba38720e53aaa5eba4 erfolgreich bestätigt.
-
-## Nicht durchgeführt / noch offen
-
-- Kein visueller Browserlauf der Alpha 0.6: Chromium fehlt; früherer Installationsversuch lieferte ein unbrauchbares Archiv. DOM-Prüfung ist kein Browser-Rendering-Test.
-- Jahresplanung mit Start Juli, Leerstand, Zahlungsmonaten, eigenen Abzügen/AfA sowie gespeichertem Jahresmodus auf iPhone/Safari abnehmen. 320-px-Layout, Fokus/Tastatur und native Dezimaleingabe weiterhin gezielt visuell prüfen.
-- Teilmonate, abweichende Zu-/Abflusszeitpunkte, Ausfälle, mehrere Eigentümer, USt/Vorsteuer und vollständige persönliche Veranlagung sind nicht implementiert und nicht abgedeckt.
-- Ein lokales Bestehen ist kein Nachweis des GitHub-Actions-/Pages-Laufs für den neuen Commit; dessen Status separat prüfen.
-
-
-
-
+- Neue Einseitenansicht mit echtem iPhone/Safari: Lesbarkeit, Einklappen, virtuelle Kommatastatur, Dateiablage/-auswahl und Druck-/PDF-Dialog. Linux-WebKit mit Mobile-Viewport ersetzt diesen Test nicht.
+- Neue Kalender-/Regeljahresbedienung manuell abnehmen; bisherige Speicher-Abnahme nicht still auf den ganzen Umbau übertragen.
+- Teilmonate, abweichende Zu-/Abflusszeitpunkte, Ausfälle, mehrere Eigentümer, USt/Vorsteuer und vollständige persönliche Veranlagung sind außerhalb des implementierten Modells.

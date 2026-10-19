@@ -100,3 +100,7 @@ Es wurden eine aktuelle Eigentümer-Vorschreibung, eine Vorjahresabrechnung, ein
 
 
 
+
+## Regeljahr-Leerstand und eigener m²-Vergleich ab Alpha 0.7
+
+Der erwartete Leerstand ist eine Planannahme zur Einnahmenseite, keine automatische Kürzung oder Freigabe von Kosten/AfA. Weiterhin dieselben oben geprüften Grundregeln und gesondert eingegebene Jahresabzüge. Ein selbst hinterlegter Vergleich je m² ist ausschließlich Orientierung; es wird weder ein gesetzlicher Richtwert ermittelt noch eine Mietzinsgrenze bestätigt. Keine neue steuer- oder mietrechtliche Einstufung im UI-Umbau.

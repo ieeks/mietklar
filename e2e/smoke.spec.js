@@ -72,6 +72,13 @@ test('rule-year vacancy and calendar-year arithmetic, with invalid-state suppres
   await field(page, 'startMonth').selectOption('7');
   await expect.poll(() => value(page, 'annualRent')).toBe(8400);
   await expect.poll(() => value(page, 'headline')).toBe(85);
+  await openSection(page, 'afa');
+  await field(page, 'afaMode').selectOption('known'); await field(page, 'afa').fill('2400,00');
+  await field(page, 'yearAfaMode').selectOption('regular'); await field(page, 'yearAfaMonths').selectOption('6');
+  await expect.poll(() => value(page, 'headline')).toBe(125);
+  await field(page, 'yearAfaMonths').selectOption('7'); await expect.poll(() => value(page, 'headline')).toBe(165);
+  await field(page, 'yearAfaMode').selectOption('unknown'); await field(page, 'afaMode').selectOption('unknown');
+  await expect.poll(() => value(page, 'headline')).toBe(85);
   await field(page, 'vacantMonths').fill('1');
   await expect.poll(() => value(page, 'headline')).toBe(15);
   await field(page, 'vacantMonths').fill('7');
@@ -92,7 +99,8 @@ test('rule-year vacancy and calendar-year arithmetic, with invalid-state suppres
 
 test('flow conserves receipts and represents a cash shortfall without a false surplus', async ({ page }) => {
   const widths = await page.locator('[data-flow-bar] > span').evaluateAll(nodes => nodes.map(n => parseFloat(n.style.width)));
-  expect(widths.reduce((a,b) => a+b, 0)).toBeCloseTo(100, 6);
+  // Browsers serialize CSS percentages with fewer digits than the pure model.
+  expect(widths.reduce((a,b) => a+b, 0)).toBeCloseTo(100, 3);
   const amounts = await page.locator('[data-flow-value]').allTextContents();
   expect(amounts.map(displayed).reduce((a,b) => a+b, 0)).toBeCloseTo(await value(page, 'total'), 2);
   await page.locator('[data-calc-mode="rent"]').click(); await field(page, 'monthlyRent').fill('0');
@@ -114,6 +122,9 @@ test('optional m² comparison and purchase errors do not corrupt the rental resu
   await openSection(page, 'purchase'); await field(page, 'purchase').fill('1001');
   await expect(page.locator('[data-investment-result]')).toBeHidden();
   await expect(page.locator('[data-out="headline"]')).toContainText('505,00');
+  await openSection(page, 'afa'); await field(page, 'vat').selectOption('unknown');
+  await expect(page.locator('[data-result-content]')).toBeHidden(); await expect(page.locator('[data-print]')).toBeDisabled();
+  await field(page, 'vat').selectOption('exempt'); await expect(page.locator('[data-result-content]')).toBeVisible();
 });
 
 test('opt-in, reload, export/import/undo and scoped deletion with comma drafts', async ({ page }) => {
