@@ -12,3 +12,6 @@ const screenshot = files.find(path => path.includes('chromium') && path.endsWith
 if (screenshot) console.log('QA_MOBILE_PNG=' + readFileSync(screenshot).toString('base64'));
 const pdf = files.find(path => path.includes('chromium') && path.endsWith('/ergebnis.pdf'));
 if (pdf) console.log('QA_RESULT_PDF=' + readFileSync(pdf).toString('base64'));
+
+const costReview = files.find(path => path.includes('chromium') && path.endsWith('/cost-review.png'));
+if (costReview) console.log('QA_COST_REVIEW_PNG=' + readFileSync(costReview).toString('base64'));

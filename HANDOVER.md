@@ -73,7 +73,7 @@ Die Vorschreibung enthält getrennte BK, Wasser, Heizung, Warmwasser, I-Fonds. J
 ## Sinnvoller nächster Arbeitsblock
 
 1. Neue Einseitenansicht auf iPhone/Safari abnehmen: beide Richtungen, Regler/exaktes Kommafeld, alle Hilfen, Speichern/Import, PDF-/Druckdialog und Layout. Speichern/Sicherung der Alpha 0.5 wurde am 19.10.2026 ausdrücklich abgenommen; das ist keine Abnahme des neuen Designs.
-2. Detaillierte Kosten-/Vertragshinweise und Garage fachlich ausbauen. Vergleich pro m² bleibt ein eigener Orientierungswert, keine gesetzliche Freigabe.
+2. Neue Kosten-Prüfhilfe gemeinsam mit fiktiven Eingaben abnehmen; anschließend individuelle Belege und Vertragsgrundlagen privat prüfen. Vergleich pro m² bleibt Orientierung, keine gesetzliche Freigabe.
 3. Weitere Review-Punkte und Reihenfolge in docs/REVIEW_FOLLOWUP.md. Vor Jahreswechsel Tarifparameter/Jahr zentralisieren. Teilmonate/abweichende Zahlungen und persönliche Steuerfaktoren bleiben eigene größere Blöcke.
 4. Persönlichen Fall privat gegenprüfen; keine Originale/echten Zahlen in GitHub. USt-Voraussetzungen separat klären.
 
@@ -108,3 +108,5 @@ Kosten-Prüfhilfe umgesetzt: `src/cost-guidance.js` enthält 18 bedingte Profile
 Schema 4 ergänzt `composition` (max. 400 Zeichen), `agreement` (unknown/planned/documented/excluded) und neue Kategorien. Formate 1–3 werden zuerst strikt gegen ihre alten Regeln geprüft, dann neue Prüffelder leer/offen ergänzt. Bestehende Geldwerte, Zahlungen und Abzüge bleiben erhalten; keine Vertragsgrundlage aus alten Namen ableiten. Keine privaten Originale oder echten Beträge übernommen. Sammelposten und Einzelpositionen dürfen nicht doppelt erfasst werden. Gemeinsame Garagenkosten können in einer Wohnungsabrechnung stehen, ohne dass ein eigener Stellplatz vermietet wird; Zuordnung und Nutzungsrecht prüfen. Fondsarbeiten sind von Einzahlungen zu unterscheiden, keine doppelte Cash-Erfassung.
 
 Nächster Nutzertest: eine fiktive Karte öffnen, Mietrecht/Vertragsstatus ändern, Kostenart/Vereinbarung prüfen, Quelle öffnen, alles zuklappen, Sicherung exportieren/importieren. Echte iPhone-/Safari-Dialoge weiterhin separat abnehmen. Individuelle Vertrags-/Belegprüfung und Gebäude-AfA sind dadurch nicht abgeschlossen.
+
+Alpha 0.8 Browser-Nachweis: Commit `8f791152c98aa0daa89dbe395c235d777f019b11`, [Actions 39310549482](https://github.com/ieeks/mietklar/actions/runs/39310549482): Syntax/Assetprüfung, 95 reine Tests und alle 20 Chromium-/WebKit-Fälle erfolgreich. Die fachlichen Hinweise sind bedingt; eine echte iPhone-Abnahme und konkrete Vertrags-/Belegprüfung bleiben offen.
