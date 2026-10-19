@@ -46,3 +46,6 @@ Alpha-0.2-Stand: Zahlungsbetrag, erwartete Erstattung und angegebener Jahresabzu
 
 
 Alpha-0.3-Stand: AfA-Hilfe mit vier Eingabewegen, einfacher Kaufherleitung nach Privatnutzung, bedingter Grundanteil-Hilfe und separater regulärer Startjahr-Information. Der Hauptrechner bleibt auf ein volles Vermietungsjahr beschränkt. Weitere Erwerbsarten/Sonder-AfA und die tatsächliche Startjahr-Rechnung sind offen.
+
+
+Alpha-0.4-Stand: Beide Rechenrichtungen und getrennte Einkommenswege sind implementiert. Fixe Hauptmiete liefert Überschuss oder Zuschuss; bereits bereinigte Gehaltsbasis bleibt ohne erneuten Werbungskostenabzug. Alle weiteren Modellgrenzen gelten in beiden Richtungen identisch.

@@ -11,6 +11,16 @@ Stand: 19.10.2026. Quellen sind Ausgangspunkte; ein Kontoname und ein Baujahr er
 - [BMF: AfA bei Vermietung](https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/absetzung-fuer-abnutzung-bei-vuv.html): Gebäude-AfA grundsätzlich 1,5 %, individuelle Sonderfälle möglich. Bestehende Berechnung übernehmen; Grundanteil nicht abschreiben.
 - [BMF: EStR, Rücklagen](https://findok.bmf.gv.at/findok/volltext?segmentId=54c121ef-a7f2-464c-bf00-a452b801c149): Einzahlung in einen Instandhaltungsfonds allein ist noch kein Werbungskostenabzug. Tatsächliche Verwendung und Art der Maßnahme gesondert prüfen.
 
+### Einkommensbasis seit Alpha 0.4
+
+Am 19.10.2026 erneut gegen FinanzOnline-Lohnzettel und BMF-Werbungskostenüberblick geprüft (Links oben). Der KZ-245-Weg setzt eine aktive Arbeitnehmertätigkeit voraus. Das einfache Modell zieht einmal 132 € oder höhere **auf diese Pauschale anzurechnende** Werbungskosten ab. Höhere Beträge werden nicht zusätzlich zur Pauschale gerechnet.
+
+Nicht jede Werbungskostenart wird auf die Pauschale angerechnet: [BMF LStR-Wartungserlass 2024](https://findok.bmf.gv.at/volltext?dokumentId=dca4ae0e-a5f3-4dac-9770-5e6dced9dfa5) nennt auch ohne Anrechnung zu berücksichtigende Arten. Eine vollständige Werbungskostenklassifikation wird hier nicht implementiert. Solche weiteren Anpassungen sind über eine passend bereinigte Tarifbasis abzubilden.
+
+Direkte Eingabe = jährliche Gehalts-Tarifbasis **vor Hinzurechnung dieser Vermietung**, nach den passenden Abzügen. Keine automatische 132-€-Pauschale und keine Abzüge aus dem inaktiven KZ-245-Weg. Kein Bescheid-Gesamteinkommen mit bereits enthaltenem Vermietungsüberschuss ungeprüft erneut verwenden. Beide Wege ersetzen keine vollständige persönliche Veranlagung.
+
+Das Jahresmodell erlaubt keine negative Gehaltsbasis. Bei rechnerisch negativem Betrag wird die Basis mit sichtbarem Hinweis auf 0 begrenzt; ein möglicher einkunftsübergreifender Verlustausgleich ist nicht berechnet. Diese Begrenzung ist eine Modellgrenze, keine steuerliche Aussage zur individuellen Abzugsfähigkeit.
+
 ### Erstmalige Vermietung nach Privatnutzung
 
 Nach [BMF: AfA bei Vermietung](https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/absetzung-fuer-abnutzung-bei-vuv.html), geprüft am 19.10.2026: Ein bisheriger Vermietungs-AfA-Wert muss bei erstmaliger Vermietung nicht vorhanden sein. Bei seit 2013 erstmaliger Vermietung sind fiktive Anschaffungskosten nur im entsprechenden Altvermögensfall möglich; für Neuvermögen sind die tatsächlichen Anschaffungs-/Herstellungskosten maßgeblich. Grund und Boden sind nicht abschreibbar. Erwerbszeitpunkt/-art, anrechenbare Nebenkosten und Vermietungsbeginn prüfen; keinen heutigen Marktwert pauschal ansetzen. Grundsätzlich 1,5 % Jahres-AfA, Halb-/Ganzjahres-AfA und Sonderfälle getrennt behandeln. Ein einfacher Assistent für Käufe ab 2003 nach Privatnutzung ist seit Alpha 0.3 implementiert; Sonderfälle und eine steuerliche Freigabe nicht.
@@ -78,5 +88,6 @@ Gewünschtes Entwicklungsszenario seit 19.10.2026: vorerst Kleinunternehmerbefre
 ## Private Quellen
 
 Es wurden eine aktuelle Eigentümer-Vorschreibung, eine Vorjahresabrechnung, ein Grundbuchauszug und ein Kaufvertrag als Struktur-/Szenariobeispiele gelesen. Keine Originale, OCR-Texte, persönlichen Identifikatoren oder tatsächlichen Einzelbeträge sind Bestandteil dieses Repos. Bei einer späteren individuellen Berechnung gezielt privat auf aktuelle Dokumente zugreifen; nicht aus fiktiven Fixtures auf reale Verhältnisse schließen.
+
 
 

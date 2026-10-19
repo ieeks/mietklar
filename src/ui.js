@@ -1,7 +1,8 @@
 
-import { solveRent, comparePurchase, validateTariff } from './calc.js';
+import { comparePurchase, validateTariff } from './calc.js';
 import { aggregateCosts } from './costs.js';
 import { resolveAfa, suggestLandShare } from './afa.js';
+import { resolveIncomeBase, calculateScenario } from './planning.js';
 
 (async () => {
   const root = document.getElementById('mietklar-app');
@@ -10,7 +11,7 @@ import { resolveAfa, suggestLandShare } from './afa.js';
   const el = key => q('[data-key="' + key + '"]');
   const val = key => Number(el(key).value);
   const money = value => new Intl.NumberFormat('de-AT', { style: 'currency', currency: 'EUR' }).format(value);
-  let step = 0, tariff, adoptedLandSuggestion = false;
+  let step = 0, tariff, adoptedLandSuggestion = false, calculationMode = 'target';
   const hints = {
     bk: 'Sammelposten: Einzelpositionen und Mietvertrag prüfen. Nicht pauschal vollständig weiterverrechnen.',
     water: 'Wasser und Abwasser: Kostenanteil, Abrechnung und Vereinbarung prüfen.',
@@ -126,6 +127,20 @@ import { resolveAfa, suggestLandShare } from './afa.js';
     return result;
   }
 
+  function renderCalculationMode() {
+    const forward = calculationMode === 'rent';
+    all('[data-calc-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.calcMode === calculationMode)));
+    all('[data-calc-field]').forEach(field => field.hidden = field.dataset.calcField !== calculationMode);
+    q('[data-start-eyebrow]').textContent = forward ? 'Miete & Einkommen' : 'Ziel & Einkommen';
+    q('[data-start-title]').textContent = forward ? 'Was bleibt dir von der Miete?' : 'Was soll dir bleiben?';
+    q('[data-start-intro]').textContent = forward
+      ? 'Gib die Hauptmiete vor. Wir berechnen deinen Überschuss nach Kosten und zusätzlicher Einkommensteuer.'
+      : 'Dein monatlicher Überschuss nach Kosten und zusätzlicher Einkommensteuer.';
+    if (step === 0) q('[data-progress-text]').textContent = 'Schritt 1 von 5 · ' + (forward ? 'Miete & Einkommen' : 'Ziel & Einkommen');
+    all('[data-income-section]').forEach(section => section.hidden = section.dataset.incomeSection !== el('incomeMode').value);
+    q('[data-deduction-custom]').hidden = el('deductionMode').value !== 'custom';
+  }
+
   function showError(message) {
     q('[data-error]').hidden = false;
     q('[data-error]').textContent = message;
@@ -141,6 +156,7 @@ import { resolveAfa, suggestLandShare } from './afa.js';
 
   function compute() {
     if (!tariff) return false;
+    renderCalculationMode();
     contextHint();
     q('[data-purchase-afa]').hidden = el('treatment').value !== 'afa';
     const lines = readCosts();
@@ -151,32 +167,43 @@ import { resolveAfa, suggestLandShare } from './afa.js';
       const row = input.closest('[data-cost-row]');
       const inactive = (input.hasAttribute('data-cost-forward') && row.querySelector('[data-cost-payer]').value !== 'partial')
         || (input.hasAttribute('data-cost-tax-annual') && row.querySelector('[data-cost-tax]').value !== 'annual')
-        || (input === el('purchaseAfa') && el('treatment').value !== 'afa');
+        || (input === el('purchaseAfa') && el('treatment').value !== 'afa')
+        || (input === el('target') && calculationMode !== 'target')
+        || (input === el('monthlyRent') && calculationMode !== 'rent')
+        || (input.closest('[data-income-section]') && input.closest('[data-income-section]').dataset.incomeSection !== el('incomeMode').value)
+        || (input === el('salaryDeduction') && el('deductionMode').value !== 'custom');
       const bad = !inactive && (input.value === '' || !Number.isFinite(Number(input.value)) || Number(input.value) < 0);
       input.setAttribute('aria-invalid', String(bad));
       invalid ||= bad;
     }
     if (invalid) return showError('Bitte gültige Beträge ab 0 eingeben. Aktive Zahlenfelder dürfen nicht leer sein.');
-    let costs, solved, afaResult;
-    const base = Math.max(0, val('salary') - val('salaryDeduction'));
-    let afa;
+    let costs, solved, afaResult, income, base, afa;
     try {
+      income = resolveIncomeBase({
+        mode: el('incomeMode').value, salary: val('salary'), base: val('salaryBase'),
+        deductionMode: el('deductionMode').value, deduction: val('salaryDeduction')
+      });
+      base = income.base;
       afaResult = readAfa();
       afa = afaResult.annualAfa;
       costs = aggregateCosts([...lines, {
         name: 'Persönlicher Puffer', amount: val('buffer'), period: 'month',
         kind: 'buffer', payer: 'owner', taxStatus: 'none'
       }]);
-      solved = solveRent({
+      solved = calculateScenario({
+        mode: calculationMode, target: val('target'), rent: val('monthlyRent')
+      }, {
         base, annualCashCosts: costs.annualCashCosts,
         annualReimbursements: costs.annualReimbursements,
-        annualTaxCosts: costs.annualTaxCosts, annualAfa: afa, target: val('target')
+        annualTaxCosts: costs.annualTaxCosts, annualAfa: afa
       }, tariff);
     } catch (error) { return showError(error.message); }
     q('[data-error]').hidden = true;
     const rent = solved.rent, e = solved.rentalIncome;
     const tenant = costs.annualReimbursements / 12;
     const payments = costs.annualCashCosts / 12;
+    const displayCash = Math.round(solved.monthlyCash * 100) / 100 || 0;
+    const shortfall = displayCash < 0;
     const prescription = lines.filter((line, i) => all('[data-cost-row]')[i].dataset.group === 'house')
       .reduce((sum, line) => sum + line.amount * (line.period === 'month' ? 1 : 1 / 12), 0);
     const purchase = val('purchase');
@@ -189,13 +216,32 @@ import { resolveAfa, suggestLandShare } from './afa.js';
     }
     const outputs = {
       prescription, tenant, payments, ownCosts: payments - tenant, taxCosts: costs.annualTaxCosts,
-      rent, total: rent + tenant, cash: solved.monthlyCash, tax: solved.annualTax / 12,
+      rent, total: rent + tenant, cash: displayCash, tax: solved.annualTax / 12,
+      headline: calculationMode === 'target' ? rent : Math.abs(displayCash),
+      salaryBase: base, salaryAppliedDeduction: income.appliedDeduction,
       annualAfa: afa, purchase, saving, burden, afterPurchase
     };
     all('[data-out]').forEach(node => node.textContent = money(outputs[node.dataset.out]));
+    q('[data-income-explain]').textContent = el('incomeMode').value === 'provided'
+      ? 'Bereinigte Basis direkt übernommen; kein weiterer Werbungskostenabzug durch die App.'
+      : money(val('salary')) + ' KZ 245 minus ' + money(income.appliedDeduction) + ' angesetzte Werbungskosten. '
+        + (income.notes.length ? income.notes.join(' ') : '');
+    q('[data-result-title]').textContent = calculationMode === 'target'
+      ? 'Diese Miete brauchst du.' : shortfall ? 'Hier musst du noch zuzahlen.' : 'Das bleibt dir von der Miete.';
+    q('[data-result-label]').textContent = calculationMode === 'target'
+      ? 'Benötigte Hauptmiete ohne Kostenersatz'
+      : shortfall ? 'Nötiger Zuschuss aus eigener Tasche' : 'Überschuss nach Kosten und zusätzlicher Steuer';
+    q('[data-result-rent-row]').hidden = calculationMode !== 'rent';
+    q('[data-cash-label]').textContent = shortfall ? 'Monatlicher Saldo' : 'Für dich frei verfügbar';
+    q('[data-cash-summary]').dataset.tone = shortfall ? 'negative' : 'normal';
+    q('[data-result-content] .mr-result').dataset.tone = calculationMode === 'rent' && shortfall ? 'negative' : 'normal';
+    q('[data-shortfall-note]').hidden = !shortfall;
+    q('[data-shortfall-note]').textContent = shortfall
+      ? 'Bei dieser Hauptmiete fehlen dir im Monatsdurchschnitt ' + money(Math.abs(displayCash))
+        + '. Ein möglicher steuerlicher Verlustausgleich ist nicht berücksichtigt.' : '';
     q('[data-open-cost]').textContent = costs.unknownForward.length + ' Position(en) mit offener Erstattung; '
       + costs.unknownTax.length + ' mit offenem Steuerabzug. Ungeklärt heißt jeweils vorerst 0 € Erstattung bzw. 0 € Abzug.';
-    const assumptions = afaResult.notes.map(note => 'Gebäude-AfA: ' + note);
+    const assumptions = [...income.notes, ...afaResult.notes.map(note => 'Gebäude-AfA: ' + note)];
     for (const row of costs.unknownForward) assumptions.push(row.name + ': Erstattung noch prüfen; vorerst von dir getragen.');
     for (const row of costs.unknownTax) assumptions.push(row.name + ': Steuerabzug noch prüfen; vorerst 0 € Abzug.');
     for (const row of costs.rows.filter(row => row.annualDeduction > 0 && !row.evidence)) {
@@ -222,7 +268,7 @@ import { resolveAfa, suggestLandShare } from './afa.js';
         + (afaResult.status === 'open' ? 'Gebäude-AfA ist offen und mit 0 € angesetzt. ' : '')
         + 'Mietererstattungen zählen als Einnahmen; nur die gesondert angegebenen Jahresabzüge mindern die Steuerbasis.';
     const cutoff = tariff.brackets.find(b => b.upTo === null || base + Math.max(0, e) <= b.upTo);
-    q('[data-tax-explain]').textContent = 'Tarifbasis aus dem Gehalt: ' + money(base)
+    q('[data-tax-explain]').textContent = 'Tarifbasis vor Vermietung (' + (el('incomeMode').value === 'provided' ? 'direkt eingegeben' : 'aus KZ 245') + '): ' + money(base)
       + ' / Jahr. Vermietungsüberschuss: ' + money(e) + ' / Jahr. Darin enthalten: '
       + money(costs.annualReimbursements) + ' Mietererstattungen als Einnahmen, '
       + money(costs.annualTaxCosts) + ' angegebene Kostenabzüge und ' + money(afa)
@@ -238,7 +284,7 @@ import { resolveAfa, suggestLandShare } from './afa.js';
   }
 
   function show() {
-    const names = ['Ziel & Einkommen', 'Wohnungskosten', 'AfA & Steuer', 'Ergebnis', 'Anschaffung'];
+    const names = [calculationMode === 'rent' ? 'Miete & Einkommen' : 'Ziel & Einkommen', 'Wohnungskosten', 'AfA & Steuer', 'Ergebnis', 'Anschaffung'];
     all('[data-panel]').forEach(panel => panel.hidden = Number(panel.dataset.panel) !== step);
     q('[data-progress-text]').textContent = 'Schritt ' + (step + 1) + ' von 5 · ' + names[step];
     all('.mr-dot').forEach((dot, i) => dot.dataset.on = String(i <= step));
@@ -265,6 +311,14 @@ import { resolveAfa, suggestLandShare } from './afa.js';
   q('[data-home]').addEventListener('click', () => {
     step = 0; show();
     const heading = q('[data-panel="0"] h2'); heading.tabIndex = -1; heading.focus({ preventScroll: true });
+  });
+  all('[data-calc-mode]').forEach(button => button.addEventListener('click', () => {
+    calculationMode = button.dataset.calcMode;
+    show();
+  }));
+  q('[data-change-calculation]').addEventListener('click', () => {
+    step = 0; show();
+    el(calculationMode === 'target' ? 'target' : 'monthlyRent').focus();
   });
   q('[data-next]').addEventListener('click', () => { if (compute()) { step = Math.min(4, step + 1); show(); } });
   q('[data-back]').addEventListener('click', () => { step = Math.max(0, step - 1); show(); });
@@ -300,5 +354,6 @@ import { resolveAfa, suggestLandShare } from './afa.js';
   q('[data-next]').disabled = false;
   show();
 })();
+
 
 

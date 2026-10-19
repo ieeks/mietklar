@@ -3,16 +3,37 @@
 
 
 <div class="mr-app">
-<header class="mr-top"><button type="button" class="mr-wordmark" data-home aria-label="mietklar. – Zur Startseite" title="Zur Startseite">mietklar<span style="color:var(--mr-brand)">.</span></button><span class="mr-year">Alpha 0.3 · 2026</span></header><div class="mr-help alpha"><strong>Alpha · fiktive Beispieldaten.</strong> Bedienungs- und Tarifmodell für 12 vermietete Monate ohne USt. Ungeklärte Steuerabzüge werden mit 0 € angesetzt. Keine vollständige Steuer- oder Mietrechtsprüfung.</div>
+<header class="mr-top"><button type="button" class="mr-wordmark" data-home aria-label="mietklar. – Zur Startseite" title="Zur Startseite">mietklar<span style="color:var(--mr-brand)">.</span></button><span class="mr-year">Alpha 0.4 · 2026</span></header><div class="mr-help alpha"><strong>Alpha · fiktive Beispieldaten.</strong> Bedienungs- und Tarifmodell für 12 vermietete Monate ohne USt. Ungeklärte Steuerabzüge werden mit 0 € angesetzt. Keine vollständige Steuer- oder Mietrechtsprüfung.</div>
 <div class="mr-progress"><span data-progress-text>Schritt 1 von 5 · Ziel &amp; Einkommen</span><div class="mr-dots" aria-hidden="true"><span class="mr-dot" data-on="true"></span><span class="mr-dot"></span><span class="mr-dot"></span><span class="mr-dot"></span><span class="mr-dot"></span></div></div>
 <main class="mr-main">
 <section class="mr-step-panel" data-panel="0">
-<div class="mr-eyebrow">Ziel &amp; Einkommen</div><h2>Was soll dir bleiben?</h2><p>Dein monatlicher Überschuss nach Kosten und zusätzlicher Einkommensteuer.</p>
-<div class="mr-choice"><label for="mk-target">Wunschüberschuss / Monat (€)</label><input id="mk-target" data-key="target" type="number" min="0" value="1000" inputmode="decimal"></div>
-<label class="mr-field" style="margin-top:20px">Steuerpflichtige Bezüge laut Lohnzettel / Jahr (€)<input data-key="salary" type="number" min="0" value="45132" inputmode="decimal"></label>
-<details><summary class="">Wo finde ich diesen Betrag?</summary><div class="mr-help">Im Jahreslohnzettel L16 unter <strong>Kennzahl 245</strong>. Das ist weder dein Jahresbrutto noch das ausbezahlte Netto. Begünstigte Sonderzahlungen nicht nochmals addieren.</div></details>
-<div class="mr-fields"><label class="mr-field">Werbungskosten / Jahr (€)<input data-key="salaryDeduction" type="number" min="0" value="132" inputmode="decimal"></label></div><div class="mr-hint">Beispiel: 132 € Pauschale. Weitere persönliche Abzüge werden in dieser Vorschau nicht abgebildet.</div>
-<div class="mr-help">Eigentumswohnung in Österreich · kein Kredit · Berechnung für einen Eigentümer mit 100 % Anteil.</div>
+<div class="mr-eyebrow" data-start-eyebrow>Ziel &amp; Einkommen</div>
+<div class="mr-calculation-mode" role="group" aria-label="Rechenrichtung">
+<button type="button" data-calc-mode="target" aria-pressed="true"><strong>Wunschbetrag</strong><span>Welche Miete brauche ich?</span></button>
+<button type="button" data-calc-mode="rent" aria-pressed="false"><strong>Miete vorgeben</strong><span>Was bleibt mir übrig?</span></button>
+</div>
+<h2 data-start-title>Was soll dir bleiben?</h2>
+<p data-start-intro>Dein monatlicher Überschuss nach Kosten und zusätzlicher Einkommensteuer.</p>
+<div class="mr-choice" data-calc-field="target"><label for="mk-target">Wunschüberschuss / Monat (€)</label><input id="mk-target" data-key="target" type="number" min="0" step="0.01" value="1000" inputmode="decimal"></div>
+<div class="mr-choice" data-calc-field="rent" hidden><label for="mk-rent">Hauptmiete / Monat, ohne Kostenersatz (€)</label><input id="mk-rent" data-key="monthlyRent" type="number" min="0" step="0.01" value="1400" inputmode="decimal"><div class="mr-hint">Betriebskosten, Heizung und andere Erstattungen kommen im nächsten Schritt gesondert dazu.</div></div>
+<div class="mr-section"><h3>Deine Einkommensbasis</h3>
+<label class="mr-field">Welchen Jahreswert hast du?<select data-key="incomeMode"><option value="payslip">Lohnzettel · KZ 245</option><option value="provided">Bereinigte Tarifbasis ohne Vermietung</option></select></label>
+<div data-income-section="payslip">
+<label class="mr-field mr-afa-field">Steuerpflichtige Bezüge · KZ 245 / Jahr (€)<input data-key="salary" type="number" min="0" step="0.01" value="45132" inputmode="decimal"></label>
+<details><summary>Wo finde ich diesen Betrag?</summary><div class="mr-help">Im Jahreslohnzettel L16 unter <strong>Kennzahl 245</strong>. Das ist weder dein Jahresbrutto noch das ausbezahlte Netto. Sozialversicherung und begünstigte Sonderzahlungen nicht nochmals pauschal abziehen oder addieren. Das Modell setzt eine aktive nichtselbstständige Tätigkeit voraus.</div></details>
+<label class="mr-field mr-afa-field">Werbungskosten aus deiner Arbeit<select data-key="deductionMode"><option value="flat">132 € Pauschale verwenden</option><option value="custom">Höhere Werbungskosten statt Pauschale eingeben</option></select></label>
+<label class="mr-field mr-afa-field" data-deduction-custom hidden>Werbungskosten statt Pauschale / Jahr (€)<input data-key="salaryDeduction" type="number" min="0" step="0.01" value="132" inputmode="decimal"></label>
+<div class="mr-hint">Hier sind Werbungskosten mit Anrechnung auf die Pauschale gemeint, etwa Arbeitsmittel oder Fortbildung. Ein höherer Jahresbetrag ersetzt die 132 €; die Pauschale kommt nicht nochmals dazu. Für zusätzlich zur Pauschale abziehbare Beträge oder weitere persönliche Abzüge eine passend bereinigte Tarifbasis verwenden. Bereits enthaltene Abzüge nicht nochmals erfassen; Wohnungskosten kommen separat.</div>
+<div class="mr-row"><span>Angesetzte Werbungskosten / Jahr</span><strong data-out="salaryAppliedDeduction"></strong></div>
+</div>
+<div data-income-section="provided" hidden>
+<label class="mr-field mr-afa-field">Bereinigte Tarifbasis ohne diese Vermietung / Jahr (€)<input data-key="salaryBase" type="number" min="0" step="0.01" value="45000" inputmode="decimal"></label>
+<div class="mr-help">Hier sind die passenden Abzüge bereits berücksichtigt. Die App zieht weder 132 € noch die Werbungskosten aus dem anderen Eingabeweg nochmals ab. Verwende eine vergleichbare Jahresbasis für dein Gehalt <strong>vor Hinzurechnung dieser Vermietung</strong>.</div>
+<div class="mr-hint">Kein Bescheid-Einkommen übernehmen, in dem diese Vermietung bereits enthalten ist. Kein Brutto-/Netto-Lohnrechner; weitere Einkünfte und persönliche Steuerbesonderheiten werden nicht automatisch ergänzt.</div>
+</div>
+<div class="mr-summary" aria-live="polite"><div class="mr-row"><span>Tarifbasis vor Vermietung / Jahr</span><strong data-out="salaryBase"></strong></div><div class="mr-hint" data-income-explain></div></div>
+</div>
+<div class="mr-help">Eigentumswohnung in Österreich · kein Kredit · 100 % Eigentümeranteil · Planung für 12 vermietete Monate.</div>
 </section>
 
 <section class="mr-step-panel" data-panel="1" hidden>
@@ -131,10 +152,10 @@
 <div class="mr-help">Vorschau: 12 vermietete Monate. Für die endgültige App ergänzen wir Leerstand und weitere steuerliche Annahmen.</div>
 </section>
 <section class="mr-step-panel" data-panel="3" hidden>
-<div class="mr-eyebrow">Dein Ergebnis</div><h2>Diese Miete brauchst du.</h2>
+<div class="mr-eyebrow">Dein Ergebnis</div><h2 data-result-title>Diese Miete brauchst du.</h2>
 <div class="mr-help" data-caveat></div>
-<div data-result-content><div class="mr-result" aria-live="polite"><div class="mr-result-label">Hauptmiete ohne Kostenersatz</div><div class="mr-amount"><span data-out="rent"></span><small> / Monat</small></div><div class="mr-row"><span>Erwarteter Kostenersatz</span><strong data-out="tenant"></strong></div><div class="mr-row"><span>Gesamtzahlung des Mieters</span><strong data-out="total"></strong></div><div class="mr-good"><span>Für dich frei verfügbar</span><strong data-out="cash"></strong></div></div>
-<details open><summary class="">So setzt es sich zusammen / Monat</summary><div class="mr-row"><span>Gesamtzahlung des Mieters</span><strong data-out="total"></strong></div><div class="mr-row"><span>Deine Zahlungen inkl. Rücklage &amp; Puffer</span><strong data-out="payments"></strong></div><div class="mr-row"><span>Zusätzliche Steuerrücklage</span><strong data-out="tax"></strong></div><div class="mr-divider"></div><div class="mr-row"><span>Angesetzter Kostenabzug / Jahr</span><strong data-out="taxCosts"></strong></div><div class="mr-row"><span>Steuerlich wirksame AfA / Jahr</span><strong data-out="annualAfa"></strong></div><div class="mr-hint">Monatlicher Jahresdurchschnitt. Die AfA ist in der Steuerberechnung enthalten und wird nicht nochmals als Zahlung abgezogen.</div></details>
+<div data-result-content><div class="mr-result" aria-live="polite"><div class="mr-result-label" data-result-label>Benötigte Hauptmiete ohne Kostenersatz</div><div class="mr-amount"><span data-out="headline"></span><small> / Monat</small></div><div class="mr-row" data-result-rent-row hidden><span>Eingegebene Hauptmiete</span><strong data-out="rent"></strong></div><div class="mr-row"><span>Erwarteter Kostenersatz</span><strong data-out="tenant"></strong></div><div class="mr-row"><span>Gesamtzahlung des Mieters</span><strong data-out="total"></strong></div><div class="mr-good" data-cash-summary><span data-cash-label>Für dich frei verfügbar</span><strong data-out="cash"></strong></div></div>
+<div class="mr-help" data-shortfall-note hidden></div><button type="button" class="mr-change-mode" data-change-calculation>Rechenrichtung / Eingaben ändern</button><details open><summary class="">So setzt es sich zusammen / Monat</summary><div class="mr-row"><span>Gesamtzahlung des Mieters</span><strong data-out="total"></strong></div><div class="mr-row"><span>Deine Zahlungen inkl. Rücklage &amp; Puffer</span><strong data-out="payments"></strong></div><div class="mr-row"><span>Zusätzliche Steuerrücklage</span><strong data-out="tax"></strong></div><div class="mr-divider"></div><div class="mr-row"><span>Angesetzter Kostenabzug / Jahr</span><strong data-out="taxCosts"></strong></div><div class="mr-row"><span>Steuerlich wirksame AfA / Jahr</span><strong data-out="annualAfa"></strong></div><div class="mr-hint">Monatlicher Jahresdurchschnitt. Die AfA ist in der Steuerberechnung enthalten und wird nicht nochmals als Zahlung abgezogen.</div></details>
 <details data-assumptions-wrap open><summary>Noch zu prüfen (<span data-assumption-count>0</span>)</summary><ul class="mr-assumptions" data-assumptions></ul></details><details><summary class="">Meine Steuerstufen verstehen</summary><div class="mr-help" data-tax-explain></div></details></div>
 </section>
 <section class="mr-step-panel" data-panel="4" hidden>
@@ -147,7 +168,7 @@
 </section>
 <div class="mr-error" role="alert" data-error hidden></div><noscript>Bitte JavaScript aktivieren, um die Alpha zu verwenden.</noscript>
 <nav class="mr-nav" aria-label="Rechenschritte"><button type="button" data-back class="">← Zurück</button><button type="button" disabled data-next class="mr-primary ">Weiter zu den Kosten →</button></nav>
-<div class="mr-note">Alpha 0.3 · Sämtliche vorausgefüllten Zahlen sind fiktive Beispiele. Keine automatische Speicherung.</div>
+<div class="mr-note">Alpha 0.4 · Sämtliche vorausgefüllten Zahlen sind fiktive Beispiele. Keine automatische Speicherung.</div>
 </main></div>
 
 </div>
@@ -174,5 +195,6 @@
 
 <script type="module" src="./src/ui.js"></script>
 </body></html>
+
 
 

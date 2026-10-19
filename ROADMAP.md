@@ -23,7 +23,7 @@
 
 ## Alpha 0.3 – AfA-Hilfe; weitere Jahres- und Steuerrechnung offen
 
-- [ ] Einkommensbasis: KZ 245 und bereits bereinigte Basis als getrennte Eingabewege; Doppelabzüge verhindern.
+- [x] Alpha 0.4: KZ 245 und bereits bereinigte Basis als getrennte Eingabewege; keine erneuten Abzüge im direkten Weg.
 - [ ] Weitere tarifpflichtige Einkünfte und Veranlagungsfreibetrag in beiden Vergleichsfällen.
 - [x] AfA offen / Jahreswert / Gebäude-Basis / Kaufherleitung für Kauf ab 2003 nach Privatnutzung; Nebenkosten und Grundanteil, bewusste Übernahme bedingter 20/30/40-%-Vorschläge.
 - [x] Reguläre Startjahr-AfA als separate Halb-/Ganzjahresinformation; Volljahres-Zielmiete unverändert.
@@ -31,7 +31,8 @@
 - [ ] Neue AfA-Hilfe auf iPhone/Safari prüfen.
 - [ ] Leerstand: tatsächliche Jahreserträge und nicht gedeckte Kosten statt pauschaler Kürzung aller Positionen.
 - [ ] Normales Vermietungsjahr, Anschaffungsjahr und tatsächlicher Jahres-Zahlungsfluss unterscheiden.
-- [ ] Vorwärtsmodus „Miete eingeben → was bleibt?“.
+- [x] Alpha 0.4: Vorwärtsmodus „Miete eingeben → was bleibt?“; Zuschuss bei negativem Saldo, Wechsel ohne Eingabeverlust.
+- [ ] Neue Rechenrichtungen und Einkommenswege auf iPhone/Safari prüfen.
 - [ ] Persönliche Absetzbeträge/weitere Steuerfaktoren prüfen oder bewusst nachvollziehbar abgrenzen.
 
 ## Vor einer belastbaren Version: Umsatzsteuer und Anschaffungen
@@ -55,5 +56,6 @@
 ## Später, bei Bedarf
 
 PDF-/OCR-Import, mehrere Eigentümer/Objekte, Rendite, Kredit oder Airbnb. Diese Erweiterungen sind nicht Voraussetzung für die erste kleine App.
+
 
 
