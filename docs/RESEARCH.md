@@ -38,7 +38,7 @@ Die Kaufherleitung beschränkt sich bewusst auf Käufe ab 2003 nach ausschließl
 
 Grundanteil-Vorschlag ist nur nach bekannten Bedingungen und Ausschluss besonderer Bewertungsfälle verfügbar, wird nicht automatisch angewendet und bleibt nach Übernahme als Planungsannahme gekennzeichnet. Nach einer Änderung der Hilfsbedingungen wird ein übernommener Vorschlag ungültig. Individuell eingegebene Werte sind Angaben des Nutzers, keine Bestätigung der App.
 
-Die Hauptrechnung nutzt einen vollen Jahres-AfA-Wert für 12 vermietete Monate. Die Startjahr-Vorschau bei regulärer AfA dient nur der Information. Kein stillschweigender Wechsel auf Halbjahres-AfA in einer Ganzjahres-Mietkalkulation. Sonder-/beschleunigte Abschreibung sowie eine vollständige Startjahresrechnung sind nicht automatisiert.
+Der Volljahresmodus nutzt weiterhin einen vollen Jahres-AfA-Wert für zwölf Mietmonate. Die Startjahr-Vorschau bei regulärer AfA dient nur der Information. Kein stillschweigender Wechsel auf Halbjahres-AfA in einer Ganzjahres-Mietkalkulation. Sonder-/beschleunigte Abschreibung bleibt nicht automatisiert. Die gesonderte Kalenderjahresplanung ab Alpha 0.6 steht unten; sie ersetzt keine vollständige Zu-/Abflussrechnung.
 
 ## Kostenmodell seit Alpha 0.2
 
@@ -47,7 +47,7 @@ Mietererstattung und Abzug unabhängig erfassen. Betriebskosten ohne entsprechen
 - [BMF EStR, Einnahmen/Werbungskosten](https://findok.bmf.gv.at/findok/volltext?segmentId=54c121ef-a7f2-464c-bf00-a452b801c149): Eine Durchlaufbehandlung kommt unter Bedingungen für entsprechende mietengeschützte Objekte in Betracht. Stehen den BK keine entsprechenden Werbungskosten gegenüber, als Einnahme erfassen.
 - [BFG: Nichtabzugsfähige Werbungskosten und Vorsteuern bei Vermietung](https://findok.bmf.gv.at/findok/volltext?dokumentId=94116553-73be-4477-80b9-1cca1670dfe5): bestätigt die notwendige Trennung von Betriebskosteneinnahmen und tatsächlich abzugsfähigem Aufwand.
 
-Implementierung: Jahreserlös = Hauptmiete × 12 + erwarteter Kostenersatz; Steuerbasis = Jahreserlös minus angegebener Jahresabzug minus Gebäude-AfA. Cash = Jahreserlös minus Zahlungen/Puffer minus Zusatzsteuer. Unbekannt ist keine steuerliche Freigabe: 0 € Erstattung und 0 € Abzug als getrennte vorläufige Modellannahmen. Akonti sind Zahlungswerte und ersetzen keine steuerliche Jahresermittlung. Eigenständige Jahresabzüge können von Zahlungen abweichen; die App prüft deren rechtliche Zuordnung und Höhe nicht. Keine pauschale Behauptung einer abschließend richtigen Steuerhöhe.
+Implementierung im Volljahresmodus: Jahreserlös = Hauptmiete × 12 + erwarteter Kostenersatz; Steuerbasis = Jahreserlös minus angegebener Jahresabzug minus Gebäude-AfA. Cash = Jahreserlös minus Zahlungen/Puffer minus Zusatzsteuer. Unbekannt ist keine steuerliche Freigabe: 0 € Erstattung und 0 € Abzug als getrennte vorläufige Modellannahmen. Akonti sind Zahlungswerte und ersetzen keine steuerliche Jahresermittlung. Eigenständige Jahresabzüge können von Zahlungen abweichen; die App prüft deren rechtliche Zuordnung und Höhe nicht. Keine pauschale Behauptung einer abschließend richtigen Steuerhöhe.
 
 ## Mietrecht vor Kostenfreigabe
 
@@ -85,9 +85,18 @@ Gewünschtes Entwicklungsszenario seit 19.10.2026: vorerst Kleinunternehmerbefre
 - [BMF: Geringwertige Wirtschaftsgüter](https://findok.bmf.gv.at/findok/volltext?segmentId=82635c96-c216-41ce-a45c-ed88b4bcd843): 1.000-€-Grenze; maßgebliche Anschaffungskosten, wirtschaftliche Einheit und Nutzungsanteil prüfen.
 - [BMF: Vorsteuer und GWG-Basis](https://findok.bmf.gv.at/findok/volltext?segmentId=08dc4c9a-529c-4a56-a0df-f89558ac561f): abziehbare Vorsteuer nicht als Anschaffungskosten behandeln.
 
+## Jahresplanung ab Alpha 0.6
+
+Am 19.10.2026 erneut geprüft: [BMF: AfA bei Vermietung](https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/absetzung-fuer-abnutzung-bei-vuv.html), insbesondere reguläre Halb-/Ganzjahresregel und Ausnahme bei beschleunigter AfA. AfA-Nutzungsmonate nicht ungeprüft mit tatsächlich bezahlten Mietmonaten gleichsetzen. Der neue Kalenderjahresweg verlangt dafür eine gesonderte Auswahl; fortgesetzte Vermietung/Sonderfälle über eigenen Jahresbetrag führen.
+
+[RIS § 19 EStG](https://www.ris.bka.gv.at/NormDokument.wxe?Abfrage=Bundesnormen&Gesetzesnummer=10004570&Paragraf=19): zeitliche Zuordnung grundsätzlich nach Zu-/Abfluss, einschließlich besonderer Regeln für regelmäßig wiederkehrende Zahlungen und bestimmter Vorauszahlungen. Eine bloße Multiplikation mit Mietmonaten ist keine vollständige Jahresveranlagung. Die Alpha nimmt im Monatsmodell Zahlung im selben Jahr an; abweichende Zeitpunkte und Teilmonate bleiben ausdrücklich offen. Jahreskosten/-erstattungen sind eingegebene Jahressummen und werden nicht nochmals gekürzt.
+
+Vorweggenommene Kosten und Leerstand: keine automatische Abzugsfreigabe. Ernsthafte Vermietungsabsicht und frühere Privatnutzung separat prüfen; der Kalenderjahres-Abzug startet unabhängig von der Volljahreswahl mit 0 € und wird als eigener Jahresbetrag angegeben. Dazu als primärer Rechercheansatz [BFG 26.02.2026: Nachweis der Vermietungsabsicht nach außen](https://findok.bmf.gv.at/findok/volltext?dokumentId=2ba75538-b736-4419-b728-cfaff71fa37c). Abruf war nur als Suchauszug lesbar; keine detaillierten Fallregeln daraus implementiert.
+
 ## Private Quellen
 
 Es wurden eine aktuelle Eigentümer-Vorschreibung, eine Vorjahresabrechnung, ein Grundbuchauszug und ein Kaufvertrag als Struktur-/Szenariobeispiele gelesen. Keine Originale, OCR-Texte, persönlichen Identifikatoren oder tatsächlichen Einzelbeträge sind Bestandteil dieses Repos. Bei einer späteren individuellen Berechnung gezielt privat auf aktuelle Dokumente zugreifen; nicht aus fiktiven Fixtures auf reale Verhältnisse schließen.
+
 
 
 

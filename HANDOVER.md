@@ -1,4 +1,4 @@
-# Übergabe: mietklar. Alpha 0.5
+# Übergabe: mietklar. Alpha 0.6
 
 Stand: 19.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADMAP, docs/RESEARCH lesen. Danach zuerst den aktuellen Branch/Commit prüfen; die nächste Sitzung nicht aus dem Gesprächsgedächtnis rekonstruieren.
 
@@ -19,9 +19,9 @@ Stand: 19.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADM
 
 Statische App mit fünf Schritten, heller Darstellung und Home-Button über die Wortmarke. Alpha 0.2 ergänzt dynamische Kostenkarten mit Monats-/Jahreszahlung, voller/teilweiser/keiner/ungeklärter Erstattung, eigener Steuerentscheidung und optionaler Quelle. Eigene Positionen sind hinzufügbar und entfernbar. Die Steuerdetails sind aufklappbar. „Geklärt“ ist die Angabe des Nutzers, keine Bestätigung der App.
 
-`src/costs.js`: reine Normalisierung je Position und Aggregation. Ungeklärte Erstattung = 0 € Einnahme, ungeklärter Steuerabzug = 0 € Abzug. Zahlung bleibt vollständig als Cash-Kosten enthalten. Bekannter Jahresabzug kann separat erfasst werden, auch wenn er von den Zahlungen abweicht. Rücklagen-/Puffereinzahlung bleibt ohne Erstattung/Abzug.
+`src/costs.js`: Volljahr oder Jahreskontext. Im Kalenderjahr monatliche Zahlungen mit eigenen Zahlungsmonaten, monatliche Erstattungen mit Mietmonaten; Jahresbeträge bleiben explizite Jahressummen. Abzug im Kalenderjahr über separate yearTaxStatus/yearTaxAnnual, standardmäßig offen, Rücklage/Puffer ohne Abzug. Weiterhin reine Normalisierung je Position und Aggregation. Ungeklärte Erstattung = 0 € Einnahme, ungeklärter Steuerabzug = 0 € Abzug. Zahlung bleibt vollständig als Cash-Kosten enthalten. Bekannter Jahresabzug kann separat erfasst werden, auch wenn er von den Zahlungen abweicht. Rücklagen-/Puffereinzahlung bleibt ohne Erstattung/Abzug.
 
-`src/calc.js`: Jahresmodell mit getrennten `annualCashCosts`, `annualReimbursements`, `annualTaxCosts`, `annualAfa`. Mietererstattungen erhöhen Cash-Einnahmen und steuerliche Einnahmen. Keine automatische Neutralisierung gegen eine Ausgabe. 2026-Tarif, vereinfachter Veranlagungsfreibetrag für Gehalt plus eine Vermietung, keine Verlustgutschrift. Zielmiete mit minimaler Cent-Rundung.
+`src/calc.js`: Jahresmodell mit getrennten `annualCashCosts`, `annualReimbursements`, `annualTaxCosts`, `annualAfa`. Mietererstattungen erhöhen Cash-Einnahmen und steuerliche Einnahmen. Keine automatische Neutralisierung gegen eine Ausgabe. Hauptmiete × rentMonths (Default 12), Jahres-Cash und Monatsdurchschnitt ÷ 12. Bei 0 Mietmonaten Vorwärtsrechnung möglich, Zielmietsuche mit erklärtem Fehler unterbunden. 2026-Tarif, vereinfachter Veranlagungsfreibetrag für Gehalt plus eine Vermietung, keine Verlustgutschrift. Zielmiete mit minimaler Cent-Rundung.
 
 `src/ui.js`: offene Positionen im Ergebnis; Mietrechtsszenario/Vertragsstatus beeinflussen erklärende Hinweise, erteilen keine Rechtsfreigabe und ändern nicht automatisch die eingegebene Erstattung. Noch kein Mietvertrag ist der Startwert, Mietrecht startet ungeklärt. Keine persönlichen Objektwerte als Defaults.
 
@@ -33,18 +33,20 @@ Einkommenswege: KZ 245 aus aktiver nichtselbstständiger Arbeit mit einfacher 13
 
 Grundanteil-Hilfe: Bedingungen für 20/30/40 % aus GrundanteilV 2016, gesonderte Nachweise/erhebliche Abweichungen verhindern einen Pauschalvorschlag. Keine automatische Anwendung; ausdrücklicher Übernahme-Button. Änderung der zugrunde liegenden Hilfsangaben setzt einen zuvor übernommenen Vorschlag zurück. Individuell eingegebene Anteile werden nicht automatisch überschrieben.
 
-Reguläre Startjahr-AfA bei 0/1–6/7–12 Nutzungsmonaten = 0/halb/voll. Diese Vorschau ändert **nicht** die Zielmiete für 12 vermietete Monate. Sonder-/beschleunigte AfA wird nicht automatisch berechnet. Gekaufter Altbestand bis 2002, frühere Vermietung und andere Erwerbsarten führen zur separaten Prüfung statt automatischer neuer Basis. Bestätigte Sonderwerte können über Jahreswert/Basis übernommen werden.
+Reguläre Startjahr-AfA bei 0/1–6/7–12 Nutzungsmonaten = 0/halb/voll. Die frühere Vorschau im Kauf-Assistenten bleibt Information. Die Kalenderjahresplanung hat eine eigene bewusste AfA-Auswahl: offen/angegebener Jahresbetrag/reguläres erstes AfA-Jahr. Nur letzterer Weg verwendet den Volljahreswert und gesonderte AfA-Nutzungsmonate. Bei eigenem Jahresbetrag blockiert eine ungültige, ungenutzte Volljahresbasis die Jahresrechnung nicht. Sonder-/beschleunigte AfA wird nicht automatisch berechnet. Gekaufter Altbestand bis 2002, frühere Vermietung und andere Erwerbsarten führen zur separaten Prüfung statt automatischer neuer Basis. Bestätigte Sonderwerte können über Jahreswert/Basis übernommen werden.
 
-`src/persistence.js`: striktes versioniertes Eingabeformat, Dateigröße/Feldtypen/Auswahlen prüfen, keine Ergebnisse oder Tarife speichern. Rohwerte einschließlich leerer und negativer Entwürfe bleiben erhalten; fachliche Prüfung weiter im Rechner. Gleiche Tarifjahre erforderlich. Stabile lokale Kennung `mietklar:saved-inputs`, Schema 1. Format, Grenzen und Migrationsregeln in docs/STORAGE.md.
+`src/persistence.js`: striktes versioniertes Eingabeformat, Dateigröße/Feldtypen/Auswahlen prüfen, keine Ergebnisse oder Tarife speichern. Rohwerte einschließlich leerer und negativer Entwürfe bleiben erhalten; fachliche Prüfung weiter im Rechner. Gleiche Tarifjahre erforderlich. Stabile lokale Kennung `mietklar:saved-inputs`, Schema 2. Strikte Migration gültiger Schema-1-Sicherungen: alte Felder unverändert, Volljahresmodus und neue Jahresdefaults ergänzen; Jahresabzüge bleiben gesondert offen. Lesen schreibt die alte Kopie nicht um; erst nächste Eingabe/Speicherung schreibt Schema 2. Übernahmehinweis sichtbar. Format, Grenzen und Migrationsregeln in docs/STORAGE.md.
 
 `src/storage-ui.js`: Opt-in zunächst aus, vorhandener gültiger Speicherstand stellt die frühere Auswahl wieder her. Speichern nach 400 ms sowie bei ausstehender Änderung beim Verlassen/Verbergen der Seite. Aus/Löschen entfernt nur die App-Kennung und lässt aktuelle Eingaben stehen. JSON-Import/-Export auch ohne Speichern; Import übernimmt die aktuelle Speicherwahl, schaltet sie nicht ein. Letzten Import innerhalb der Sitzung rückgängig machen. Vor Übernahme vollständig strukturell prüfen; bei unerwartetem Anwendungsfehler Formular zurücksetzen. Unlesbare/neuere/fremde Jahresstände nicht überschreiben: automatische Speicherung sperren, Original herunterladen oder löschen lassen. Speicherfehler sichtbar melden; keine falsche Erfolgsbestätigung. Änderung in anderem Tab pausiert hier die Speicherung, kein automatischer Geräte-/Tab-Abgleich.
 
-`data/tarif-2026.json`: zentrale Tarifquelle mit Prüfdatum. 52 automatisierte Rechen-/Kosten-/AfA-/Planungs-/Speichertests. Die GitHub-Actions-Prüfung führt Syntax und Tests bei Push/PR aus. Keine neuen Produktionsabhängigkeiten.
+`data/tarif-2026.json`: zentrale Tarifquelle mit Prüfdatum. 68 automatisierte Rechen-/Kosten-/AfA-/Planungs-/Speichertests. Die GitHub-Actions-Prüfung führt Syntax und Tests bei Push/PR aus. Keine neuen Produktionsabhängigkeiten.
+
+`src/year.js`: Startmonat 1–12 und Leerstandsmonate innerhalb des restlichen Kalenderjahrs → Mietmonate. Volljahresmodus ignoriert ungenutzte Jahresfelder. Eigener Jahres-AfA-Wert oder reguläre Erstjahresregel; Belegungsmonate und AfA-Nutzung unabhängig. Näheres in docs/YEAR_MODEL.md. Keine Bestimmung der Abzugsfähigkeit.
 
 ## Wichtige Alpha-Annahmen und offene Punkte
 
-1. Nur 12 vermietete Monate, ohne USt, 100 % Eigentümeranteil, kein Kredit. Gehalt wahlweise aus KZ 245 mit einfacher Werbungskostenberücksichtigung oder direkt als bereinigte Tarifbasis ohne diese Vermietung; keine volle persönliche Steuerveranlagung.
-2. Zahlungs-/Erstattungsbeträge sind Planwerte, keine abgegrenzte Jahresbuchhaltung. Timing, Leerstand, Jahresausgleich und tatsächlich steuerlich zulässige Kosten werden nicht automatisch ermittelt. Ungeklärte Abzüge nicht mit einer abschließend richtigen Steuerprognose verwechseln.
+1. Volljahr oder Kalenderjahr 2026 mit ganzen Mietmonaten, ohne USt, 100 % Eigentümeranteil, kein Kredit. Gleiche Miete je Mietmonat und Zahlung im gleichen Jahr; kein Zahlungsledger für Nachzahlungen/Ausfälle/Teilmonate. Gehalt wahlweise aus KZ 245 mit einfacher Werbungskostenberücksichtigung oder direkt als bereinigte Tarifbasis ohne diese Vermietung; keine volle persönliche Steuerveranlagung.
+2. Zahlungs-/Erstattungsbeträge sind Planwerte, keine abgegrenzte Jahresbuchhaltung. Leerstand ist als Anzahl voller Monate ab Start erfassbar. Einzelne Zahlungstermine, Jahresausgleich und tatsächlich steuerlich zulässige Kosten werden nicht automatisch ermittelt. Private Vorperioden und belegte Vermietungsabsicht selbst prüfen; Zahlungsmonate und Steuerjahresbeträge passend eingeben. Ungeklärte Abzüge nicht mit einer abschließend richtigen Steuerprognose verwechseln.
 3. Jahresabzüge dürfen unabhängig von den Zahlungen eingegeben werden. Der Nutzer muss Zeitpunkt, Betrag, Vermietungsanteil und mögliche Verteilung klären. Gebäude-AfA und Anschaffungsvergleich nicht zusätzlich als Kostenposition doppelt erfassen.
 4. AfA-Hilfe für den einfachen Kauf-/Privatnutzungsfall ist implementiert. Individuelle AfA noch nicht ermittelt. Nur mit passender Erwerbs-/Nutzungsgeschichte verwenden. Fehlende Angaben führen zu 0 € AfA mit Hinweis. Individuelle Basis, Kostenaufteilung, Sonderfälle und Vorjahreswerte werden nicht durch die App freigegeben.
 5. Kleinunternehmerbefreiung als Planungsannahme. Unbekannter/steuerpflichtiger USt-Status blendet Ergebnisse aus. Keine gemischten USt-Sätze/Vorsteuer. Umsatzgrenze unternehmerweit beim selben Unternehmer prüfen.
@@ -62,9 +64,9 @@ Die Vorschreibung enthält getrennte BK, Wasser, Heizung, Warmwasser, I-Fonds. J
 
 ## Sinnvoller nächster Arbeitsblock
 
-1. Neue Kosten-/AfA-Oberfläche, beide Rechenrichtungen und Speichern auf iPhone/Safari ausprobieren. Insbesondere Neuladen, Export in Dateien, erneuter Import und Ausschalten/Löschen. Der Nutzer hat die Bedienung der vorherigen Alpha 0.1 am 19.10.2026 bestätigt; das ist keine Abnahme der neuen Karten.
+1. Neue Kalenderjahresplanung auf iPhone/Safari ausprobieren: Start Juli, ein Monat Leerstand, weiterlaufende Kosten und separate AfA/Jahresabzüge. Speichern/Sicherung hat der Nutzer am 19.10.2026 ausdrücklich abgenommen. Das ist keine Abnahme der neuen Jahresplanung. Der Nutzer hat die Bedienung der vorherigen Alpha 0.1 am 19.10.2026 bestätigt; das ist keine Abnahme der neuen Karten.
 2. Detaillierte bedingte Kostenhinweise/Kostenarten ausbauen und Garage fachlich führen. MRG-/Vertragseinordnung nicht automatisch freigeben.
-3. Nächster größerer Rechenblock: tatsächliches Vermietungsjahr mit Vermietungsbeginn/Leerstand. Vorher Regeln und Gegenbeispiele festlegen; Zahlung, Ertrag, Steuerabzug und AfA nicht pauschal gemeinsam kürzen. AfA-Sonderfälle und weitere Erwerbsarten nur mit eigenen fachlichen Regeln ausbauen.
+3. Kalenderjahres-Grundmodell ist implementiert. Nächste sinnvolle Erweiterung: konkretere bedingte Kostenhilfen/Garage und transparentere Anschaffungs-/Tarifgrenzen-Hilfe. Für weitere Jahresgenauigkeit Teilmonate, Zahlungsausfälle und abweichende Zu-/Abflusszeitpunkte mit eigenen Regeln entwickeln. AfA-Sonderfälle und weitere Erwerbsarten ebenfalls nur mit eigenen fachlichen Regeln ausbauen.
 4. Persönlichen Fall anhand privater Unterlagen gegenprüfen, ohne Daten zu veröffentlichen. USt-Voraussetzungen separat verifizieren.
 
 GitHub Pages ist aktiviert: https://ieeks.github.io/mietklar/. Änderungen auf main veröffentlichen automatisch.
@@ -77,7 +79,7 @@ npm test
 python3 -m http.server 8080
 ```
 
-Syntax und 52 Rechen-/Kosten-/AfA-/Planungs-/Speichertests erfolgreich. Browser-Rendering der neuen Oberfläche ist nicht bestätigt: Chromium fehlt; früherer Downloadversuch lieferte ein unbrauchbares Archiv. Zusätzlich DOM-Funktionsdurchgänge mit temporärem jsdom, ohne Browser-Rendering; tatsächliche Fälle und Status stehen in docs/TESTING.md. Manueller Safari-Test der vorherigen Version bleibt als historischer Nachweis erhalten.
+Syntax und 68 Rechen-/Kosten-/AfA-/Planungs-/Speichertests erfolgreich. Browser-Rendering der neuen Oberfläche ist nicht bestätigt: Chromium fehlt; früherer Downloadversuch lieferte ein unbrauchbares Archiv. Zusätzlich DOM-Funktionsdurchgänge mit temporärem jsdom, ohne Browser-Rendering; tatsächliche Fälle und Status stehen in docs/TESTING.md. Manueller Safari-Test der vorherigen Version bleibt als historischer Nachweis erhalten.
 
 ## Projektpflege
 

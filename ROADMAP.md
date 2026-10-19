@@ -29,8 +29,9 @@
 - [x] Reguläre Startjahr-AfA als separate Halb-/Ganzjahresinformation; Volljahres-Zielmiete unverändert.
 - [ ] AfA-Sonderfälle, frühere Vermietung, weitere Erwerbsarten und beschleunigte AfA fachlich erweitern; aktuell nur mit separat geklärten Werten.
 - [ ] Neue AfA-Hilfe auf iPhone/Safari prüfen.
-- [ ] Leerstand: tatsächliche Jahreserträge und nicht gedeckte Kosten statt pauschaler Kürzung aller Positionen.
-- [ ] Normales Vermietungsjahr, Anschaffungsjahr und tatsächlicher Jahres-Zahlungsfluss unterscheiden.
+- [x] Alpha 0.6: Startmonat und volle Leerstandsmonate; Hauptmiete/monatliche Erstattungen nach Mietmonaten, Zahlungskosten separat. Teilmonate und abweichende Zahlungszeitpunkte bleiben offen.
+- [x] Alpha 0.6: Volljahres- und Kalenderjahresplanung getrennt; Jahres-Cash und Monatsdurchschnitt, eigene Jahresabzüge und AfA-Auswahl.
+- [ ] Einzelne Zu-/Abflusszeitpunkte, Teilmonate, Zahlungsausfälle und Jahresausgleich abbilden.
 - [x] Alpha 0.4: Vorwärtsmodus „Miete eingeben → was bleibt?“; Zuschuss bei negativem Saldo, Wechsel ohne Eingabeverlust.
 - [ ] Neue Rechenrichtungen und Einkommenswege auf iPhone/Safari prüfen.
 - [ ] Persönliche Absetzbeträge/weitere Steuerfaktoren prüfen oder bewusst nachvollziehbar abgrenzen.
@@ -51,7 +52,16 @@
 - [x] Ausschalten/Löschen nur für den lokalen App-Stand; aktuelle Sitzung erhalten.
 - [x] Versionierter JSON-Import/-Export mit Struktur-, Größen-, Werte- und Steuerjahresprüfung; letzten Import rückgängig machen.
 - [x] Unlesbare Speicherstände erhalten und herunterladbar machen; Speicherfehler sichtbar melden; bei Änderungen in anderem Tab pausieren.
-- [ ] Speicherung/Neuladen, Dateiexport/-import und Löschverhalten auf iPhone/Safari abnehmen.
+- [x] Speichern/Sicherung am 19.10.2026 vom Nutzer ausdrücklich abgenommen.
+
+## Alpha 0.6 – Kalenderjahr mit Start & Leerstand
+
+- [x] Startmonat und Leerstand mit Grenzen; gleiche Miete je ganzem Mietmonat.
+- [x] Weiterlaufende Zahlungen und Jahresbeträge separat, eigene Abzüge für das Kalenderjahr.
+- [x] Jahres-AfA offen / eigener Betrag / reguläres erstes AfA-Jahr; keine automatische Kürzung nach Belegung.
+- [x] Jahresaufschlüsselung; Ziel als Jahresdurchschnitt über zwölf Monate und 0-Monats-Fall erklärt.
+- [x] Schema-1-Sicherungen geprüft in Schema 2 übernehmen, alte Volljahreswerte erhalten.
+- [ ] Neue Jahresplanung auf iPhone/Safari abnehmen.
 
 ## Komfort und Veröffentlichung
 

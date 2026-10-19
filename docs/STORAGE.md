@@ -1,6 +1,6 @@
 # Eingaben speichern und übertragen
 
-Stand: Alpha 0.5, 19.10.2026. Die finanzielle Berechnung bleibt unverändert.
+Stand: Alpha 0.6, 19.10.2026. Speichern/Sicherung der Alpha 0.5 wurde vom Nutzer am 19.10.2026 abgenommen. Die neue Jahresplanung verwendet zusätzliche Eingabefelder.
 
 ## Bedienung
 
@@ -12,23 +12,25 @@ Stand: Alpha 0.5, 19.10.2026. Die finanzielle Berechnung bleibt unverändert.
 
 Die Dateien enthalten Gehalt, Kosten, AfA und Freitextangaben im Klartext. Auch der Browserstand ist unverschlüsselt. Keine persönlichen Sicherungen ins öffentliche Repository laden. Die App sendet die Formulareingaben nicht an einen Server und synchronisiert keine Geräte. Lokale Website-Daten sind an Browser und Herkunft gebunden; GitHub Pages teilt eine Herkunft mit anderen Seiten desselben `ieeks.github.io`-Hosts. Die App nutzt keine fremden Laufzeitskripte. Für stärkere Isolation später eine eigene Herkunft prüfen.
 
-## Format 1
+## Format 2 und Übernahme von Format 1
 
 Lokale Kennung: `mietklar:saved-inputs`. Eine stabile Kennung ermöglicht es, einen unbekannten älteren/neuen Stand zu erkennen, statt ihn durch neue Defaults zu ersetzen.
 
 | Schlüssel | Inhalt |
 | --- | --- |
 | `app` | Exakt `mietklar` |
-| `schemaVersion` | Ganzzahl `1` |
+| `schemaVersion` | Ganzzahl `2`; vorhandenes Format `1` wird geprüft migriert |
 | `tariffYear` | Gleich dem Tarifjahr der geöffneten App, derzeit `2026` |
 | `savedAt` | Kanonischer UTC-Zeitstempel mit Millisekunden |
-| `state.fields` | Vollständige erlaubte `data-key`-Felder als rohe Zeichenketten |
-| `state.costs` | Kostenkarten mit Name, Zahlbetrag, Zeitraum, Erstattung, Steuerwahl/-betrag, Quelle, Art und Gruppe |
+| `state.fields` | Vollständige erlaubte `data-key`-Felder als rohe Zeichenketten, jetzt auch `periodMode`, `startMonth`, `vacantMonths`, `yearAfaMode`, `yearAfa`, `yearAfaMonths` |
+| `state.costs` | Kostenkarten mit Name, Zahlbetrag, Zeitraum, Erstattung, Steuerwahl/-betrag, Quelle, Art und Gruppe; zusätzlich `paymentMonths`, `yearTaxStatus`, `yearTaxAnnual` |
 | `state.calculationMode` | `target` oder `rent` |
 | `state.step` | Ganzzahl von `0` bis `4` |
 | `state.adoptedLandSuggestion` | Wahrheitswert zur Herkunft des bewusst übernommenen Grundanteils |
 
-Kein gespeicherter Tarif, Ergebniswert, HTML oder ausführbarer Code. Die Feldliste und Auswahlen sind in `src/persistence.js` festgelegt. Unbekannte/fehlende Schlüssel werden auf jeder Ebene abgewiesen; nur neue erlaubte Objekte werden aufgebaut. Texte werden durch die UI als Text bzw. Feldwert verwendet.
+Kein gespeicherter Tarif, Ergebniswert, HTML oder ausführbarer Code. Die Feldliste und Auswahlen sind in `src/persistence.js` pro Version festgelegt. Unbekannte/fehlende Schlüssel werden auf jeder Ebene abgewiesen; nur neue erlaubte Objekte werden aufgebaut. Texte werden durch die UI als Text bzw. Feldwert verwendet.
+
+Gültiges Format 1: zunächst vollständig gegen die damalige Feldliste prüfen, dann unverändert alle alten Werte kopieren und Defaults ergänzen: Volljahresmodus, Start Jänner, Leerstand 0, Jahres-AfA offen/0, AfA-Nutzungsmonate offen. Pro Position Zahlungsmonate 12 und Jahresabzug offen/0; Rücklage zwingend ohne Jahresabzug. Übernahmehinweis wird angezeigt. Laden allein schreibt die alte lokale Kopie nicht um. Die nächste bewusste Änderung mit eingeschalteter Speicherung sowie neuer Export verwenden Format 2. Ältere Dateien können weiterhin importiert werden; fehlerhafte oder gemischte Versionsformate werden nicht still repariert. Werte und Ergebnis der bisherigen Volljahresplanung bleiben erhalten.
 
 Maximal 256 KiB UTF-8 und 100 Kostenpositionen. Texte sind feldweise begrenzt; numerische Rohwerte maximal 64 Zeichen, endlich und im Betrag höchstens 10¹². Auswahlwerte, Schritt und Rücklagenstatus müssen passen. Ein als übernommen markierter Grundanteil muss den zugehörigen Hilfsangaben entsprechen, damit die spätere Invalidierung weiter funktioniert.
 

@@ -1,11 +1,11 @@
-# Prüfung der Alpha 0.5
+# Prüfung der Alpha 0.6
 
 Stand: 19.10.2026.
 
 ## Erfolgreich lokal ausgeführt
 
-- `npm run check`: Syntax von UI, Rechenkern, Kosten-, AfA-, Planungs-, Speicher- und Speicherbedienungsmodul.
-- `npm test`: 52 Rechen-/Kosten-/AfA-/Planungs-/Speichertests bestanden (40 bestehende, 12 neue).
+- `npm run check`: Syntax von UI, Rechenkern, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Speicherbedienungsmodul.
+- `npm test`: 68 Rechen-/Kosten-/AfA-/Planungs-/Speicher-/Jahrestests bestanden (52 bestehende, 13 Jahresgruppen, 3 Migrations-/Jahresspeichergruppen).
 - HTML-Nesting und eindeutige IDs statisch geprüft.
 - Zusätzlicher DOM-Funktionsdurchgang mit temporärem jsdom außerhalb der Projektabhängigkeiten: Navigation/Home und Fokus, Erhalt der Eingaben, getrennte Erstattung/Abzüge, Monat/Jahr, überhöhte Teilbeträge, inaktive leere Felder, neue Position/Entfernen, Textausgabe ohne HTML-Injektion, USt-Ergebnisunterdrückung und Anschaffungsgrenze.
 - Keine zusätzlichen Produktionsabhängigkeiten.
@@ -66,22 +66,33 @@ Zusätzlich zwölf DOM-Funktionsgruppen mit temporärem jsdom, ohne neue Projekt
 11. 100 importierte Kostenpositionen sperren Hinzufügen; Entfernen erlaubt es wieder.
 12. Unerwartete Ausnahme während der Übernahme setzt den vorherigen Stand zurück und schreibt keine Speicherung.
 
-Der gesamte bisherige Kosten-/AfA-/Planungs-DOM-Durchgang wurde mit Alpha 0.5 erneut erfolgreich ausgeführt. Ein zusätzlicher Controller-Durchgang bestätigt den tatsächlichen 400-ms-Speichertimer, Flush bei verstecktem Dokument, Erhalt des letzten Standes bei späterem Quota-Fehler, erfolgreiches erneutes Speichern und Ignorieren fremder Speicherkennungen. Diese DOM-Durchgänge sind ergänzende lokale Prüfungen, kein im CI eingerichteter echter Browserlauf. Dateidownload wurde über Blob-Inhalt/Dateinamen geprüft; der native iOS-Dateidialog wurde nicht getestet.
+Der gesamte bisherige Kosten-/AfA-/Planungs-DOM-Durchgang und die zwölf Speichergruppen wurden mit Alpha 0.6 erneut erfolgreich ausgeführt. Ein zusätzlicher Controller-Durchgang der Alpha 0.5 bestätigte den tatsächlichen 400-ms-Speichertimer, Flush bei verstecktem Dokument, Erhalt des letzten Standes bei späterem Quota-Fehler, erfolgreiches erneutes Speichern und Ignorieren fremder Speicherkennungen. Diese DOM-Durchgänge sind ergänzende lokale Prüfungen, kein im CI eingerichteter echter Browserlauf. Dateidownload wurde über Blob-Inhalt/Dateinamen geprüft; der native iOS-Dateidialog wurde nicht getestet.
+
+## Kalenderjahr und Migration
+
+13 neue Jahres-Testgruppen: Startmonat/Leerstand und Grenzen; zwölf weiterlaufende Kostenzahlungen trotz sechs Mietmonaten; kein automatischer Volljahresabzug; eigene Zahlungsmonate und ungekürzte Jahresbeträge; Rücklage/Puffer bei Leerstand; ungültige Jahres-Kostenangaben; Ziel = Monatsdurchschnitt × 12 mit minimalem Centbetrag für 1/3/6/9/12 Mietmonate; Vorwärtsrechnung und gesperrte Zielsuche bei 0 Mietmonaten; Gleichheit des zwölfmonatigen Modells; unabhängige AfA-Nutzungsmonate mit 6/7-Grenze; offene/eigene Jahres-AfA und Sonderpfade; Anschaffung bei unveränderter Miete.
+
+Unabhängiges Beispiel: sechs Monate × 2.000 € Miete, 600 € Erstattungen, 1.200 € Zahlungen, 600 € Kostenabzug, 1.200 € AfA, Basis 45.000 € → Einkünfte 10.800 €, Zusatzsteuer 4.320 €, Jahres-Cash 7.080 €, Durchschnitt 590 €/Monat. Bei demselben Kosten-/Abzugsmodell ohne Erstattung verlangt ein Ziel von 1.000 €/Monat genau 3.466,67 € Miete je Mietmonat; ein Cent weniger unterschreitet das Jahresziel.
+
+Drei neue Speichergruppen: vollständige Übernahme aller alten Felder/Schritte/Rechenrichtungen unter Volljahresmodus, kein Überschreiben beim Lesen, Rücklagenmigration, Ablehnen beschädigter oder gemischter Schema-Versionen, Roundtrip neuer Jahresfelder und unvollständiger Jahresentwürfe.
+
+Zusätzlicher DOM-Durchgang erfolgreich: Volljahr → Kalenderjahr → Volljahr mit erhaltenen Werten; Jahresaufschlüsselung und richtige Durchschnitts-Gesamteinnahmen; separate Jahresabzüge/AfA; Wechsel 6/7 AfA-Monate und Leerstand ohne automatische AfA-Kürzung; ungültige/fractionale Leerstände und Zahlungsmonate; ungenutzte Felder; ungekürzte Jahresbeträge; Null-Mietmonatsfall; explizite Jahres-AfA trotz ungültiger ungenutzter Volljahresbasis; Schema-2-Speicherung/Neuladen/Export/Import/Rückgängig; tatsächliches Schema-1-Laden und Dateiimport mit identischem Volljahresergebnis und sichtbarem Übernahmehinweis.
 
 ## Manuelle und externe Nachweise
 
 - Nutzer bestätigte am 19.10.2026 den iPhone-/Safari-Bedienungstest der vorherigen Alpha 0.1.
+- Nutzer hat am 19.10.2026 Speichern/Sicherung der Alpha 0.5 ausdrücklich abgenommen. Dies ersetzt keine gesonderte Abnahme der neuen Jahresplanung.
 - GitHub Pages ist aktiviert. Die zuvor veröffentlichte Alpha wurde vom Nutzer aufgerufen.
 - Der alte Alpha-0.1-Safari-Durchgang ist keine Abnahme der neuen Kosten-/AfA-Oberfläche.
 - Alpha 0.2: GitHub Actions und Pages-Deployment für Commit 6a9e5c98bbfda49666aa7d5748aef8d284a12b3e erfolgreich bestätigt.
 - Alpha 0.4: GitHub Actions und Pages-Deployment für Commit b6662037f19c64d2349049f1800aaa04dad7aba8 erfolgreich bestätigt.
+- Alpha 0.5: GitHub Actions und Pages-Deployment für Commit ef95c2430dfc7b53c635f1ba38720e53aaa5eba4 erfolgreich bestätigt.
 
 ## Nicht durchgeführt / noch offen
 
-- Kein visueller Browserlauf der Alpha 0.5: Chromium fehlt; früherer Installationsversuch lieferte ein unbrauchbares Archiv. DOM-Prüfung ist kein Browser-Rendering-Test.
-- Neue Kostenkarten, AfA-Hilfe, Rechenrichtungen, Einkommenswege und Speicherpanel auf iPhone/Safari, 320-px-Layout, Fokus/Tastatur und native Dezimaleingabe visuell prüfen.
-- Auf iPhone/Safari mit fiktiven Daten: Speicherung einschalten → Werte ändern → neu laden; Datei in „Dateien“ exportieren → Wert ändern → importieren → rückgängig machen; Speichern ausschalten → neu laden. Auch privates Surfen/Speicherverweigerung und mehrere Tabs manuell prüfen.
-- Zeitpunkte/Abfluss, Leerstand, mehrere Eigentümer, USt/Vorsteuer und vollständige persönliche Veranlagung sind nicht implementiert und nicht abgedeckt.
+- Kein visueller Browserlauf der Alpha 0.6: Chromium fehlt; früherer Installationsversuch lieferte ein unbrauchbares Archiv. DOM-Prüfung ist kein Browser-Rendering-Test.
+- Jahresplanung mit Start Juli, Leerstand, Zahlungsmonaten, eigenen Abzügen/AfA sowie gespeichertem Jahresmodus auf iPhone/Safari abnehmen. 320-px-Layout, Fokus/Tastatur und native Dezimaleingabe weiterhin gezielt visuell prüfen.
+- Teilmonate, abweichende Zu-/Abflusszeitpunkte, Ausfälle, mehrere Eigentümer, USt/Vorsteuer und vollständige persönliche Veranlagung sind nicht implementiert und nicht abgedeckt.
 - Ein lokales Bestehen ist kein Nachweis des GitHub-Actions-/Pages-Laufs für den neuen Commit; dessen Status separat prüfen.
 
 

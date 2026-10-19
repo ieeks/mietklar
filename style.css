@@ -113,3 +113,6 @@ html{color-scheme:only light}body{margin:0;padding:20px 12px;background:#fff6f0;
 
 
 
+
+#mietklar-app .mr-year-plan{padding:16px;border:1px solid var(--mr-line);border-radius:14px;background:var(--mr-panel)}
+#mietklar-app [data-year-only] .mr-field{margin-top:12px}

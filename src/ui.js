@@ -5,6 +5,7 @@ import { resolveAfa, suggestLandShare } from './afa.js';
 import { resolveIncomeBase, calculateScenario } from './planning.js';
 import { setupPersistence } from './storage-ui.js';
 import { MAX_COST_ROWS } from './persistence.js';
+import { resolveYear, resolveYearAfa } from './year.js';
 
 (async () => {
   const root = document.getElementById('mietklar-app');
@@ -37,6 +38,8 @@ import { MAX_COST_ROWS } from './persistence.js';
       row.querySelector('[data-cost-tax]').value = 'none';
       row.querySelector('[data-cost-payer]').disabled = true;
       row.querySelector('[data-cost-tax]').disabled = true;
+      row.querySelector('[data-cost-year-tax]').value = 'none';
+      row.querySelector('[data-cost-year-tax]').disabled = true;
     }
     q('[data-cost-list="' + group + '"]').append(row);
     return row;
@@ -59,7 +62,8 @@ import { MAX_COST_ROWS } from './persistence.js';
       return {
         name: get('name'), amount: get('amount'), period: get('period'),
         payer: get('payer'), forward: get('forward'), taxStatus: get('tax'),
-        taxAnnual: get('tax-annual'), evidence: get('evidence'), kind: row.dataset.kind, group: row.dataset.group
+        taxAnnual: get('tax-annual'), evidence: get('evidence'), kind: row.dataset.kind, group: row.dataset.group,
+        paymentMonths: get('payment-months'), yearTaxStatus: get('year-tax'), yearTaxAnnual: get('year-tax-annual')
       };
     });
     return { fields, costs, calculationMode, step, adoptedLandSuggestion };
@@ -71,7 +75,8 @@ import { MAX_COST_ROWS } from './persistence.js';
       const row = addCost(cost);
       for (const [selector, value] of [
         ['payer', cost.payer], ['forward', cost.forward], ['tax', cost.taxStatus],
-        ['tax-annual', cost.taxAnnual], ['evidence', cost.evidence]
+        ['tax-annual', cost.taxAnnual], ['evidence', cost.evidence], ['payment-months', cost.paymentMonths],
+        ['year-tax', cost.yearTaxStatus], ['year-tax-annual', cost.yearTaxAnnual]
       ]) row.querySelector('[data-cost-' + selector + ']').value = value;
     }
     calculationMode = state.calculationMode; step = state.step;
@@ -79,6 +84,7 @@ import { MAX_COST_ROWS } from './persistence.js';
   }
 
   function readCosts() {
+    const yearMode = el('periodMode').value === 'year';
     q('[data-add-cost]').disabled = all('[data-cost-row]').length >= MAX_COST_ROWS;
     q('[data-add-cost]').title = all('[data-cost-row]').length >= MAX_COST_ROWS ? 'Höchstens 100 Kostenpositionen möglich' : '';
     return all('[data-cost-row]').map(row => {
@@ -86,17 +92,21 @@ import { MAX_COST_ROWS } from './persistence.js';
       const line = {
         name: get('name'), amount: Number(get('amount')), period: get('period'),
         payer: get('payer'), forward: Number(get('forward')), taxStatus: get('tax'),
-        taxAnnual: Number(get('tax-annual')), evidence: get('evidence'), kind: row.dataset.kind
+        taxAnnual: Number(get('tax-annual')), evidence: get('evidence'), kind: row.dataset.kind,
+        paymentMonths: Number(get('payment-months')), yearTaxStatus: get('year-tax'), yearTaxAnnual: Number(get('year-tax-annual'))
       };
-      const annual = line.amount * (line.period === 'month' ? 12 : 1);
+      const annual = line.amount * (line.period === 'month' ? (yearMode ? line.paymentMonths : 12) : 1);
       row.setAttribute('aria-label', line.name || 'Kostenposition');
       row.querySelector('[data-remove-cost]').setAttribute('aria-label', (line.name || 'Kostenposition') + ' entfernen');
       row.querySelector('[data-forward-wrap]').hidden = line.payer !== 'partial';
       row.querySelector('[data-forward-period]').textContent = line.period === 'month' ? 'Erwartete Erstattung / Monat (€)' : 'Erwartete Erstattung / Jahr (€)';
       row.querySelector('[data-tax-annual-wrap]').hidden = line.taxStatus !== 'annual';
+      row.querySelector('[data-payment-months-wrap]').hidden = line.period !== 'month';
+      row.querySelector('[data-year-tax-annual-wrap]').hidden = line.yearTaxStatus !== 'provided';
       row.querySelector('[data-evidence-wrap]').hidden = row.dataset.kind === 'reserve';
-      const deduction = line.taxStatus === 'full' ? annual : line.taxStatus === 'annual' ? line.taxAnnual : 0;
-      row.querySelector('[data-tax-summary]').textContent = line.taxStatus === 'unknown'
+      const deduction = yearMode ? (line.yearTaxStatus === 'provided' ? line.yearTaxAnnual : 0)
+        : line.taxStatus === 'full' ? annual : line.taxStatus === 'annual' ? line.taxAnnual : 0;
+      row.querySelector('[data-tax-summary]').textContent = (yearMode ? line.yearTaxStatus : line.taxStatus) === 'unknown'
         ? 'Steuerabzug: noch prüfen · vorerst 0 €'
         : 'Steuerabzug: ' + money(deduction) + ' / Jahr';
       row.querySelector('[data-cost-equivalent]').textContent = 'Zahlung: ' + money(annual) + ' / Jahr · ' + money(annual / 12) + ' / Monat im Durchschnitt';
@@ -146,7 +156,7 @@ import { MAX_COST_ROWS } from './persistence.js';
     q('[data-afa-status]').textContent = result.status === 'open' ? result.notes[0]
       : mode === 'purchase'
         ? 'Vorläufige Kaufherleitung: ' + money(result.annualAfa) + ' reguläre Gebäude-AfA pro vollem Jahr. Deine Angaben sind nicht durch die App geprüft.'
-        : 'In der Volljahresplanung angesetzt: ' + money(result.annualAfa) + ' Gebäude-AfA. '
+        : 'Volljahreswert als Grundlage: ' + money(result.annualAfa) + ' Gebäude-AfA. '
           + (result.status === 'estimate' ? 'Grundlage ist eine Planungsannahme.' : 'Wert von dir angegeben; keine Prüfung durch die App.');
     q('[data-afa-purchase-breakdown]').hidden = result.totalAcquisition === null;
     q('[data-afa-total]').textContent = result.totalAcquisition === null ? '–' : money(result.totalAcquisition);
@@ -184,9 +194,27 @@ import { MAX_COST_ROWS } from './persistence.js';
     return false;
   }
 
+  function renderPeriod() {
+    const yearMode = el('periodMode').value === 'year';
+    all('[data-year-only]').forEach(node => node.hidden = !yearMode);
+    all('[data-full-only]').forEach(node => node.hidden = yearMode);
+    all('[data-year-afa-section]').forEach(node => node.hidden = node.dataset.yearAfaSection !== el('yearAfaMode').value);
+    q('[data-target-label]').textContent = yearMode ? 'Wunschüberschuss als Jahresdurchschnitt / Monat (€)' : 'Wunschüberschuss / Monat (€)';
+    all('[data-tenant-label]').forEach(node => node.textContent = yearMode ? 'Kostenersatz · Jahresdurchschnitt / Monat' : 'Erwarteter Kostenersatz / Monat');
+    all('[data-total-label]').forEach(node => node.textContent = yearMode ? 'Mietereinnahmen · Jahresdurchschnitt / Monat' : 'Gesamtzahlung des Mieters / Monat');
+    q('[data-year-result]').hidden = !yearMode;
+    if (yearMode) {
+      try {
+        const year = resolveYear({ mode: 'year', startMonth: val('startMonth'), vacantMonths: el('vacantMonths').value === '' ? NaN : val('vacantMonths') });
+        q('[data-year-summary]').textContent = year.rentMonths + ' Mietmonate in 2026. Dein Wunschbetrag gilt im Durchschnitt über alle 12 Kalendermonate. 1.000 € pro Monat bedeuten 12.000 € im Jahr, auch bei einem späten Start.';
+      } catch { q('[data-year-summary]').textContent = 'Bitte Startmonat und Leerstand prüfen.'; }
+    }
+  }
+
   function compute() {
     if (!tariff) return false;
     renderCalculationMode();
+    renderPeriod();
     contextHint();
     q('[data-purchase-afa]').hidden = el('treatment').value !== 'afa';
     const lines = readCosts();
@@ -195,7 +223,13 @@ import { MAX_COST_ROWS } from './persistence.js';
       // AfA fields are validated by the selected route, with incomplete routes explicitly using 0.
       if (input.closest('[data-afa-section]')) { input.setAttribute('aria-invalid', 'false'); continue; }
       const row = input.closest('[data-cost-row]');
-      const inactive = (input.hasAttribute('data-cost-forward') && row.querySelector('[data-cost-payer]').value !== 'partial')
+      const yearMode = el('periodMode').value === 'year';
+      const inactive = (input.closest('[data-year-only]') && !yearMode)
+        || (input.closest('[data-full-only]') && yearMode)
+        || (input.closest('[data-year-afa-section]') && input.closest('[data-year-afa-section]').dataset.yearAfaSection !== el('yearAfaMode').value)
+        || (input.hasAttribute('data-cost-payment-months') && row.querySelector('[data-cost-period]').value !== 'month')
+        || (input.hasAttribute('data-cost-year-tax-annual') && row.querySelector('[data-cost-year-tax]').value !== 'provided')
+        || (input.hasAttribute('data-cost-forward') && row.querySelector('[data-cost-payer]').value !== 'partial')
         || (input.hasAttribute('data-cost-tax-annual') && row.querySelector('[data-cost-tax]').value !== 'annual')
         || (input === el('purchaseAfa') && el('treatment').value !== 'afa')
         || (input === el('target') && calculationMode !== 'target')
@@ -207,25 +241,35 @@ import { MAX_COST_ROWS } from './persistence.js';
       invalid ||= bad;
     }
     if (invalid) return showError('Bitte gültige Beträge ab 0 eingeben. Aktive Zahlenfelder dürfen nicht leer sein.');
-    let costs, solved, afaResult, income, base, afa;
+    let costs, solved, afaResult, income, base, afa, period, yearAfa;
     try {
       income = resolveIncomeBase({
         mode: el('incomeMode').value, salary: val('salary'), base: val('salaryBase'),
         deductionMode: el('deductionMode').value, deduction: val('salaryDeduction')
       });
       base = income.base;
-      afaResult = readAfa();
-      afa = afaResult.annualAfa;
+      period = resolveYear({ mode: el('periodMode').value, startMonth: val('startMonth'), vacantMonths: val('vacantMonths') });
+      try { afaResult = readAfa(); }
+      catch (error) {
+        if (period.mode !== 'year' || el('yearAfaMode').value === 'regular') throw error;
+        afaResult = { status: 'open', annualAfa: 0, notes: [] };
+        q('[data-afa-status]').textContent = 'Volljahresbasis derzeit ungültig. Für dieses Kalenderjahr gilt die separate AfA-Auswahl unten.';
+        q('[data-afa-purchase-breakdown]').hidden = true;
+        q('[data-afa-first-wrap]').hidden = true;
+      }
+      yearAfa = resolveYearAfa({ period: period.mode, mode: el('yearAfaMode').value, amount: val('yearAfa'),
+        months: el('yearAfaMonths').value === 'unknown' ? null : val('yearAfaMonths') }, afaResult);
+      afa = yearAfa.annualAfa;
       costs = aggregateCosts([...lines, {
         name: 'Persönlicher Puffer', amount: val('buffer'), period: 'month',
-        kind: 'buffer', payer: 'owner', taxStatus: 'none'
-      }]);
+        kind: 'buffer', payer: 'owner', taxStatus: 'none', paymentMonths: 12, yearTaxStatus: 'none', yearTaxAnnual: 0
+      }], period);
       solved = calculateScenario({
         mode: calculationMode, target: val('target'), rent: val('monthlyRent')
       }, {
         base, annualCashCosts: costs.annualCashCosts,
         annualReimbursements: costs.annualReimbursements,
-        annualTaxCosts: costs.annualTaxCosts, annualAfa: afa
+        annualTaxCosts: costs.annualTaxCosts, annualAfa: afa, rentMonths: period.rentMonths
       }, tariff);
     } catch (error) { return showError(error.message); }
     q('[data-error]').hidden = true;
@@ -246,10 +290,12 @@ import { MAX_COST_ROWS } from './persistence.js';
     }
     const outputs = {
       prescription, tenant, payments, ownCosts: payments - tenant, taxCosts: costs.annualTaxCosts,
-      rent, total: rent + tenant, cash: displayCash, tax: solved.annualTax / 12,
+      rent, total: solved.annualRent / 12 + tenant, cash: displayCash, tax: solved.annualTax / 12,
       headline: calculationMode === 'target' ? rent : Math.abs(displayCash),
       salaryBase: base, salaryAppliedDeduction: income.appliedDeduction,
-      annualAfa: afa, purchase, saving, burden, afterPurchase
+      annualAfa: afa, purchase, saving, burden, afterPurchase,
+      annualRent: solved.annualRent, annualCash: solved.annualCash,
+      annualReimbursement: costs.annualReimbursements, annualPayments: costs.annualCashCosts, annualTax: solved.annualTax
     };
     all('[data-out]').forEach(node => node.textContent = money(outputs[node.dataset.out]));
     q('[data-income-explain]').textContent = el('incomeMode').value === 'provided'
@@ -271,7 +317,9 @@ import { MAX_COST_ROWS } from './persistence.js';
         + '. Ein möglicher steuerlicher Verlustausgleich ist nicht berücksichtigt.' : '';
     q('[data-open-cost]').textContent = costs.unknownForward.length + ' Position(en) mit offener Erstattung; '
       + costs.unknownTax.length + ' mit offenem Steuerabzug. Ungeklärt heißt jeweils vorerst 0 € Erstattung bzw. 0 € Abzug.';
-    const assumptions = [...income.notes, ...afaResult.notes.map(note => 'Gebäude-AfA: ' + note)];
+    const basisNotes = period.mode === 'full' || el('yearAfaMode').value === 'regular' ? afaResult.notes : [];
+    const assumptions = [...income.notes, ...basisNotes.map(note => 'Gebäude-AfA-Basis: ' + note), ...yearAfa.notes];
+    if (period.mode === 'year') assumptions.push('Kalenderjahr: ' + period.rentMonths + ' volle Mietmonate; Mietzahlungen im selben Jahr angenommen. Jahres-Kostenbeträge und Abzüge selbst abgrenzen. Vorherige Privatkosten nicht automatisch der Vermietung zugerechnet.');
     for (const row of costs.unknownForward) assumptions.push(row.name + ': Erstattung noch prüfen; vorerst von dir getragen.');
     for (const row of costs.unknownTax) assumptions.push(row.name + ': Steuerabzug noch prüfen; vorerst 0 € Abzug.');
     for (const row of costs.rows.filter(row => row.annualDeduction > 0 && !row.evidence)) {
@@ -293,9 +341,10 @@ import { MAX_COST_ROWS } from './persistence.js';
       || (el('treatment').value === 'afa' && deduction > purchase);
     q('[data-caveat]').textContent = vat !== 'exempt'
       ? 'Für diesen Umsatzsteuerstatus gibt es noch kein Ergebnis. Bitte den Status im vorigen Schritt prüfen.'
-      : 'Planung für 12 vermietete Monate mit angenommener Kleinunternehmerbefreiung. '
+      : (period.mode === 'year' ? 'Kalenderjahr 2026 mit ' + period.rentMonths + ' Mietmonaten. Hauptmiete je Mietmonat; alle Überschuss-/Kosten-/Steuer-Monatswerte = Jahresbetrag ÷ 12. ' : 'Planung für 12 vermietete Monate. ')
+        + 'Angenommene Kleinunternehmerbefreiung. '
         + (costs.unknownTax.length ? 'Offene Steuerabzüge sind mit 0 € angesetzt. ' : '')
-        + (afaResult.status === 'open' ? 'Gebäude-AfA ist offen und mit 0 € angesetzt. ' : '')
+        + ((period.mode === 'full' && afaResult.status === 'open') || (period.mode === 'year' && el('yearAfaMode').value === 'unknown') ? 'Gebäude-AfA ist offen und mit 0 € angesetzt. ' : '')
         + 'Mietererstattungen zählen als Einnahmen; nur die gesondert angegebenen Jahresabzüge mindern die Steuerbasis.';
     const cutoff = tariff.brackets.find(b => b.upTo === null || base + Math.max(0, e) <= b.upTo);
     q('[data-tax-explain]').textContent = 'Tarifbasis vor Vermietung (' + (el('incomeMode').value === 'provided' ? 'direkt eingegeben' : 'aus KZ 245') + '): ' + money(base)

@@ -18,11 +18,13 @@ function state() {
       afaLandPercent: '', afaLandStatus: 'unknown', afaMunicipality: 'unknown',
       afaLandPriceBand: 'unknown', afaUnits: 'unknown', afaLandException: 'unknown',
       afaFirstMonths: 'unknown', afaEvidence: '', vat: 'exempt', item: 'Kühlschrank',
-      purchase: '500', treatment: 'instant', purchaseAfa: '100'
+      purchase: '500', treatment: 'instant', purchaseAfa: '100',
+      periodMode: 'full', startMonth: '1', vacantMonths: '0', yearAfaMode: 'unknown', yearAfa: '0', yearAfaMonths: 'unknown'
     },
     costs: [{
       name: 'Betriebskosten', amount: '170', period: 'month', payer: 'unknown', forward: '0',
-      taxStatus: 'unknown', taxAnnual: '0', evidence: '', kind: 'bk', group: 'house'
+      taxStatus: 'unknown', taxAnnual: '0', evidence: '', kind: 'bk', group: 'house',
+      paymentMonths: '12', yearTaxStatus: 'unknown', yearTaxAnnual: '0'
     }],
     calculationMode: 'target', step: 1, adoptedLandSuggestion: false
   };
@@ -54,7 +56,7 @@ test('unfinished financial drafts survive storage validation for later domain va
 test('invalid JSON, foreign files, unsupported versions and other years are rejected', () => {
   assert.throws(() => parseSnapshot('{', 2026), /JSON/);
   for (const value of [null, [], 'text', 7]) assert.throws(() => parseSnapshot(raw(value), 2026));
-  for (const [key, value] of [['app', 'other'], ['schemaVersion', 2], ['schemaVersion', '1'], ['tariffYear', 2025], ['tariffYear', '2026']]) {
+  for (const [key, value] of [['app', 'other'], ['schemaVersion', 99], ['schemaVersion', '1'], ['tariffYear', 2025], ['tariffYear', '2026']]) {
     const snapshot = makeSnapshot(state(), 2026, date); snapshot[key] = value;
     assert.throws(() => parseSnapshot(raw(snapshot), 2026));
   }
@@ -103,7 +105,7 @@ test('cost rows reject unexpected categories, oversized texts and reserve manipu
   }
   const input = state(); input.costs[0].kind = 'reserve';
   assert.throws(() => validateState(input));
-  input.costs[0].payer = 'owner'; input.costs[0].taxStatus = 'none';
+  input.costs[0].payer = 'owner'; input.costs[0].taxStatus = 'none'; input.costs[0].yearTaxStatus = 'none';
   assert.doesNotThrow(() => validateState(input));
   input.costs[0].taxStatus = 'full';
   assert.throws(() => validateState(input), /Rücklagen/);
@@ -160,4 +162,42 @@ test('storage security, quota and deletion errors propagate without claiming suc
   assert.throws(() => readSavedSnapshot(storage, 2026), /SecurityError/);
   assert.throws(() => writeSavedSnapshot(storage, state(), 2026, date), /QuotaExceededError/);
   assert.throws(() => removeSavedSnapshot(storage), /SecurityError/);
+});
+
+function legacySnapshot() {
+  const input = state();
+  for (const key of ['periodMode', 'startMonth', 'vacantMonths', 'yearAfaMode', 'yearAfa', 'yearAfaMonths']) delete input.fields[key];
+  input.costs.forEach(row => { delete row.paymentMonths; delete row.yearTaxStatus; delete row.yearTaxAnnual; });
+  return { app: 'mietklar', schemaVersion: 1, tariffYear: 2026, savedAt: date, state: input };
+}
+
+test('Alpha 0.5 backups migrate every existing value while defaulting to identical full-year planning', () => {
+  const old = legacySnapshot(); old.state.fields.target = ''; old.state.fields.salary = '50000';
+  old.state.costs[0].taxStatus = 'full'; old.state.calculationMode = 'rent'; old.state.step = 3;
+  const original = raw(old), storage = memory(); storage.values.set(STORAGE_KEY, original);
+  const migrated = readSavedSnapshot(storage, 2026);
+  assert.equal(migrated.schemaVersion, 2); assert.equal(migrated.savedAt, date);
+  for (const [key, value] of Object.entries(old.state.fields)) assert.equal(migrated.state.fields[key], value);
+  for (const [key, value] of Object.entries(old.state.costs[0])) assert.equal(migrated.state.costs[0][key], value);
+  assert.equal(migrated.state.calculationMode, 'rent'); assert.equal(migrated.state.step, 3);
+  assert.equal(migrated.state.fields.periodMode, 'full'); assert.equal(migrated.state.fields.yearAfaMode, 'unknown');
+  assert.equal(migrated.state.costs[0].yearTaxStatus, 'unknown'); assert.equal(migrated.state.costs[0].paymentMonths, '12');
+  assert.equal(storage.getItem(STORAGE_KEY), original, 'reading migration never overwrites the original');
+  assert.deepEqual(parseSnapshot(raw(migrated), 2026), migrated, 'new export format roundtrips');
+});
+
+test('legacy reserves migrate cash-only and malformed or mixed versions are never repaired silently', () => {
+  const old = legacySnapshot(); Object.assign(old.state.costs[0], { kind: 'reserve', payer: 'owner', taxStatus: 'none' });
+  assert.equal(parseSnapshot(raw(old), 2026).state.costs[0].yearTaxStatus, 'none');
+  old.state.fields.periodMode = 'year'; assert.throws(() => parseSnapshot(raw(old), 2026));
+  delete old.state.fields.periodMode; old.state.fields.salary = 'invalid'; assert.throws(() => parseSnapshot(raw(old), 2026));
+  const current = makeSnapshot(state(), 2026, date); delete current.state.fields.periodMode;
+  assert.throws(() => parseSnapshot(raw(current), 2026));
+});
+
+test('year fields and separate year tax data survive current-schema draft roundtrips', () => {
+  const input = state(); Object.assign(input.fields, { periodMode: 'year', startMonth: '7', vacantMonths: '', yearAfaMode: 'provided', yearAfa: '1200' });
+  Object.assign(input.costs[0], { paymentMonths: '8', yearTaxStatus: 'provided', yearTaxAnnual: '600' });
+  assert.deepEqual(parseSnapshot(raw(makeSnapshot(input, 2026, date)), 2026).state, input);
+  input.fields.startMonth = '13'; assert.throws(() => validateState(input));
 });

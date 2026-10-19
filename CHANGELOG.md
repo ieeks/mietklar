@@ -1,5 +1,9 @@
 # Änderungen
 
+## 0.6.0-alpha.1 – 19.10.2026
+
+Volljahres- oder Kalenderjahresplanung mit Startmonat und ganzen Leerstandsmonaten. Hauptmiete und monatliche Erstattungen nach Mietmonaten, Zahlungen mit eigenen Zahlungsmonaten; Jahresbeträge bleiben ungekürzt. Separate Steuerabzüge und bewusste Jahres-AfA-Auswahl verhindern eine ungeprüfte Übernahme aus dem Volljahr. Jahresaufschlüsselung, Ziel als Durchschnitt über zwölf Monate und erklärter Null-Mietmonatsfall. Schema 2 mit geprüfter Übernahme aller alten Eingaben aus Alpha 0.5. 68 automatisierte Tests. Nutzer hat Speichern/Sicherung der Alpha 0.5 abgenommen; neue Jahresplanung noch nicht manuell abgenommen.
+
 ## 0.5.0-alpha.1 – 19.10.2026
 
 Freiwillige lokale Speicherung inklusive Entwürfen, Rechenrichtung, Schritt, Kostenkarten und AfA-Herkunft. Speicherung zunächst aus; Löschen erhält die aktuelle Sitzung. Versionierter JSON-Export/-Import mit Größen-/Struktur-/Feldprüfung und gleichem Steuerjahr. Letzten Import rückgängig machen. Fehlerhafte Speicherstände bleiben erhalten und können heruntergeladen werden; Änderungen in anderem Tab pausieren lokale Schreibvorgänge. 52 automatisierte Tests; DOM-Funktionen zusätzlich geprüft, visuelle Safari-Abnahme offen. Finanzielle Berechnung gegenüber Alpha 0.4 unverändert.

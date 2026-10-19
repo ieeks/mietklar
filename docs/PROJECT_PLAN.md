@@ -52,3 +52,5 @@ Alpha-0.4-Stand: Beide Rechenrichtungen und getrennte Einkommenswege sind implem
 
 Alpha-0.5-Stand: Freiwillige lokale Speicherung, Löschen sowie versionierter JSON-Export/-Import mit Rückgängig sind implementiert. Entwürfe bleiben erhalten; Dateiprüfung ersetzt keine fachliche Prüfung. Keine Übernahme gespeicherter Ergebnisse/Tarife und kein automatischer Geräteabgleich. Der nächste größere Rechenblock bleibt Vermietungsbeginn/Leerstand.
 
+
+Alpha-0.6-Stand: Kalenderjahr mit Startmonat und vollen Leerstandsmonaten, separaten Zahlungsmonaten, unabhängigen Jahresabzügen und bewusster AfA-Auswahl. Hauptmiete je Mietmonat; Überschuss immer Jahresergebnis ÷ 12. Alte Sicherungen werden ohne Änderung ihrer Volljahreswerte übernommen. Teilmonate und ein vollständiger Zahlungs-/Abgrenzungsassistent bleiben offen.

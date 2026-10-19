@@ -39,15 +39,20 @@ export function additionalTax(base, rentalIncome, tariff) {
 }
 export function cashAtRent(monthlyRent, model, tariff) {
   nonnegative(monthlyRent, 'Miete');
+  const rentMonths = model.rentMonths ?? 12;
+  if (!Number.isInteger(rentMonths) || rentMonths < 0 || rentMonths > 12) throw new RangeError('Mietmonate: ganze Zahl von 0 bis 12 erforderlich');
   const reimbursements = nonnegative(model.annualReimbursements ?? 0, 'Mietererstattungen');
-  const rentalIncome = monthlyRent * 12 + reimbursements - model.annualTaxCosts - model.annualAfa;
+  const annualRent = monthlyRent * rentMonths;
+  const rentalIncome = annualRent + reimbursements - model.annualTaxCosts - model.annualAfa;
   const annualTax = additionalTax(model.base, rentalIncome, tariff);
-  return { rentalIncome, annualTax, monthlyCash: (monthlyRent * 12 + reimbursements - model.annualCashCosts - annualTax) / 12 };
+  const annualCash = annualRent + reimbursements - model.annualCashCosts - annualTax;
+  return { annualRent, annualCash, rentalIncome, annualTax, monthlyCash: annualCash / 12 };
 }
 export function solveRent(model, tariff) {
   for (const key of ['base', 'annualTaxCosts', 'annualAfa', 'annualCashCosts', 'target']) nonnegative(model[key], key);
   nonnegative(model.annualReimbursements ?? 0, 'Mietererstattungen');
   validateTariff(tariff);
+  if (model.rentMonths === 0) throw new RangeError('Ohne Mietmonate lässt sich keine Zielmiete bestimmen. Miete vorgeben oder Mietmonate ergänzen.');
   let lo = 0, hi = 1000;
   while (cashAtRent(hi, model, tariff).monthlyCash < model.target) {
     hi *= 2;
@@ -71,4 +76,5 @@ export function comparePurchase({ base, rentalIncome, monthlyCash, purchase, ded
   const burden = purchase - saving;
   return { saving, burden, afterPurchase: monthlyCash - burden / 12 };
 }
+
 

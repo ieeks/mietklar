@@ -1,7 +1,7 @@
 import { suggestLandShare } from './afa.js';
 
 export const STORAGE_KEY = 'mietklar:saved-inputs';
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 export const MAX_BACKUP_BYTES = 256 * 1024;
 export const MAX_COST_ROWS = 100;
 const numeric = { type: 'number' };
@@ -9,7 +9,7 @@ const choice = (...values) => ({ type: 'choice', values });
 const text = max => ({ type: 'text', max });
 
 // Raw form values preserve unfinished drafts. Domain validation remains in the calculators.
-export const FIELD_RULES = Object.freeze({
+const V1_FIELD_RULES = {
   target: numeric, monthlyRent: numeric,
   incomeMode: choice('payslip', 'provided'), salary: numeric,
   deductionMode: choice('flat', 'custom'), salaryDeduction: numeric, salaryBase: numeric,
@@ -29,14 +29,21 @@ export const FIELD_RULES = Object.freeze({
   afaFirstMonths: choice('unknown', ...Array.from({ length: 13 }, (_, i) => String(i))),
   afaEvidence: text(300), vat: choice('exempt', 'unknown', 'taxable'),
   item: text(200), purchase: numeric, treatment: choice('instant', 'afa'), purchaseAfa: numeric
+};
+export const YEAR_DEFAULTS = Object.freeze({ periodMode: 'full', startMonth: '1', vacantMonths: '0', yearAfaMode: 'unknown', yearAfa: '0', yearAfaMonths: 'unknown' });
+export const FIELD_RULES = Object.freeze({ ...V1_FIELD_RULES,
+  periodMode: choice('full', 'year'), startMonth: choice(...Array.from({ length: 12 }, (_, i) => String(i + 1))),
+  vacantMonths: numeric, yearAfaMode: choice('unknown', 'provided', 'regular'), yearAfa: numeric,
+  yearAfaMonths: choice('unknown', ...Array.from({ length: 13 }, (_, i) => String(i)))
 });
-const COST_RULES = {
+const V1_COST_RULES = {
   name: text(100), amount: numeric, period: choice('month', 'year'),
   payer: choice('unknown', 'tenant', 'partial', 'owner'), forward: numeric,
   taxStatus: choice('unknown', 'full', 'annual', 'none'), taxAnnual: numeric, evidence: text(250),
   kind: choice('bk', 'water', 'heat', 'reserve', 'admin', 'repair', 'adviser', 'other'),
   group: choice('house', 'own', 'custom')
 };
+const COST_RULES = { ...V1_COST_RULES, paymentMonths: numeric, yearTaxStatus: choice('unknown', 'provided', 'none'), yearTaxAnnual: numeric };
 function exactKeys(value, keys, label) {
   if (value === null || typeof value !== 'object' || Array.isArray(value)
     || Object.keys(value).length !== keys.length
@@ -65,15 +72,17 @@ function validateValues(value, rules, label) {
   }
   return result;
 }
-export function validateState(state) {
+export function validateState(state, version = SCHEMA_VERSION) {
+  if (![1, SCHEMA_VERSION].includes(version)) throw new RangeError('Unbekannte Sicherungsversion.');
   exactKeys(state, ['fields', 'costs', 'calculationMode', 'step', 'adoptedLandSuggestion'], 'Eingabestand');
-  const fields = validateValues(state.fields, FIELD_RULES, 'Eingabefelder');
+  const fields = validateValues(state.fields, version === 1 ? V1_FIELD_RULES : FIELD_RULES, 'Eingabefelder');
   if (!Array.isArray(state.costs) || state.costs.length > MAX_COST_ROWS) throw new RangeError('Sicherung: höchstens 100 Kostenpositionen möglich.');
   const costs = state.costs.map(row => {
-    const copy = validateValues(row, COST_RULES, 'Kostenposition');
+    const copy = validateValues(row, version === 1 ? V1_COST_RULES : COST_RULES, 'Kostenposition');
     if (copy.kind === 'reserve' && (copy.payer !== 'owner' || copy.taxStatus !== 'none')) {
       throw new RangeError('Rücklageneinzahlung: unzulässige Erstattungs-/Steuerauswahl in der Sicherung.');
     }
+    if (version === SCHEMA_VERSION && copy.kind === 'reserve' && copy.yearTaxStatus !== 'none') throw new RangeError('Rücklageneinzahlung: kein automatischer Abzug im Planjahr.');
     return copy;
   });
   if (!['target', 'rent'].includes(state.calculationMode)) throw new RangeError('Sicherung: unbekannte Rechenrichtung.');
@@ -105,9 +114,14 @@ export function parseSnapshot(raw, expectedYear) {
   try { value = JSON.parse(raw); } catch { throw new TypeError('Datei ist keine lesbare mietklar-JSON-Sicherung.'); }
   exactKeys(value, ['app', 'schemaVersion', 'tariffYear', 'savedAt', 'state'], 'Sicherung');
   if (value.app !== 'mietklar') throw new TypeError('Diese Datei ist keine mietklar-Sicherung.');
-  if (value.schemaVersion !== SCHEMA_VERSION) throw new RangeError('Diese Sicherungsversion wird von der App noch nicht unterstützt.');
+  if (![1, SCHEMA_VERSION].includes(value.schemaVersion)) throw new RangeError('Diese Sicherungsversion wird von der App noch nicht unterstützt.');
   if (!Number.isInteger(value.tariffYear) || value.tariffYear !== expectedYear) throw new RangeError('Sicherung und App gehören nicht zum gleichen Steuerjahr.');
-  return makeSnapshot(value.state, value.tariffYear, value.savedAt);
+  let state = validateState(value.state, value.schemaVersion);
+  if (value.schemaVersion === 1) state = {
+    ...state, fields: { ...state.fields, ...YEAR_DEFAULTS },
+    costs: state.costs.map(row => ({ ...row, paymentMonths: '12', yearTaxStatus: row.kind === 'reserve' ? 'none' : 'unknown', yearTaxAnnual: '0' }))
+  };
+  return makeSnapshot(state, value.tariffYear, value.savedAt);
 }
 export function readSavedSnapshot(storage, tariffYear) {
   const raw = storage.getItem(STORAGE_KEY);

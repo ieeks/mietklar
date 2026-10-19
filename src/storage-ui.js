@@ -77,10 +77,12 @@ export function setupPersistence({ root, tariffYear, captureState, applyState, r
     hasSaved = true;
     try {
       const snapshot = parseSnapshot(raw, tariffYear);
+      const migrated = JSON.parse(raw).schemaVersion === 1;
       const valid = applyWithRollback(snapshot.state);
       remember = true; lastState = JSON.stringify(snapshot.state); lastSavedAt = snapshot.savedAt;
       announce('Gespeicherter Stand geladen: ' + time(snapshot.savedAt)
-        + (valid ? '.' : '. Bitte die unvollständigen oder ungültigen Eingaben prüfen.'));
+        + (valid ? '.' : '. Bitte die unvollständigen oder ungültigen Eingaben prüfen.')
+        + (migrated ? ' Sicherung aus Alpha 0.5 übernommen; neue Jahresfelder ergänzt, Volljahresplanung beibehalten.' : ''));
     } catch (error) {
       blocked = true; recoveryText = raw;
       announce('Gespeicherter Stand nicht geladen: ' + error.message
@@ -125,14 +127,16 @@ export function setupPersistence({ root, tariffYear, captureState, applyState, r
       const raw = await readFile(file);
       if (sequence !== importSequence) return;
       const snapshot = parseSnapshot(raw, tariffYear);
+      const migrationNote = JSON.parse(raw).schemaVersion === 1 ? ' Ältere Sicherung übernommen; neue Jahresfelder ergänzt, Volljahresplanung beibehalten.' : '';
       const before = captureState();
       cancel();
       const valid = applyWithRollback(snapshot.state);
       undoState = before; updateControls();
       if (remember) {
-        if (saveNow(true)) announce('Sicherung importiert und lokal gespeichert.' + (valid ? '' : ' Bitte die noch ungültigen Eingaben prüfen.'));
+        if (saveNow(true)) announce('Sicherung importiert und lokal gespeichert.' + migrationNote + (valid ? '' : ' Bitte die noch ungültigen Eingaben prüfen.'));
       } else {
         announce('Sicherung importiert. Lokale Speicherung bleibt aus.'
+          + migrationNote
           + (blocked ? ' Der bisher nicht geladene Speicherstand bleibt erhalten.' : '')
           + (valid ? '' : ' Bitte die noch ungültigen Eingaben prüfen.'));
       }
