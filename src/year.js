@@ -1,5 +1,5 @@
-import { nonnegative } from './calc.js';
-import { regularFirstYearAfa } from './afa.js';
+import { nonnegative } from './calc.js?v=0.7.0-alpha.1';
+import { regularFirstYearAfa } from './afa.js?v=0.7.0-alpha.1';
 
 export function resolveYear(input) {
   if (input.mode === 'full') {

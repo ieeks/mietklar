@@ -1,4 +1,4 @@
-import { STORAGE_KEY, MAX_BACKUP_BYTES, makeSnapshot, parseSnapshot, writeSavedSnapshot, removeSavedSnapshot } from './persistence.js';
+import { STORAGE_KEY, MAX_BACKUP_BYTES, makeSnapshot, parseSnapshot, writeSavedSnapshot, removeSavedSnapshot } from './persistence.js?v=0.7.0-alpha.1';
 
 export function setupPersistence({ root, tariffYear, captureState, applyState, refresh, isValid }) {
   const doc = root.ownerDocument, win = doc.defaultView;

@@ -7,7 +7,8 @@
   "scripts": {
     "test": "node --test tests/*.test.js",
     "check": "node scripts/check.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "assets:stamp": "node scripts/stamp-assets.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1"

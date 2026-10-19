@@ -1,4 +1,4 @@
-import { nonnegative } from './calc.js';
+import { nonnegative } from './calc.js?v=0.7.0-alpha.1';
 
 const pending = message => ({
   status: 'open', annualAfa: 0, buildingBasis: null, landValue: null,
@@ -103,3 +103,4 @@ export function resolveAfa(input, calculationYear = 2026) {
     ]
   };
 }
+

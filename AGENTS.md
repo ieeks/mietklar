@@ -10,4 +10,5 @@ Vor Änderungen README.md, HANDOVER.md und ROADMAP.md lesen. Bei Steuer-/Mietrec
 - Fachliche Änderungen anhand unabhängiger Grenz-/Gegenbeispiele prüfen: npm run check und npm test.
 - HANDOVER und ROADMAP nach relevanten Änderungen auf den tatsächlichen Stand aktualisieren.
 - Speicherformatänderungen zusätzlich mit docs/STORAGE.md abgleichen. Alte/unlesbare Stände nie stillschweigend löschen oder überschreiben; Migration explizit und geprüft durchführen. Persönliche JSON-Sicherungen nicht ins Repo übernehmen.
+- Bei einer Versionsänderung `npm run assets:stamp` ausführen. Browser-Einstieg, Module und Tarifabruf müssen zusammen versioniert werden, damit Pages kein neues HTML mit alten JavaScript-Modulen mischt. `npm run check` prüft diese Zuordnung.
 

@@ -74,7 +74,8 @@
 - [x] Komma-/Punkt-Eingabe, Schutz vor mehrdeutigen Tausenderpunkten und Migration der Formate 1/2 nach 3.
 - [x] 80 lokale Tests inklusive 3.000 deterministischer Mietsuchfälle.
 - [x] Chromium-/WebKit-Smoke-Tests in CI einrichten.
-- [ ] Endgültigen Browserlauf und Pages-Deployment anhand des finalen Commits bestätigen.
+- [x] Browserlauf nach Druckkorrektur bestätigt: 80 Tests + 16 Chromium-/WebKit-Fälle; mobile Aufnahme und Druckseiten visuell geprüft.
+- [x] Asset-Versionierung gegen gemischte alte/neue Dateien beim Pages-Update ergänzen.
 - [ ] Neue Einseitenansicht und native iPhone-/Safari-Dialoge manuell abnehmen.
 
 ## Komfort und Veröffentlichung

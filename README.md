@@ -23,7 +23,7 @@ npm run check
 npm test
 ```
 
-Die Syntaxprüfung findet JavaScript-Dateien automatisch. 80 reine Rechen-, Kosten-, AfA-, Jahres-, Speicher- und Szenariotests, einschließlich 3.000 deterministischer Zielmietfälle. Für die zusätzlichen Browserprüfungen ist Playwright ausschließlich als Entwicklungsabhängigkeit enthalten:
+Die Syntaxprüfung findet JavaScript-Dateien automatisch und prüft konsistente Asset-Versionen. 80 reine Rechen-, Kosten-, AfA-, Jahres-, Speicher- und Szenariotests, einschließlich 3.000 deterministischer Zielmietfälle. Für die zusätzlichen Browserprüfungen ist Playwright ausschließlich als Entwicklungsabhängigkeit enthalten:
 
 ```sh
 npm ci
@@ -77,3 +77,5 @@ Die App überträgt Formulareingaben nicht an einen Server. Die freiwillige loka
 [HANDOVER.md](HANDOVER.md) · [ROADMAP.md](ROADMAP.md) · [Projektplan](docs/PROJECT_PLAN.md) · [Recherche](docs/RESEARCH.md) · [Review-Follow-up](docs/REVIEW_FOLLOWUP.md)
 
 GitHub Pages veröffentlicht statisch aus `main` und `/ (root)` mit relativen Asset-Pfaden.
+
+Bei einer neuen Paketversion vor Veröffentlichung `npm run assets:stamp` ausführen. Alle Browsermodule, Stylesheet und Tarifabruf werden passend versioniert; die Prüfung verhindert gemischte alte/neue Dateien aus dem Browsercache.

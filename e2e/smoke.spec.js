@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 const field = (page, key) => page.locator('[data-key="' + key + '"]');
 const key = 'mietklar:saved-inputs';
+const release = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8')).version;
 async function openSection(page, name) {
   const details = page.locator('[data-section="' + name + '"]');
   if (!await details.evaluate(node => node.open)) await details.locator(':scope > summary').click();
@@ -28,12 +29,21 @@ async function importBackup(page, snapshot) {
 
 test.beforeEach(async ({ page }) => {
   page.testErrors = [];
+  page.testAssets = [];
+  page.on('request', request => {
+    const url = new URL(request.url());
+    if (/\/src\/.*\.js$|\/style\.css$|\/data\/tarif-\d{4}\.json$/.test(url.pathname)) page.testAssets.push(url.searchParams.get('v'));
+  });
   page.on('pageerror', error => page.testErrors.push(error.message));
   await page.goto('./');
   await expect(page.locator('#mietklar-app')).toHaveAttribute('data-ready', 'true');
   await expect(page.locator('[data-error]')).toBeHidden();
 });
-test.afterEach(async ({ page }) => { expect(page.testErrors).toEqual([]); });
+test.afterEach(async ({ page }) => {
+  expect(page.testErrors).toEqual([]);
+  expect(page.testAssets.length).toBeGreaterThan(5);
+  expect(page.testAssets.every(version => version === release)).toBe(true);
+});
 
 test('live result, both directions, decimal comma/point and keyboard slider', async ({ page }) => {
   await expect(page.locator('[data-result-content]')).toBeVisible();

@@ -1,6 +1,6 @@
-import { buildFlow, comparePerSquareMetre } from './scenario.js';
-import { money, numeric, decimal } from './numbers.js';
-import { renderAfa } from './form-view.js';
+import { buildFlow, comparePerSquareMetre } from './scenario.js?v=0.7.0-alpha.1';
+import { money, numeric, decimal } from './numbers.js?v=0.7.0-alpha.1';
+import { renderAfa } from './form-view.js?v=0.7.0-alpha.1';
 
 function assumptionsFor(result) {
   const { fields: f, income, period, afaResult, yearAfa, costs } = result;

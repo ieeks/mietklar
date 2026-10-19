@@ -1,6 +1,6 @@
-import { suggestLandShare } from './afa.js';
-import { resolveYear } from './year.js';
-import { numeric, money } from './numbers.js';
+import { suggestLandShare } from './afa.js?v=0.7.0-alpha.1';
+import { resolveYear } from './year.js?v=0.7.0-alpha.1';
+import { numeric, money } from './numbers.js?v=0.7.0-alpha.1';
 
 export function landSuggestion(fields) {
   return suggestLandShare({ municipality: fields.afaMunicipality, priceBand: fields.afaLandPriceBand,
