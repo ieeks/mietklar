@@ -47,7 +47,7 @@ Chromium und WebKit prüfen jeweils:
 7. Aktuelles Druckblatt und Print-CSS; zusätzlich PDF-Erzeugung in Chromium. Kein Nachweis des nativen OS-Druckdialogs.
 8. 320/390/1280-px-Breiten ohne Dokument-Überlauf, Fokus/Home, eigene Position und Textausgabe ohne HTML-Injektion.
 
-Aktueller endgültiger CI-Lauf ist vor Veröffentlichung separat zu bestätigen. Automatische Screenshots/PDF/Report werden für sieben Tage als GitHub-Testartefakt mit ausschließlich fiktiven Daten aufbewahrt. Sie werden nicht ins Repository übernommen. Ein erzeugter Screenshot ist allein keine manuelle visuelle Abnahme.
+Browser-Nachweis: Commit `84d28f6889a0f0a01946639b26b763a38c528e26`, [Actions-Lauf 39296249582](https://github.com/ieeks/mietklar/actions/runs/39296249582): 80 reine Tests, Syntax und alle 16 Browserfälle erfolgreich, ohne Testwiederholung. Ein zunächst beobachteter WebKit-Aufklappfehler nach Zahlen-Blur wurde durch Vermeidung unveränderter doppelter Renderläufe korrigiert. Die mobile 390-px-Aufnahme wurde zusätzlich visuell angesehen; Drucklayout wird vor Abschluss nach der letzten Spalten-/Umbruchkorrektur erneut geprüft. Automatische Screenshots/PDF/Report werden für sieben Tage als GitHub-Testartefakt mit ausschließlich fiktiven Daten aufbewahrt. Sie werden nicht ins Repository übernommen. Ein erzeugter Screenshot ist allein keine manuelle visuelle Abnahme.
 
 ## Historische und manuelle Nachweise
 

@@ -83,7 +83,7 @@ npm test
 python3 -m http.server 8080
 ```
 
-Syntax und 80 Rechen-/Kosten-/AfA-/Planungs-/Speicher-/Szenariotests lokal erfolgreich, darunter 3.000 deterministische Zielmietfälle. Zusätzlicher Speicher-DOM-Durchgang mit zwölf Fehler-/Import-/Mehrtab-Gruppen erfolgreich. Acht Browserfälle in zwei Engines sind als CI eingerichtet; aktuelles Ergebnis vor Abschluss anhand des endgültigen Commits prüfen und in docs/TESTING.md dokumentieren. Kein lokaler Browserlauf in dieser Umgebung; nativer iPhone-/Safari-Dialog bleibt manuelle Abnahme.
+Syntax und 80 Rechen-/Kosten-/AfA-/Planungs-/Speicher-/Szenariotests lokal erfolgreich, darunter 3.000 deterministische Zielmietfälle. Zusätzlicher Speicher-DOM-Durchgang mit zwölf Fehler-/Import-/Mehrtab-Gruppen erfolgreich. Acht Browserfälle in zwei Engines erfolgreich bestätigt: Actions-Lauf 39296249582 für Commit 84d28f6889a0f0a01946639b26b763a38c528e26, 16/16 ohne Retry. Kleine doppelte Blur-Renderläufe unterdrücken, damit ein nativer WebKit-Klick auf eine aufklappbare Gruppe nicht durch Textknoten-Austausch verloren geht. Import/Restore setzt den Render-Fingerprint bewusst zurück; Druck erzwingt aktuellen Neuaufbau. Letzte Drucklayout-/Dokumentationsänderungen vor Abschluss noch commitbezogen prüfen. Kein lokaler Browserlauf in dieser Umgebung; nativer iPhone-/Safari-Dialog bleibt manuelle Abnahme.
 
 ## Projektpflege
 

@@ -69,8 +69,11 @@ function renderPrint(root, result, notes, reference) {
     [row.name + (row.evidence ? ' · ' + row.evidence : ''), money(row.annualPayment), money(row.annualReimbursement) + (row.forwardUnknown ? ' (offen)' : ''), money(row.annualDeduction) + (row.taxUnknown ? ' (offen)' : '')].forEach(text => tr.append(node('td', text)));
     body.append(tr);
   }); table.append(body); fragment.append(table, node('h2', 'Annahmen und offene Punkte'));
-  const ul = node('ul'); notes.forEach(text => ul.append(node('li', text))); fragment.append(ul);
-  fragment.append(node('p', 'Planungsmodell mit deinen Angaben, keine vollständige Steuer- oder Mietrechtsprüfung. Rücklage/Puffer sind Zahlungen ohne automatischen Abzug. AfA nicht nochmals als Zahlung erfasst. Der Vergleich pro m² ist keine gesetzliche Mietpreisgrenze.'));
+  const ul = node('ul'); notes.forEach(text => ul.append(node('li', text)));
+  const notesSection = node('section', undefined, 'mr-print-notes');
+  notesSection.append(fragment.lastChild, ul);
+  notesSection.append(node('p', 'Planungsmodell mit deinen Angaben, keine vollständige Steuer- oder Mietrechtsprüfung. Rücklage/Puffer sind Zahlungen ohne automatischen Abzug. AfA nicht nochmals als Zahlung erfasst. Der Vergleich pro m² ist keine gesetzliche Mietpreisgrenze.'));
+  fragment.append(notesSection);
   sheet.replaceChildren(fragment);
 }
 
