@@ -19,14 +19,17 @@ export function createAmountInputs(root) {
   root.addEventListener('focusin', event => {
     const input = event.target;
     if (!isMoney(input)) return;
-    const raw = readValue(input);
-    rawValues.set(input, raw);
-    // Some engines select a field before dispatching focus (replacement/paste
-    // and autofill). Preserve that selection when removing display grouping.
-    const selectedAll = input.selectionStart === 0 && input.selectionEnd === input.value.length;
-    const editing = raw.includes(',') && Number.isFinite(numeric(raw)) ? raw.replaceAll('.', '') : raw;
-    if (input.value !== editing) input.value = editing;
-    if (selectedAll || (input.value !== '' && numeric(input.value) === 0)) input.select();
+    rawValues.set(input, readValue(input));
+    // Let the browser finish its native focus/select operation first. Rewriting
+    // value inside focusin can cancel Chromium's pending select-all operation.
+    queueMicrotask(() => {
+      if (root.ownerDocument.activeElement !== input) return;
+      const raw = readValue(input);
+      const selectedAll = input.selectionStart === 0 && input.selectionEnd === input.value.length;
+      const editing = raw.includes(',') && Number.isFinite(numeric(raw)) ? raw.replaceAll('.', '') : raw;
+      if (input.value !== editing) input.value = editing;
+      if (selectedAll || (input.value !== '' && numeric(input.value) === 0)) input.select();
+    });
   });
   root.addEventListener('click', event => {
     const input = event.target;
