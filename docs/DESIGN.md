@@ -1,30 +1,29 @@
 # Designrichtung
 
-Stand: 18.10.2026, nach Feedback zur ersten Alpha.
+Stand: 19.10.2026, Alpha 0.7.
 
-- Bestätigt: Wortmarke **mietklar.** mit farbigem Punkt; geführte Bedienung.
-- Feedback: Die grünlichen Flächen wirken zu „military“. Gewünscht sind ein helleres, freundlicheres Erscheinungsbild.
-- Erste Anpassung: warmer heller Seitenhintergrund, weiße Eingabeflächen, sanfte Apricot-Hinweise, neutrale grau-violette Texte und Terrakotta für Hauptaktionen und Akzentpunkt.
-- Die Alpha startet jetzt bewusst hell statt automatisch den dunklen Systemmodus zu übernehmen. Eine optionale dunkle Gestaltung ist noch zu entwerfen.
-- Geändert wurde die Farbgebung, nicht die Rechenlogik. Keine abschließende Designabnahme; Abstände, Typografie und Ergebnisdarstellung sind für die nächste gemeinsame Runde offen.
+Die Wortmarke **mietklar.** mit Terrakotta-Punkt bleibt. Auf das Nutzerfeedback zu den dunklen/grünlichen Flächen folgt eine bewusst helle Oberfläche mit warmem Creme, klaren Eingaben und sparsamen farbigen Akzenten.
 
-## Farben
+## Einseitenansicht
+
+Die frühere Fünf-Schritte-Führung ist ersetzt. Oben stehen das echte Ergebnis, beide Rechenrichtungen, ein genaues Zahlenfeld mit Regler und die Aufteilung der gesamten Mietereinnahmen. Kosten, Einkommen, AfA, Zeitraum und optionale Vergleiche lassen sich darunter aufklappen. Die fachlichen Hilfen bleiben dort direkt bei den Eingaben. Die Wortmarke springt zurück zum Ergebnis und setzt den Fokus dorthin.
+
+Auf kleinen Bildschirmen sind die Ergebnisabstände kompakter. Geldbeträge verwenden Textfelder mit Dezimaltastatur; Monatszähler bleiben Ganzzahlfelder. Ein separater Druckbereich blendet die Bedienoberfläche aus und enthält Rechnung und Annahmen.
+
+## Aktuelle Farben
 
 | Rolle | Farbe |
 | --- | --- |
-| Seitenhintergrund | `#fff6f0` |
-| App-Oberfläche | `#fffdfa` |
-| Eingaben/Karten | `#ffffff` |
-| Haupttext | `#34323b` |
-| Sekundärtext | `#6f6974` |
-| Linien | `#eee3df` |
-| Hinweisflächen | `#fff0e5` |
-| Hauptaktion/Akzentpunkt | `#b94c30` |
+| Seitenhintergrund | `#f8f5f0` |
+| Karten | `#fffdf9` |
+| Haupttext | `#342c28` |
+| Sekundärtext | `#756b63` |
+| Linien | `#e6dfd6` |
+| Hinweisflächen | `#fbe8df` |
+| Hauptaktion/Akzentpunkt | `#b84e32` |
 
-## Noch prüfen
+Die helle Darstellung ist unabhängig vom System-Dunkelmodus. Eine optionale dunkle Gestaltung ist nicht implementiert.
 
-Gemeinsam am iPhone ansehen: Helligkeit, Wärme des Hintergrunds, Kontrast und Lesbarkeit. Der Browser-/Safari-Test steht weiter aus; kein fertiges visuelles Redesign behaupten.
+## Prüfstand und nächste Abnahme
 
-## Darstellungsfehler in eingebetteter Vorschau
-
-Im iPhone-Screenshot waren dunkle Abschnittsflächen und weiße Überschriften innerhalb der hellen App sichtbar. Das deutet auf übernommene Standardstile der Vorschau hin. Ein lokal begrenzter CSS-Grundstil setzt Flächen und Textvererbung im Produkt explizit; die darüberliegenden Komponenten definieren danach ihre eigenen Farben. Die helle Darstellung verwendet `color-scheme: only light`. Die Korrektur ist implementiert, muss auf dem betroffenen iPhone aber noch visuell bestätigt werden. Kein Browser-/Safari-Test in dieser Arbeitsumgebung verfügbar.
+Automatische Chromium-/WebKit-Fälle prüfen 320/390/1280-px-Breiten, Fokus, Regler und Druckdarstellung. Die mobile 390-px-Aufnahme und beide Seiten des Chromium-PDF wurden visuell angesehen; keine abgeschnittenen Spalten oder Überläufe gefunden. Das ersetzt weder eine Nutzerabnahme des neuen Designs noch einen Test der nativen iPhone-/Safari-Datei- und Druckdialoge. Diese gemeinsame Abnahme ist der nächste Schritt; historische Alpha-0.1-Tests gelten nur für die damalige Oberfläche. Nachweise siehe [TESTING.md](TESTING.md).
