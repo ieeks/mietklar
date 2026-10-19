@@ -11,7 +11,7 @@
 
 ## Als Nächstes: Alpha 0.2 – Kosten fachlich sauber machen
 
-- [ ] Browser-/iPhone-/Safari-Durchgang; Texte, Feldreihenfolge und Ergebnissicht testen.
+- [x] Bedienung auf iPhone/Safari ausprobiert; vom Nutzer am 19.10.2026 als erledigt bestätigt.
 - [ ] Pro Kostenposition getrennt: Zahlbetrag, weiterverrechneter Betrag, steuerlicher Jahresabzug, Bestätigungsstatus/Quelle.
 - [ ] Eigene Positionen hinzufügen/entfernen; Zeitraum Monat/Jahr pro Position.
 - [ ] „Noch prüfen“ nicht mit „steuerlich absetzbar“ verknüpfen; offene Annahmen im Ergebnis zusammenfassen.
@@ -45,7 +45,7 @@
 - [ ] Opt-in-Browserspeicherung, Löschen und versionierter JSON-Import/-Export mit Validierung.
 - [ ] Druckansicht als PDF über Browserdruck.
 - [ ] Bedienung mit Tastatur, Fokus, Fehlermeldungen, 320-px-Layout und Safari abnehmen.
-- [ ] GitHub Pages aktivieren und echte Live-URL prüfen; erst danach als veröffentlicht melden.
+- [x] GitHub Pages aktiviert; Live-Alpha vom Nutzer aufgerufen und auf iPhone/Safari getestet: https://ieeks.github.io/mietklar/.
 - [ ] Herkunft/Stand aller Tarif- und Regelwerte anzeigen; fremdes Tarifjahr nicht stillschweigend übernehmen.
 
 ## Später, bei Bedarf

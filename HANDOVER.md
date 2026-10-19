@@ -1,6 +1,6 @@
 # Übergabe: mietklar. Alpha 0.1
 
-Stand: 18.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADMAP, docs/RESEARCH lesen. Danach zuerst den aktuellen Branch/Commit prüfen; die nächste Sitzung nicht aus dem Gesprächsgedächtnis rekonstruieren.
+Stand: 19.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADMAP, docs/RESEARCH lesen. Danach zuerst den aktuellen Branch/Commit prüfen; die nächste Sitzung nicht aus dem Gesprächsgedächtnis rekonstruieren.
 
 ## Ziel und bestätigte Entscheidungen
 
@@ -42,11 +42,11 @@ Die Vorschreibung enthält getrennte BK, Wasser, Heizung, Warmwasser, I-Fonds. J
 
 ## Sinnvoller nächster Arbeitsblock
 
-1. Alpha im Browser und auf iPhone/Safari ausprobieren; konkrete UX-Rückmeldungen erfassen.
+1. Erledigt: Nutzer bestätigt am 19.10.2026 den manuellen Bedienungstest auf iPhone/Safari. GitHub Pages ist aktiviert; Live-Alpha: https://ieeks.github.io/mietklar/.
 2. Im Kostenmodell **Zahlung, erwartete Mietererstattung und bestätigten Steuerabzug** getrennt führen; Quellen/Status je Position ergänzen.
 3. Objekt-/Mietrechtsszenario und „noch kein Mietvertrag“ als Eingaben ergänzen, Vorschläge mit Begründung statt automatischer Freigaben.
 4. Persönliche AfA und Vermietungs-USt-Status separat verifizieren. Keine weiteren privaten Unterlagen in Commits aufnehmen.
-5. Erst danach weitere Features aus ROADMAP und Pages-Veröffentlichung.
+5. Danach weitere Features aus ROADMAP; Pages ist bereits aktiviert.
 
 ## Prüfen / weiterentwickeln
 
@@ -56,7 +56,7 @@ npm test
 python3 -m http.server 8080
 ```
 
-Syntax- und Rechentests erfolgreich. Browserlauf konnte mangels installiertem Chromium in der Arbeitsumgebung nicht durchgeführt werden. Nicht als End-to-End-getestet bezeichnen. Die Inline-Vorschau wurde in der Unterhaltung gezeigt; deren endgültige UI-Abnahme ist noch offen.
+Syntax- und Rechentests erfolgreich. Browserlauf konnte mangels installiertem Chromium in der Arbeitsumgebung nicht durchgeführt werden. Nicht als End-to-End-getestet bezeichnen. Die helle Stilrichtung wurde positiv bestätigt. Der Nutzer hat den manuellen iPhone-/Safari-Bedienungstest am 19.10.2026 als erledigt bestätigt. Dies ist kein automatisierter End-to-End-Test und keine vollständige Barrierefreiheitsprüfung.
 
 ## Projektpflege
 

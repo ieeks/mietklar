@@ -1,6 +1,6 @@
 # mietklar.
 
-**Alpha 0.1 · Stand 18.10.2026**
+**Alpha 0.1 · Stand 19.10.2026**
 
 Welche Hauptmiete ist nötig, damit nach laufenden Kosten, Rücklage und zusätzlicher Einkommensteuer ein gewünschter Monatsbetrag bleibt?
 
@@ -24,7 +24,7 @@ npm test
 ## Enthalten
 
 - Geführter Ablauf: Ziel und Einkommen → Wohnungskosten → AfA und Steuerannahmen → Ergebnis → Anschaffung.
-- Wortmarke **mietklar.** mit farbigem Punkt; responsive, systemabhängige helle/dunkle Darstellung.
+- Wortmarke **mietklar.** mit farbigem Punkt; responsive, helle Darstellung mit Terrakotta-Akzent und Home-Button.
 - Monatliche Vorschreibung: Betriebskosten, Wasser/Abwasser, Heizung, Warmwasser und separate WEG-Rücklage.
 - Weiterverrechnung je Position: voller Betrag, Teilbetrag, selbst getragen oder „noch prüfen“.
 - Fiktive Jahresabrechnung als Detailansicht; wird nicht zusätzlich in die laufenden Kosten eingerechnet.
@@ -42,11 +42,13 @@ npm test
 - Keine automatische Verlustverwertung; negative Vermietungseinkünfte erzeugen keine Steuererstattung.
 - Mietrechts- und Vertragsprüfung ist dokumentiert, aber noch nicht als Regelwerk implementiert.
 - Keine Speicherung, kein PDF-Upload/OCR, kein Import/Export, keine fertige Druckansicht.
-- Kein Browser-End-to-End-Test in dieser Arbeitsumgebung; Mobile/Safari-Abnahme steht aus.
+- Manueller iPhone-/Safari-Bedienungstest vom Nutzer am 19.10.2026 bestätigt. Kein automatisierter Browser-End-to-End-Test in dieser Arbeitsumgebung.
 
 ## GitHub Pages
 
-Die Dateien sind statisch und verwenden relative Pfade. Für eine spätere Veröffentlichung: Repository → Settings → Pages → Deploy from a branch → `main` → `/ (root)`. Die GitHub-Pages-Freischaltung wurde bei diesem Alpha-Checkpoint **nicht** vorgenommen. Eine Live-URL wird daher nicht als bereits verfügbar ausgegeben.
+Live-Alpha: https://ieeks.github.io/mietklar/
+
+GitHub Pages ist aktiviert: Deploy from a branch → `main` → `/ (root)`. Die Dateien sind statisch und verwenden relative Pfade. Änderungen auf `main` werden automatisch veröffentlicht.
 
 ## Beim nächsten Mal weiterlesen
 
