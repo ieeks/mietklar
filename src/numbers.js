@@ -27,3 +27,17 @@ export const numeric = raw => { try { return parseAmount(raw); } catch { return 
 export const money = value => Number.isFinite(value)
   ? new Intl.NumberFormat('de-AT', { style: 'currency', currency: 'EUR' }).format(value) : '–';
 export const decimal = value => new Intl.NumberFormat('de-AT', { maximumFractionDigits: 2 }).format(value);
+
+// Group the literal digits without rounding through Intl/Number. Monetary
+// drafts with >2 decimal places keep every digit; invalid/ambiguous drafts stay.
+export function formatMoneyInput(raw) {
+  if (raw === '' || !Number.isFinite(numeric(raw))) return raw;
+  const text = raw.trim();
+  if (/[eE]/.test(text)) return raw;
+  const plain = text.includes(',') ? text.replaceAll('.', '').replace(',', '.') : text;
+  const match = /^(-?)(\d*)(?:\.(\d*))?$/.exec(plain);
+  if (!match) return raw;
+  const integer = (match[2] || '0').replace(/^0+(?=\d)/, '');
+  const fraction = (match[3] || '').padEnd(2, '0');
+  return match[1] + integer.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + fraction;
+}

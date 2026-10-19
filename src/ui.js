@@ -1,25 +1,27 @@
-import { validateTariff } from './calc.js?v=0.7.0-alpha.2';
-import { setupPersistence } from './storage-ui.js?v=0.7.0-alpha.2';
-import { createCostEditor } from './cost-editor.js?v=0.7.0-alpha.2';
-import { renderForm, landSuggestion } from './form-view.js?v=0.7.0-alpha.2';
-import { evaluateScenario } from './scenario.js?v=0.7.0-alpha.2';
-import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.2';
+import { createAmountInputs } from './amount-inputs.js?v=0.7.0-alpha.3';
+import { validateTariff } from './calc.js?v=0.7.0-alpha.3';
+import { setupPersistence } from './storage-ui.js?v=0.7.0-alpha.3';
+import { createCostEditor } from './cost-editor.js?v=0.7.0-alpha.3';
+import { renderForm, landSuggestion } from './form-view.js?v=0.7.0-alpha.3';
+import { evaluateScenario } from './scenario.js?v=0.7.0-alpha.3';
+import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.3';
 
 (async () => {
   const root = document.getElementById('mietklar-app');
   const q = selector => root.querySelector(selector);
   const all = selector => [...root.querySelectorAll(selector)];
   const field = key => q('[data-key="' + key + '"]');
-  const editor = createCostEditor(root);
+  const amounts = createAmountInputs(root);
+  const editor = createCostEditor(root, amounts.readValue);
   let tariff, persistence, calculationMode = 'target', adoptedLandSuggestion = false, legacyStep = 0;
   let lastFingerprint = null, lastValid = false;
 
   function captureState() {
-    return { fields: Object.fromEntries(all('[data-key]').map(node => [node.dataset.key, node.value])),
+    return { fields: Object.fromEntries(all('[data-key]').map(node => [node.dataset.key, amounts.readValue(node)])),
       costs: editor.capture(), calculationMode, step: legacyStep, adoptedLandSuggestion };
   }
   function applyState(state) {
-    all('[data-key]').forEach(node => { node.value = state.fields[node.dataset.key]; });
+    all('[data-key]').forEach(node => { amounts.writeValue(node, state.fields[node.dataset.key]); });
     editor.restore(state.costs); calculationMode = state.calculationMode;
     legacyStep = state.step; adoptedLandSuggestion = state.adoptedLandSuggestion;
     lastFingerprint = null;
@@ -32,6 +34,7 @@ import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.2';
   }
   function compute(light = false, force = false) {
     if (!tariff) return false;
+    amounts.refresh();
     const state = captureState();
     const fingerprint = JSON.stringify(state);
     // A native change event often repeats the preceding input on blur. Avoid
@@ -58,7 +61,7 @@ import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.2';
   root.addEventListener('input', event => {
     if (event.target.closest('[data-storage-panel]')) return;
     if (event.target.matches('[data-slider]')) {
-      field(calculationMode === 'target' ? 'target' : 'monthlyRent').value = event.target.value;
+      amounts.writeValue(field(calculationMode === 'target' ? 'target' : 'monthlyRent'), event.target.value);
       changed(true); return;
     }
     if (adoptedLandSuggestion && event.target.hasAttribute('data-land-guide')) {
@@ -105,7 +108,7 @@ import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.2';
   window.addEventListener('beforeprint', () => compute(false, true));
 
   try {
-    const response = await fetch(new URL('../data/tarif-2026.json?v=0.7.0-alpha.2', import.meta.url));
+    const response = await fetch(new URL('../data/tarif-2026.json?v=0.7.0-alpha.3', import.meta.url));
     if (!response.ok) throw new Error('Tarifdatei nicht erreichbar');
     tariff = validateTariff(await response.json());
     if (tariff.year !== 2026) throw new Error('Tarifjahr stimmt nicht mit der Oberfläche überein');

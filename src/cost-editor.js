@@ -1,7 +1,7 @@
-import { numeric, money } from './numbers.js?v=0.7.0-alpha.2';
-import { MAX_COST_ROWS } from './persistence.js?v=0.7.0-alpha.2';
+import { numeric, money } from './numbers.js?v=0.7.0-alpha.3';
+import { MAX_COST_ROWS } from './persistence.js?v=0.7.0-alpha.3';
 
-export function createCostEditor(root) {
+export function createCostEditor(root, readValue = input => input.value) {
   const q = selector => root.querySelector(selector);
   const all = selector => [...root.querySelectorAll(selector)];
   const hints = {
@@ -49,7 +49,7 @@ export function createCostEditor(root) {
     yearTaxStatus: 'year-tax', yearTaxAnnual: 'year-tax-annual' };
   function capture() {
     return all('[data-cost-row]').map(row => ({ ...Object.fromEntries(Object.entries(keys).map(([key, suffix]) =>
-      [key, row.querySelector('[data-cost-' + suffix + ']').value])), kind: row.dataset.kind, group: row.dataset.group }));
+      [key, readValue(row.querySelector('[data-cost-' + suffix + ']'))])), kind: row.dataset.kind, group: row.dataset.group }));
   }
   function restore(costs) {
     all('[data-cost-list]').forEach(list => list.replaceChildren());
@@ -63,7 +63,7 @@ export function createCostEditor(root) {
     q('[data-add-cost]').disabled = rows.length >= MAX_COST_ROWS;
     q('[data-add-cost]').title = rows.length >= MAX_COST_ROWS ? 'Höchstens 100 Kostenpositionen möglich' : '';
     rows.forEach(row => {
-      const get = suffix => row.querySelector('[data-cost-' + suffix + ']').value;
+      const get = suffix => readValue(row.querySelector('[data-cost-' + suffix + ']'));
       const name = get('name') || 'Kostenposition', period = get('period');
       const annual = numeric(get('amount')) * (period === 'month' ? (yearMode ? numeric(get('payment-months')) : 12) : 1);
       row.setAttribute('aria-label', name);

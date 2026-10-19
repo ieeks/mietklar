@@ -73,10 +73,11 @@
 - [x] Optionaler eigener Vergleichswert je m²; keine gesetzliche Grenze behaupten.
 - [x] DOM-freien Szenarioaufbau und getrennte Darstellungs-/Kostenmodule einführen.
 - [x] Komma-/Punkt-Eingabe, Schutz vor mehrdeutigen Tausenderpunkten und Migration der Formate 1/2 nach 3.
-- [x] 80 lokale Tests inklusive 3.000 deterministischer Mietsuchfälle.
+- [x] 83 lokale Tests inklusive 3.000 deterministischer Mietsuchfälle.
 - [x] Chromium-/WebKit-Smoke-Tests in CI einrichten.
 - [x] Browserlauf nach Druckkorrektur bestätigt: 80 Tests + 16 Chromium-/WebKit-Fälle; mobile Aufnahme und Druckseiten visuell geprüft.
 - [x] Asset-Versionierung gegen gemischte alte/neue Dateien beim Pages-Update ergänzen.
+- [x] Geldfelder mit Tausenderpunkten außerhalb der Bearbeitung, Null überschreiben und exakte Rohwerte für Rechnung/Sicherung bewahren.
 - [ ] Neue Einseitenansicht und native iPhone-/Safari-Dialoge manuell abnehmen.
 
 ## Komfort und Veröffentlichung

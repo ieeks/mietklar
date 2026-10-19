@@ -23,7 +23,7 @@ npm run check
 npm test
 ```
 
-Die Syntaxprüfung findet JavaScript-Dateien automatisch und prüft konsistente Asset-Versionen. 80 reine Rechen-, Kosten-, AfA-, Jahres-, Speicher- und Szenariotests, einschließlich 3.000 deterministischer Zielmietfälle. Für die zusätzlichen Browserprüfungen ist Playwright ausschließlich als Entwicklungsabhängigkeit enthalten:
+Die Syntaxprüfung findet JavaScript-Dateien automatisch und prüft konsistente Asset-Versionen. 83 reine Rechen-, Kosten-, AfA-, Jahres-, Speicher- und Szenariotests, einschließlich 3.000 deterministischer Zielmietfälle. Für die zusätzlichen Browserprüfungen ist Playwright ausschließlich als Entwicklungsabhängigkeit enthalten:
 
 ```sh
 npm ci
@@ -31,13 +31,14 @@ npx playwright install --with-deps chromium webkit
 npm run test:e2e
 ```
 
-GitHub Actions prüft Syntax und Rechenfälle sowie acht Bedienungsfälle in Chromium und WebKit. Nachweise und verbleibende manuelle Abnahme: [TESTING.md](docs/TESTING.md).
+GitHub Actions prüft Syntax und Rechenfälle sowie neun Bedienungsfälle in Chromium und WebKit. Nachweise und verbleibende manuelle Abnahme: [TESTING.md](docs/TESTING.md).
 
 ## Bedienung
 
 - Oben zwischen **Wunschbetrag** und **Miete vorgeben** wechseln. Regler und Zahlenfeld steuern dieselbe Berechnung. Centbeträge im Zahlenfeld möglich; der Regler verändert ganze Euro. Größere Zahlenwerte erweitern den Reglerbereich.
 - Kosten, Rücklage/Puffer, zusätzliche Steuer und Überschuss stammen aus dem Rechenkern. Die Grafik verwendet gesamte Mietereinnahmen einschließlich Kostenersatz, durchgehend als Jahresdurchschnitt ÷ 12. Bei einem Defizit zeigt sie Ausgaben und zusätzlichen Finanzierungsbedarf; keinen positiven Überschuss.
 - Einkommen, Kosten, Gebäude-AfA/USt, Zeitraum, optionalen m²-Vergleich und Anschaffungen aufklappen. Zusammenfassungen bleiben im eingeklappten Zustand sichtbar. Die Wortmarke springt zum Ergebnis und behält Eingaben. **Alles zuklappen** bleibt beim Scrollen über den Bereichen erreichbar und schließt auch untergeordnete Hilfen und Speichern/Sicherung. Eingaben und Ergebnis bleiben erhalten.
+- Geldfelder zeigen außerhalb der Bearbeitung Tausenderpunkte und mindestens zwei Nachkommastellen. Beim Bearbeiten erscheinen die ursprünglichen Stellen ohne Gruppierung; eine vorbelegte Null wird zum Überschreiben markiert. Zusätzliche Dezimalstellen bleiben erhalten. Anzeigeformat und gespeicherter Rohwert sind getrennt.
 - Komma oder Punkt als Dezimaltrennzeichen verwenden: `1400,50` oder `1400.50`. Deutsche Gruppierung mit Komma ist möglich: `45.000,00`. Mehrdeutige reine Punktangaben wie `45.000` werden zur Klärung zurückgewiesen, damit daraus nicht still 45 € oder 45.000 € werden.
 - Optional Wohnfläche und eigenen Vergleichswert pro m² eingeben. Oberhalb dieses Werts erscheint ein Hinweis. Keine gesetzliche Mietpreisgrenze, keine automatische mietrechtliche Freigabe.
 - **Drucken / PDF** öffnet den Browser-Druckdialog. Das Ergebnisblatt enthält aktuellen Jahressaldo, Miete, Einkommensbasis, Kosten-/Steuerbeträge und offene Annahmen. Die App-Bedienelemente werden ausgeblendet. Bei ungültigen Eingaben oder unpassendem USt-Status wird kein veraltetes Ergebnisblatt ausgegeben. Anschaffungen bleiben ein separater Vergleich.

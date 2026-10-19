@@ -1,5 +1,9 @@
 # Änderungen
 
+## 0.7.0-alpha.3 – 19.10.2026
+
+Geldfelder gruppieren Tausender auf Blur, zeigen mindestens zwei Nachkommastellen und behalten zusätzliche Stellen ohne Rundung. Ursprünglicher Rohwert bleibt getrennt für Berechnung und Sicherung erhalten. Vorbelegte Null bei Fokus/Klick markieren und versehentlich führende Nullen beim Tippen entfernen. Dynamische Kostenbeträge verwenden nun ebenfalls Textfelder mit Kommatastatur. 83 reine Tests, zusätzlicher Browserfall für Formatierung, Null-Ersatz und exakte Sicherungswerte.
+
 ## 0.7.0-alpha.2 – 19.10.2026
 
 „Alles zuklappen“ schließt sämtliche Bereiche und verschachtelten Hilfen einschließlich Speichern/Sicherung mit einem Klick. Die Leiste bleibt beim Scrollen erreichbar; Eingaben und Ergebnis bleiben bestehen. Browser-Assets auf die neue Version gesetzt.

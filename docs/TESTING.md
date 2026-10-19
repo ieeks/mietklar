@@ -4,10 +4,10 @@ Stand: 19.10.2026. Die Abnahme gilt jeweils für den genannten Umfang, nicht pau
 
 ## Lokal erfolgreich
 
-- `npm test`: 80 reine Tests in Tarif-, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Szenariomodulen.
+- `npm test`: 83 reine Tests in Tarif-, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Szenariomodulen.
 - Enthalten: 3.000 deterministische Modelle mit unterschiedlichen Einkommen, Kosten, AfA, Erstattungen, 1–12 Mietmonaten und Zielbeträgen. Jedes Ergebnis erreicht das Ziel; ein Cent weniger Miete reicht nicht, sofern die Lösung nicht bereits 0 € ist. Fester Seed für reproduzierbare Fehler.
 - `npm run check`: Syntaxprüfung aller automatisch gefundenen JavaScript-Dateien in src, tests, e2e und scripts sowie Playwright-Konfiguration. Zusätzlich Versionszuordnung von Browsermodulen, Stylesheet und Tarifabruf geprüft, um gemischte alte/neue Assets nach Pages-Updates zu verhindern. Kein ESLint-/Typprüfungsnachweis.
-- Playwright-Testliste: acht Fälle × zwei Engines = 16 Fälle gefunden. Dies allein ist kein Browserlauf.
+- Playwright-Testliste: neun Fälle × zwei Engines = 18 Fälle gefunden. Dies allein ist kein Browserlauf.
 - DOM-Funktionsdurchgang mit temporärem jsdom: zwölf Speichergruppen erfolgreich mit neuer Oberfläche, einschließlich Restore/Neuberechnung, Drafts, Delete ohne Sitzungsverlust, Import/Undo an/aus, fehlerhafte/zu große/fremde Versions-/Jahresdateien, Mehrtab-Pause, geschützter Recovery-Download, verweigertem Speicher, Quota-/Löschfehlern, überholten Dateilesungen, 100 Kostenpositionen und Rollback bei Anwendungsfehler.
 - Kein lokaler echter Browserlauf in dieser Arbeitsumgebung. Browsertests sind deshalb auf GitHub Actions eingerichtet.
 
@@ -46,6 +46,8 @@ Chromium und WebKit prüfen jeweils:
 6. Tatsächliche Dateiimporte der alten Formate 1 und 2 bei ausgeschalteter Speicherung.
 7. Aktuelles Druckblatt und Print-CSS; zusätzlich PDF-Erzeugung in Chromium. Kein Nachweis des nativen OS-Druckdialogs.
 8. 320/390/1280-px-Breiten ohne Dokument-Überlauf, Fokus/Home, eigene Position und Textausgabe ohne HTML-Injektion. Ab Alpha 0.7.0-alpha.2 zusätzlich: „Alles zuklappen“ beim Scrollen erreichbar, alle Haupt-/Unterbereiche und Sicherung geschlossen, Fokus erhalten, Ergebnis und exportierte Eingabewerte unverändert; beim Wiederöffnen bleiben Untergruppen geschlossen.
+
+9. Geldfeld-Anzeige mit Tausenderpunkten, Bearbeitung ohne Gruppierung, Null ersetzen (auch bei Cursor hinter der Null), dynamische Kostenfelder und exakte Rohwerte im Export; zusätzliche Dezimalstellen und ungültige/mehrdeutige Entwürfe bleiben erhalten.
 
 Browser-Nachweis: Commit `84d28f6889a0f0a01946639b26b763a38c528e26`, [Actions-Lauf 39296249582](https://github.com/ieeks/mietklar/actions/runs/39296249582): 80 reine Tests, Syntax und alle 16 Browserfälle erfolgreich, ohne Testwiederholung. Ein zunächst beobachteter WebKit-Aufklappfehler nach Zahlen-Blur wurde durch Vermeidung unveränderter doppelter Renderläufe korrigiert. Erneut bestanden nach letzter Druckkorrektur: Commit `a12c1e4002a2b840a6461932988a13070fdca419`, [Actions-Lauf 39296676398](https://github.com/ieeks/mietklar/actions/runs/39296676398), wiederum 80 + 16 ohne Retry. Die mobile 390-px-Aufnahme und beide Seiten des in Chromium erzeugten Ergebnisblatts wurden visuell geprüft: keine abgeschnittenen Spalten, Annahmen mit eigener Überschrift auf der Folgeseite. Abschließende Asset-Prüfung ebenfalls bestanden: Commit `862408a91f5240c735e253d0f7419f037827a57d`, [Actions-Lauf 39297708469](https://github.com/ieeks/mietklar/actions/runs/39297708469), Syntax/80 Tests und 16 Browserfälle ohne Retry. Alle angefragten Browsermodule, Stylesheet und Tarifdaten trugen die aktuelle Versionskennung. Danach nur Dokumentationsabschluss; den aktuellen Pages-Status bei späteren Sitzungen direkt auf GitHub prüfen. Automatische Screenshots/PDF/Report werden für sieben Tage als GitHub-Testartefakt mit ausschließlich fiktiven Daten aufbewahrt. Sie werden nicht ins Repository übernommen. Ein erzeugter Screenshot ist allein keine manuelle visuelle Abnahme.
 

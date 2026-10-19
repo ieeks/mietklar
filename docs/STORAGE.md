@@ -47,3 +47,7 @@ Maximal 256 KiB UTF-8 und 100 Kostenpositionen. Texte sind feldweise begrenzt; n
 ## Künftige Änderungen
 
 Schema bei inkompatiblen Änderungen erhöhen. Eine Migration muss alte Werte explizit zuordnen und mit echten Grenzfällen getestet werden. Kein stilles Entfernen unbekannter Felder, kein Löschen unbekannter Versionen, kein Übernehmen fremder Tarife. Bei einer späteren anderen Steuerjahres-App Daten nur mit ausdrücklicher Jahreszuordnung übertragen.
+
+## Anzeigeformat ab 0.7.0-alpha.3
+
+Die gruppierte Geldanzeige liegt ausschließlich in der Bedienoberfläche. Ein getrennter Rohwert hält Eingabe und zusätzliche Dezimalstellen fest; Berechnung, Kosteneditor, Autospeicherung und Dateiexport lesen diesen Rohwert. Formatierung bei Fokus/Blur verändert ihn nicht. Null-Ersetzung beim Tippen ist eine normale Eingabe mit gleichem Zahlenwert; reine Fokus-/Klickauswahl schreibt keinen neuen Stand. Schema und Migration bleiben unverändert.

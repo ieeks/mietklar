@@ -61,10 +61,10 @@ test('live result, both directions, decimal comma/point and keyboard slider', as
   expect(await value(page, 'cash')).toBeLessThan(1000.52);
   await page.locator('[data-slider]').focus();
   await page.locator('[data-slider]').press('End');
-  await expect(field(page, 'target')).toHaveValue('2500');
+  await expect(field(page, 'target')).toHaveValue('2.500,00');
   await expect.poll(() => value(page, 'cash')).toBeGreaterThanOrEqual(2500);
   await page.locator('[data-calc-mode="rent"]').click();
-  await expect(field(page, 'monthlyRent')).toHaveValue('1400.50');
+  await expect(field(page, 'monthlyRent')).toHaveValue('1.400,50');
 });
 
 test('rule-year vacancy and calendar-year arithmetic, with invalid-state suppression', async ({ page }) => {
@@ -145,20 +145,20 @@ test('opt-in, reload, export/import/undo and scoped deletion with comma drafts',
   await page.locator('[data-remember]').check();
   await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key))?.state.fields.monthlyRent, key)).toBe('1500,25');
   await page.reload(); await expect(page.locator('#mietklar-app')).toHaveAttribute('data-ready', 'true');
-  await expect(field(page, 'monthlyRent')).toHaveValue('1500,25');
+  await expect(field(page, 'monthlyRent')).toHaveValue('1.500,25');
   const exported = await exportBackup(page); expect(exported.schemaVersion).toBe(3);
   expect(exported.state.fields.monthlyRent).toBe('1500,25');
   const imported = structuredClone(exported); imported.state.fields.monthlyRent = '1600';
-  await importBackup(page, imported); await expect(field(page, 'monthlyRent')).toHaveValue('1600');
-  await page.locator('[data-undo-import]').click(); await expect(field(page, 'monthlyRent')).toHaveValue('1500,25');
+  await importBackup(page, imported); await expect(field(page, 'monthlyRent')).toHaveValue('1.600,00');
+  await page.locator('[data-undo-import]').click(); await expect(field(page, 'monthlyRent')).toHaveValue('1.500,25');
   await importBackup(page, { ...exported, tariffYear: 2025 });
   await expect(page.locator('[data-storage-status]')).toContainText('Import nicht übernommen');
-  await expect(field(page, 'monthlyRent')).toHaveValue('1500,25');
+  await expect(field(page, 'monthlyRent')).toHaveValue('1.500,25');
   await page.evaluate(() => localStorage.setItem('unrelated', 'keep'));
   await page.locator('[data-delete-saved]').click();
   expect(await page.evaluate(key => localStorage.getItem(key), key)).toBeNull();
   expect(await page.evaluate(() => localStorage.getItem('unrelated'))).toBe('keep');
-  await expect(field(page, 'monthlyRent')).toHaveValue('1500,25');
+  await expect(field(page, 'monthlyRent')).toHaveValue('1.500,25');
   await page.reload(); await expect(page.locator('#mietklar-app')).toHaveAttribute('data-ready', 'true');
   await expect(page.locator('[data-calc-mode="target"]')).toHaveAttribute('aria-pressed','true');
 });
@@ -224,4 +224,43 @@ test('responsive layout at 320px, mobile and desktop; preserved focus and safe t
   await expect(name).toHaveValue('<img src=x onerror=alert(1)>');
   expect((await exportBackup(page)).state).toEqual(beforeCollapse.state);
 
+});
+
+
+test('money fields group on blur, replace zero and preserve exact backup precision', async ({ page }) => {
+  await page.locator('[data-calc-mode="rent"]').click();
+  const rent = field(page, 'monthlyRent');
+  await rent.fill('1234,56789');
+  const exactResult = await page.locator('[data-out="headline"]').first().textContent();
+  await openSection(page, 'afa');
+  await expect(rent).toHaveValue('1.234,56789');
+  await expect(page.locator('[data-out="headline"]').first()).toHaveText(exactResult);
+  await field(page, 'afaMode').selectOption('purchase');
+  await page.locator('[data-afa-section="purchase"] details > summary').first().click();
+  const legal = field(page, 'afaLegal');
+  await expect(legal).toHaveValue('0,00');
+  await legal.click(); await legal.pressSequentially('28,75');
+  await expect(legal).toHaveValue('28,75');
+  const price = field(page, 'afaPrice');
+  await price.fill('123456,7');
+  const broker = field(page, 'afaBroker');
+  await broker.click(); await expect(price).toHaveValue('123.456,70');
+  // Cover a mobile keyboard that leaves the caret after the existing zero.
+  await broker.press('ArrowRight'); await broker.pressSequentially('49,5');
+  await expect(broker).toHaveValue('49,5');
+  await openSection(page, 'costs'); await page.locator('[data-add-cost]').click();
+  const amount = page.locator('[data-cost-list="custom"] [data-cost-amount]').last();
+  await amount.click(); await amount.pressSequentially('12,5');
+  await expect(amount).toHaveValue('12,5');
+  const backup = await exportBackup(page);
+  await expect(amount).toHaveValue('12,50');
+  expect(backup.state.fields.monthlyRent).toBe('1234,56789');
+  expect(backup.state.fields.afaPrice).toBe('123456,7');
+  expect(backup.state.fields.afaLegal).toBe('28,75');
+  expect(backup.state.fields.afaBroker).toBe('49,5');
+  expect(backup.state.costs.at(-1).amount).toBe('12,5');
+  await page.locator('[data-home]').click(); await rent.fill('45.000');
+  await rent.press('Tab'); await expect(rent).toHaveValue('45.000');
+  await expect(page.locator('[data-error]')).toContainText('Mehrdeutiger Punkt');
+  await rent.fill('-'); await rent.press('Tab'); await expect(rent).toHaveValue('-');
 });
