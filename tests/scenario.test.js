@@ -17,8 +17,8 @@ test('actual default form inputs build the independent 1400-rent / 505-cash refe
 });
 
 test('comma, point, German grouping and scientific legacy values parse consistently without rounding', () => {
-  for (const [raw, value] of [['1400,50', 1400.5], ['1400.50', 1400.5], ['1.400,50', 1400.5], ['1.234', 1.234], ['.5', .5], ['1e3', 1000], ['-12,5', -12.5], ['', null]]) assert.equal(parseAmount(raw), value);
-  for (const raw of ['1,2,3', '1.23,45', 'NaN', 'Infinity', '0x10', 'abc', ' ', '1e999']) assert.throws(() => parseAmount(raw));
+  for (const [raw, value] of [['1400,50', 1400.5], ['1400.50', 1400.5], ['1.400,50', 1400.5], ['1,234', 1.234], ['.5', .5], ['1e3', 1000], ['-12,5', -12.5], ['', null]]) assert.equal(parseAmount(raw), value);
+  for (const raw of ['1,2,3', '1.23,45', '45.000', '1.234', 'NaN', 'Infinity', '0x10', 'abc', ' ', '1e999']) assert.throws(() => parseAmount(raw));
   assert.equal(numericDraft('-'), true); assert.equal(numericDraft('1e-'), true);
   assert.equal(numericDraft('abc'), false); assert.equal(numericDraft('1000000000001'), false);
   const input = state(); input.fields.monthlyRent = '1400,50';
@@ -109,6 +109,14 @@ test('format 2 migrates with identical cash, new defaults and strict old numeric
   old.state.fields.monthlyRent = '1400,50'; assert.throws(() => parseSnapshot(JSON.stringify(old), 2026));
   migrated.state.fields.monthlyRent = '1400,50';
   assert.equal(parseSnapshot(JSON.stringify(makeSnapshot(migrated.state, 2026)), 2026).state.fields.monthlyRent, '1400,50');
+});
+
+test('old dot fractions keep their numeric value instead of becoming a thousands separator', () => {
+  const input = state(); ['expectedVacantMonths', 'area', 'referenceRent'].forEach(key => delete input.fields[key]);
+  input.fields.monthlyRent = '1.234'; input.costs[0].amount = '45.000';
+  const converted = parseSnapshot(JSON.stringify({ app: 'mietklar', schemaVersion: 2, tariffYear: 2026, savedAt: '2026-10-19T12:00:00.000Z', state: input }), 2026).state;
+  assert.equal(converted.fields.monthlyRent, '1,234'); assert.equal(parseAmount(converted.fields.monthlyRent), 1.234);
+  assert.equal(converted.costs[0].amount, '45,000'); assert.equal(parseAmount(converted.costs[0].amount), 45);
 });
 
 test('3000 seeded rental models meet target and no smaller cent amount suffices', () => {

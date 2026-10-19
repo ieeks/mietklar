@@ -1,5 +1,5 @@
 import { suggestLandShare } from './afa.js';
-import { numericDraft } from './numbers.js';
+import { numericDraft, numeric as parsedNumeric } from './numbers.js';
 
 export const STORAGE_KEY = 'mietklar:saved-inputs';
 export const SCHEMA_VERSION = 3;
@@ -98,7 +98,7 @@ export function validateState(state, version = SCHEMA_VERSION) {
       units: fields.afaUnits, exception: fields.afaLandException
     });
     if (suggestion.percent === null || fields.afaLandStatus !== 'estimate'
-      || fields.afaLandPercent === '' || Number(fields.afaLandPercent) !== suggestion.percent) {
+      || fields.afaLandPercent === '' || (version === 3 ? parsedNumeric(fields.afaLandPercent) : Number(fields.afaLandPercent)) !== suggestion.percent) {
       throw new RangeError('Sicherung: übernommener Grundanteil passt nicht zu den Hilfsangaben.');
     }
   }
@@ -126,6 +126,13 @@ export function parseSnapshot(raw, expectedYear) {
     costs: state.costs.map(row => ({ ...row, paymentMonths: '12', yearTaxStatus: row.kind === 'reserve' ? 'none' : 'unknown', yearTaxAnnual: '0' }))
   };
   if (value.schemaVersion <= 2) state = { ...state, fields: { ...state.fields, ...COMPACT_DEFAULTS } };
+  if (value.schemaVersion <= 2) {
+    // Old number inputs unambiguously used a decimal point. Keep their value
+    // when a three-digit fraction would be ambiguous in the new text inputs.
+    const convert = (values, rules) => Object.fromEntries(Object.entries(values).map(([key, raw]) =>
+      [key, rules[key]?.type === 'number' && /^-?\d{1,3}\.\d{3}$/.test(raw) ? raw.replace('.', ',') : raw]));
+    state = { ...state, fields: convert(state.fields, FIELD_RULES), costs: state.costs.map(row => convert(row, COST_RULES)) };
+  }
   return makeSnapshot(state, value.tariffYear, value.savedAt);
 }
 export function readSavedSnapshot(storage, tariffYear) {
