@@ -24,7 +24,7 @@
 
 - [ ] Einkommensbasis: KZ 245 und bereits bereinigte Basis als getrennte Eingabewege; Doppelabzüge verhindern.
 - [ ] Weitere tarifpflichtige Einkünfte und Veranlagungsfreibetrag in beiden Vergleichsfällen.
-- [ ] AfA-Hilfen für Erwerbsart, Gebäudeanteil und bestehende Absetzungen; bestätigten Jahreswert bevorzugen.
+- [ ] AfA-Hilfen für Erwerbsart, Gebäudeanteil und bestehende Absetzungen; zusätzlich erstmalige Vermietung nach Privatnutzung ohne vorhandenen AfA-Wert. Anschaffungszeitpunkt/-kosten, Grundanteil, Nebenkosten und Vermietungsbeginn berücksichtigen.
 - [ ] Leerstand: tatsächliche Jahreserträge und nicht gedeckte Kosten statt pauschaler Kürzung aller Positionen.
 - [ ] Normales Vermietungsjahr, Anschaffungsjahr und tatsächlicher Jahres-Zahlungsfluss unterscheiden.
 - [ ] Vorwärtsmodus „Miete eingeben → was bleibt?“.
@@ -32,7 +32,7 @@
 
 ## Vor einer belastbaren Version: Umsatzsteuer und Anschaffungen
 
-- [ ] Tatsächlichen USt-Status klären; Kleinunternehmergrenze unternehmerweit, Vorjahr/Verzicht berücksichtigen.
+- [ ] Tatsächlichen USt-Status klären; Kleinunternehmerbefreiung ist vorerst die gewünschte Planungsannahme (19.10.2026). Grenze unternehmerweit beim selben Unternehmer, relevantes Vorjahr/laufendes Jahr und einen bindenden Verzicht prüfen; keine automatische Befreiung allein aus dem Umsatz einer Wohnung.
 - [ ] Steuerpflichtige Wohnraumvermietung, abweichende Nebenkosten-USt und Vorsteuer korrekt normalisieren; keine Doppelzählung.
 - [ ] Mehrere Anschaffungen gemeinsam über Tarifgrenzen rechnen.
 - [ ] Sofortabzug/AfA, Vermietungsanteil, Zeitpunkt und Jahresabzug abfragen.

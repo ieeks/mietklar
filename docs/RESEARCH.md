@@ -1,6 +1,6 @@
 # Recherche und fachliche Annahmen
 
-Stand: 18.10.2026. Quellen sind Ausgangspunkte; ein Kontoname und ein Baujahr ersetzen keine Einzelfallprüfung. Zuordnungsvorschläge später mit Bedingung, Quelle und Prüfdatum speichern.
+Stand: 19.10.2026. Quellen sind Ausgangspunkte; ein Kontoname und ein Baujahr ersetzen keine Einzelfallprüfung. Zuordnungsvorschläge später mit Bedingung, Quelle und Prüfdatum speichern.
 
 ## Einkommensteuer und KZ 245
 
@@ -10,6 +10,10 @@ Stand: 18.10.2026. Quellen sind Ausgangspunkte; ein Kontoname und ein Baujahr er
 - [BMF: LStR-Wartungserlass 2024](https://findok.bmf.gv.at/findok/volltext?dokumentId=dca4ae0e-a5f3-4dac-9770-5e6dced9dfa5): Veranlagungsfreibetrag für einschlägige andere Einkünfte bei nichtselbständigen Einkünften. Bei positivem Betrag O: max(0, min(730, 1460 - O)). In der Alpha nur Arbeitnehmer + eine Vermietung; keine weiteren Einkünfte.
 - [BMF: AfA bei Vermietung](https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/absetzung-fuer-abnutzung-bei-vuv.html): Gebäude-AfA grundsätzlich 1,5 %, individuelle Sonderfälle möglich. Bestehende Berechnung übernehmen; Grundanteil nicht abschreiben.
 - [BMF: EStR, Rücklagen](https://findok.bmf.gv.at/findok/volltext?segmentId=54c121ef-a7f2-464c-bf00-a452b801c149): Einzahlung in einen Instandhaltungsfonds allein ist noch kein Werbungskostenabzug. Tatsächliche Verwendung und Art der Maßnahme gesondert prüfen.
+
+### Erstmalige Vermietung nach Privatnutzung
+
+Nach [BMF: AfA bei Vermietung](https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/absetzung-fuer-abnutzung-bei-vuv.html), geprüft am 19.10.2026: Ein bisheriger Vermietungs-AfA-Wert muss bei erstmaliger Vermietung nicht vorhanden sein. Bei seit 2013 erstmaliger Vermietung sind fiktive Anschaffungskosten nur im entsprechenden Altvermögensfall möglich; für Neuvermögen sind die tatsächlichen Anschaffungs-/Herstellungskosten maßgeblich. Grund und Boden sind nicht abschreibbar. Erwerbszeitpunkt/-art, anrechenbare Nebenkosten und Vermietungsbeginn prüfen; keinen heutigen Marktwert pauschal ansetzen. Grundsätzlich 1,5 % Jahres-AfA, Halb-/Ganzjahres-AfA und Sonderfälle getrennt behandeln. Der vollständige Assistent ist noch nicht implementiert.
 
 ## Mietrecht vor Kostenfreigabe
 
@@ -35,10 +39,12 @@ Stand: 18.10.2026. Quellen sind Ausgangspunkte; ein Kontoname und ein Baujahr er
 
 Die Alpha hat noch keinen solchen Regelassistenten. Ein Dropdown mit „an Mieter“ ist eine Eingabeannahme, keine Rechtsfreigabe. Ein zukünftiger Vertrag kann den MRG-Katalog freiwillig heranziehen; das muss aus dem Vertrag erkennbar sein. Rücklage im Ausgangsmodell beim Eigentümer belassen.
 
-## Umsatzsteuer – noch offen
+## Umsatzsteuer – Kleinunternehmerbefreiung als Planungsannahme
 
 - [USP: Kleinunternehmen seit 2025](https://www.usp.gv.at/themen/steuern-finanzen/umsatzsteuer-ueberblick/weitere-informationen-zur-umsatzsteuer/weitere-steuertatbestaende-und-befreiungen/kleinunternehmen.html): Grenze 55.000 € relevante unternehmerische Umsätze, Vorjahr/laufendes Jahr und Toleranz beachten; nicht das Arbeitsgehalt.
 - [BMF: Vermietung in der USt](https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/vermietung-und-verpachtung-in-der-umsatzsteuer.html): Wohnraum, Heizung, Garage und Vorsteuer nicht pauschal gleich behandeln. Keine automatische Statusableitung aus einem historischen Kaufvertrag.
+
+Gewünschtes Entwicklungsszenario seit 19.10.2026: vorerst Kleinunternehmerbefreiung, keine Ausgangs-USt und kein Vorsteuerabzug. Die Alpha hat bereits einen entsprechenden Beispielmodus. Eine tatsächliche Befreiung wurde nicht festgestellt. Laut oben verlinktem USP (geprüft am 19.10.2026) ist der relevante Gesamtumsatz desselben Unternehmers maßgeblich, nicht nur die einzelne Wohnung; weitere Vermietungs-/unternehmerische Tätigkeiten können mitzählen. Arbeitslohn zählt nicht zum unternehmerischen Umsatz. Vorjahr/laufendes Jahr sowie bestehende Option zur Steuerpflicht mit mindestens fünfjähriger Bindung prüfen. Bei Anwendung der Befreiung sind Kosten ohne Vorsteuerabzug zu modellieren. Keine Prüfung dieser Voraussetzungen allein anhand des Wohnungsumsatzes.
 
 ## Anschaffungen
 

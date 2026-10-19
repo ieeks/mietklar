@@ -5,6 +5,8 @@ Stand: 19.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADM
 ## Ziel und bestätigte Entscheidungen
 
 - Österreichische Dauervermietung, Eigentumswohnung, kein Kredit.
+- Für den weiteren AfA-Assistenten zusätzlich das Szenario „bisher ausschließlich privat genutzt, erstmalige Vermietung“ berücksichtigen; keine bestehende Vermietungs-AfA voraussetzen. Ein individueller AfA-Jahreswert ist noch nicht ermittelt.
+- Als gewünschte Planungsannahme Kleinunternehmerbefreiung verwenden (ohne Ausgangs-USt und ohne Vorsteuerabzug). Keine bestätigte Statusprüfung: 55.000-€-Grenze unternehmerweit beim selben Unternehmer, relevantes Vorjahr/laufendes Jahr und ein möglicher bindender Verzicht bleiben zu prüfen.
 - Wunschbetrag X ist **frei verfügbares Geld nach Kosten, zusätzlicher Einkommensteuer und gewähltem Puffer**. Monatszahl ist ein Jahresdurchschnitt, keine Garantie gleichbleibender Zahlungseingänge.
 - Zuerst Rückwärtsrechnung: gewünschter Monatsüberschuss → benötigte Hauptmiete. Vorwärtsmodus ist geplant, noch kein eigener UI-Modus.
 - **Geführte Bedienung** wurde gegenüber Kompakt gewählt, damit Wohnungskosten, AfA und BK erklärt werden können.
@@ -45,7 +47,7 @@ Die Vorschreibung enthält getrennte BK, Wasser, Heizung, Warmwasser, I-Fonds. J
 1. Erledigt: Nutzer bestätigt am 19.10.2026 den manuellen Bedienungstest auf iPhone/Safari. GitHub Pages ist aktiviert; Live-Alpha: https://ieeks.github.io/mietklar/.
 2. Im Kostenmodell **Zahlung, erwartete Mietererstattung und bestätigten Steuerabzug** getrennt führen; Quellen/Status je Position ergänzen.
 3. Objekt-/Mietrechtsszenario und „noch kein Mietvertrag“ als Eingaben ergänzen, Vorschläge mit Begründung statt automatischer Freigaben.
-4. Persönliche AfA und Vermietungs-USt-Status separat verifizieren. Keine weiteren privaten Unterlagen in Commits aufnehmen.
+4. AfA-Hilfe für erstmalige Vermietung nach Privatnutzung ergänzen; Anschaffungs-/Herstellungsbasis, Grundanteil, Nebenkosten und Vermietungsbeginn prüfen. Kleinunternehmerbefreiung ist vorerst die gewünschte Planungsannahme; tatsächliche Voraussetzungen separat verifizieren. Keine privaten Unterlagen in Commits aufnehmen.
 5. Danach weitere Features aus ROADMAP; Pages ist bereits aktiviert.
 
 ## Prüfen / weiterentwickeln
