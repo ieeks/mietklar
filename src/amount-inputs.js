@@ -21,9 +21,12 @@ export function createAmountInputs(root) {
     if (!isMoney(input)) return;
     const raw = readValue(input);
     rawValues.set(input, raw);
-    // Remove only known grouping, retain the user's decimal precision.
-    input.value = raw.includes(',') && Number.isFinite(numeric(raw)) ? raw.replaceAll('.', '') : raw;
-    if (input.value !== '' && numeric(input.value) === 0) input.select();
+    // Some engines select a field before dispatching focus (replacement/paste
+    // and autofill). Preserve that selection when removing display grouping.
+    const selectedAll = input.selectionStart === 0 && input.selectionEnd === input.value.length;
+    const editing = raw.includes(',') && Number.isFinite(numeric(raw)) ? raw.replaceAll('.', '') : raw;
+    if (input.value !== editing) input.value = editing;
+    if (selectedAll || (input.value !== '' && numeric(input.value) === 0)) input.select();
   });
   root.addEventListener('click', event => {
     const input = event.target;
