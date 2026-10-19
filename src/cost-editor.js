@@ -1,9 +1,16 @@
-import { numeric, money } from './numbers.js?v=0.7.0-alpha.4';
-import { MAX_COST_ROWS } from './persistence.js?v=0.7.0-alpha.4';
+import { COST_TYPES, costGuidance } from './cost-guidance.js?v=0.8.0-alpha.1';
+import { numeric, money } from './numbers.js?v=0.8.0-alpha.1';
+import { MAX_COST_ROWS } from './persistence.js?v=0.8.0-alpha.1';
 
 export function createCostEditor(root, readValue = input => input.value) {
   const q = selector => root.querySelector(selector);
   const all = selector => [...root.querySelectorAll(selector)];
+  const doc = root.ownerDocument;
+  function kindOptions(select, value = 'other') {
+    select.replaceChildren(...Object.entries(COST_TYPES).map(([id, type]) => { const option = doc.createElement('option'); option.value = id; option.textContent = type.label; return option; }));
+    select.value = value;
+  }
+  kindOptions(q('[data-new-cost-kind]'));
   const hints = {
     bk: 'Sammelposten: Einzelpositionen und Mietvertrag prüfen. Nicht pauschal vollständig weiterverrechnen.',
     water: 'Wasser und Abwasser: Kostenanteil, Abrechnung und Vereinbarung prüfen.',
@@ -17,6 +24,7 @@ export function createCostEditor(root, readValue = input => input.value) {
   function addCost({ name, amount = 0, period = 'month', kind = 'other', group = 'custom' }) {
     const row = root.ownerDocument.getElementById('mr-cost-template').content.firstElementChild.cloneNode(true);
     row.dataset.kind = kind;
+    kindOptions(row.querySelector('[data-cost-kind]'), kind);
     row.dataset.group = group;
     row.querySelector('[data-cost-name]').value = name;
     row.querySelector('[data-cost-amount]').value = amount;
@@ -46,7 +54,7 @@ export function createCostEditor(root, readValue = input => input.value) {
 
   const keys = { name: 'name', amount: 'amount', period: 'period', payer: 'payer', forward: 'forward',
     taxStatus: 'tax', taxAnnual: 'tax-annual', evidence: 'evidence', paymentMonths: 'payment-months',
-    yearTaxStatus: 'year-tax', yearTaxAnnual: 'year-tax-annual' };
+    yearTaxStatus: 'year-tax', yearTaxAnnual: 'year-tax-annual', composition: 'composition', agreement: 'agreement' };
   function capture() {
     return all('[data-cost-row]').map(row => ({ ...Object.fromEntries(Object.entries(keys).map(([key, suffix]) =>
       [key, readValue(row.querySelector('[data-cost-' + suffix + ']'))])), kind: row.dataset.kind, group: row.dataset.group }));
@@ -58,7 +66,8 @@ export function createCostEditor(root, readValue = input => input.value) {
       for (const [key, suffix] of Object.entries(keys)) row.querySelector('[data-cost-' + suffix + ']').value = cost[key];
     });
   }
-  function render(yearMode) {
+  function render(context) {
+    const yearMode = context.periodMode === 'year';
     const rows = all('[data-cost-row]');
     q('[data-add-cost]').disabled = rows.length >= MAX_COST_ROWS;
     q('[data-add-cost]').title = rows.length >= MAX_COST_ROWS ? 'Höchstens 100 Kostenpositionen möglich' : '';
@@ -79,13 +88,44 @@ export function createCostEditor(root, readValue = input => input.value) {
         : status === 'full' ? annual : status === 'annual' ? numeric(get('tax-annual')) : 0;
       row.querySelector('[data-tax-summary]').textContent = status === 'unknown' ? 'Steuerabzug: noch prüfen · vorerst 0 €'
         : 'Steuerabzug: ' + money(deduction) + ' / Jahr';
+      const line = Object.fromEntries(Object.entries(keys).map(([key, suffix]) => [key, get(suffix)]));
+      line.kind = row.dataset.kind;
+      const guide = costGuidance(line, context);
+      const set = (key, text) => { row.querySelector('[data-review-' + key + ']').textContent = text; };
+      set('contents', guide.contents); set('context', guide.lawLabel); set('basis', guide.basis);
+      set('agreement', guide.agreementText); set('tenant', guide.tenant); set('tax-status', guide.tax); set('tax', guide.taxText);
+      set('checked', 'Quellen geprüft: ' + guide.checked + ' · Bedingte Prüfhilfe, keine Prüfung deines Vertrags.');
+      const items = guide.steps.map(text => { const li = doc.createElement('li'); li.textContent = text; return li; });
+      row.querySelector('[data-review-steps]').replaceChildren(...items);
+      row.querySelector('[data-review-sources]').replaceChildren(...guide.sources.map(source => {
+        const li = doc.createElement('li'), a = doc.createElement('a'); a.textContent = source.label; a.href = source.url;
+        a.target = '_blank'; a.rel = 'noopener noreferrer'; li.append(a); return li;
+      }));
+      const notice = row.querySelector('[data-cost-next]');
+      notice.textContent = guide.warnings.length ? guide.warnings.join(' ') : guide.steps[0];
+      notice.dataset.warning = String(guide.warnings.length > 0);
+      row.querySelector('[data-cost-hint]').textContent = hints[row.dataset.kind] || guide.contents;
       row.querySelector('[data-cost-equivalent]').textContent = 'Zahlung: ' + money(annual) + ' / Jahr · ' + money(annual / 12) + ' / Monat im Durchschnitt';
     });
   }
   function add() {
     if (all('[data-cost-row]').length >= MAX_COST_ROWS) return null;
-    return addCost({ name: 'Eigene Position' });
+    const kind = q('[data-new-cost-kind]').value;
+    return addCost({ name: kind === 'other' ? 'Eigene Position' : COST_TYPES[kind].label, kind });
   }
-  return { capture, restore, render, add };
+  function changeKind(input) {
+    if (!input.matches('[data-cost-kind]')) return;
+    const row = input.closest('[data-cost-row]'), previous = row.dataset.kind;
+    if (previous === input.value) return;
+    row.dataset.kind = input.value;
+    const reserve = input.value === 'reserve';
+    for (const [suffix, value] of [['payer', 'owner'], ['tax', 'none'], ['year-tax', 'none']]) {
+      const control = row.querySelector('[data-cost-' + suffix + ']');
+      control.disabled = reserve;
+      if (reserve) control.value = value;
+      else if (previous === 'reserve') control.value = 'unknown';
+    }
+  }
+  return { capture, restore, render, add, changeKind };
 }
 

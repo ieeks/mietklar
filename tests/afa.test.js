@@ -88,3 +88,4 @@ test('invalid active values and unknown enum values are rejected',()=>{
   assert.throws(()=>suggestLandShare({...suggestion,units:'bad'}));
   for(const months of [-1,13,6.5])assert.throws(()=>regularFirstYearAfa(3000,months));
 });
+

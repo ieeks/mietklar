@@ -1,4 +1,4 @@
-# Übergabe: mietklar. Alpha 0.7
+# Übergabe: mietklar. Alpha 0.8
 
 Stand: 19.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADMAP, docs/RESEARCH lesen. Danach zuerst den aktuellen Branch/Commit prüfen; die nächste Sitzung nicht aus dem Gesprächsgedächtnis rekonstruieren.
 
@@ -100,3 +100,11 @@ Kleine statische App ohne unnötiges Framework. Vor einer neuen Versionsnummer `
 
 
 
+
+## Aktueller Arbeitsblock: Alpha 0.8.0-alpha.1
+
+Kosten-Prüfhilfe umgesetzt: `src/cost-guidance.js` enthält 18 bedingte Profile und unabhängige Warnungen/Nächste-Schritte, keine Berechnung. `cost-editor.js` zeigt eine optionale vierteilige Hilfe mit Kategorie, Leistungsbeschreibung, geerbtem Mietrecht/Vertragsstatus, Vereinbarungsangabe und unabhängigem Steuerhinweis. Quellen und Datum stehen je Karte. Ungeklärte/gegensätzliche eingeplante Erstattungen erscheinen zusätzlich in Ergebnis und Druckblatt. Keinerlei automatische Freigabe oder Anpassung der Erstattung/Abzüge durch einen Statuswechsel. Nur Rücklagenkategorie erzwingt wie bisher Eigentümer/kein Abzug; beim Verlassen der Rücklagenkategorie werden diese Auswahlen wieder offen.
+
+Schema 4 ergänzt `composition` (max. 400 Zeichen), `agreement` (unknown/planned/documented/excluded) und neue Kategorien. Formate 1–3 werden zuerst strikt gegen ihre alten Regeln geprüft, dann neue Prüffelder leer/offen ergänzt. Bestehende Geldwerte, Zahlungen und Abzüge bleiben erhalten; keine Vertragsgrundlage aus alten Namen ableiten. Keine privaten Originale oder echten Beträge übernommen. Sammelposten und Einzelpositionen dürfen nicht doppelt erfasst werden. Gemeinsame Garagenkosten können in einer Wohnungsabrechnung stehen, ohne dass ein eigener Stellplatz vermietet wird; Zuordnung und Nutzungsrecht prüfen. Fondsarbeiten sind von Einzahlungen zu unterscheiden, keine doppelte Cash-Erfassung.
+
+Nächster Nutzertest: eine fiktive Karte öffnen, Mietrecht/Vertragsstatus ändern, Kostenart/Vereinbarung prüfen, Quelle öffnen, alles zuklappen, Sicherung exportieren/importieren. Echte iPhone-/Safari-Dialoge weiterhin separat abnehmen. Individuelle Vertrags-/Belegprüfung und Gebäude-AfA sind dadurch nicht abgeschlossen.

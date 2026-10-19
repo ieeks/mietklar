@@ -73,3 +73,4 @@ test('scenario rejects invalid active rent, target, direction and model values',
   assert.throws(()=>calculateScenario({mode:'rent',rent:1000},{...model,annualCashCosts:NaN},tariff));
   assert.throws(()=>calculateScenario({mode:'rent',rent:1000},{...model,annualReimbursements:-1},tariff));
 });
+

@@ -1,11 +1,13 @@
-import { buildFlow, comparePerSquareMetre } from './scenario.js?v=0.7.0-alpha.4';
-import { money, numeric, decimal } from './numbers.js?v=0.7.0-alpha.4';
-import { renderAfa } from './form-view.js?v=0.7.0-alpha.4';
+import { costGuidance } from './cost-guidance.js?v=0.8.0-alpha.1';
+import { buildFlow, comparePerSquareMetre } from './scenario.js?v=0.8.0-alpha.1';
+import { money, numeric, decimal } from './numbers.js?v=0.8.0-alpha.1';
+import { renderAfa } from './form-view.js?v=0.8.0-alpha.1';
 
 function assumptionsFor(result) {
   const { fields: f, income, period, afaResult, yearAfa, costs } = result;
   const basisNotes = period.mode === 'full' || f.yearAfaMode === 'regular' ? afaResult.notes : [];
   const notes = [...income.notes, ...basisNotes, ...yearAfa.notes];
+  result.lines.forEach(line => costGuidance(line, f).warnings.forEach(text => notes.push(line.name + ': ' + text)));
   costs.unknownForward.forEach(row => notes.push(row.name + ': Erstattung offen; vorerst 0 €.'));
   costs.unknownTax.forEach(row => notes.push(row.name + ': Steuerabzug offen; vorerst 0 €.'));
   costs.rows.filter(row => row.annualDeduction > 0 && !row.evidence).forEach(row => notes.push(row.name + ': Abzug von dir angegeben; Quelle / Begründung fehlt noch.'));
@@ -45,7 +47,7 @@ function renderPrint(root, result, notes, reference) {
   const node = (tag, text, className) => { const n = doc.createElement(tag); if (text !== undefined) n.textContent = text; if (className) n.className = className; return n; };
   const { fields: f, solved, costs, model, period, income } = result;
   const fragment = doc.createDocumentFragment();
-  fragment.append(node('h1', 'mietklar. · Ergebnisblatt'), node('p', 'Alpha 0.7 · Tarif 2026 · Berechnet am ' + new Date().toLocaleDateString('de-AT')));
+  fragment.append(node('h1', 'mietklar. · Ergebnisblatt'), node('p', 'Alpha 0.8 · Tarif 2026 · Berechnet am ' + new Date().toLocaleDateString('de-AT')));
   fragment.append(node('h2', 'Hauptmiete ' + money(solved.rent) + ' je Mietmonat'), node('p', 'Jahressaldo ' + money(solved.annualCash) + ' · Durchschnitt ' + money(solved.monthlyCash) + ' je Kalendermonat'));
   const list = node('dl');
   const entries = [

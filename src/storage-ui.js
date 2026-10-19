@@ -1,4 +1,4 @@
-import { STORAGE_KEY, MAX_BACKUP_BYTES, makeSnapshot, parseSnapshot, writeSavedSnapshot, removeSavedSnapshot } from './persistence.js?v=0.7.0-alpha.4';
+import { STORAGE_KEY, SCHEMA_VERSION, MAX_BACKUP_BYTES, makeSnapshot, parseSnapshot, writeSavedSnapshot, removeSavedSnapshot } from './persistence.js?v=0.8.0-alpha.1';
 
 export function setupPersistence({ root, tariffYear, captureState, applyState, refresh, isValid }) {
   const doc = root.ownerDocument, win = doc.defaultView;
@@ -77,12 +77,12 @@ export function setupPersistence({ root, tariffYear, captureState, applyState, r
     hasSaved = true;
     try {
       const snapshot = parseSnapshot(raw, tariffYear);
-      const migrated = JSON.parse(raw).schemaVersion < 3;
+      const migrated = JSON.parse(raw).schemaVersion < SCHEMA_VERSION;
       const valid = applyWithRollback(snapshot.state);
       remember = true; lastState = JSON.stringify(snapshot.state); lastSavedAt = snapshot.savedAt;
       announce('Gespeicherter Stand geladen: ' + time(snapshot.savedAt)
         + (valid ? '.' : '. Bitte die unvollständigen oder ungültigen Eingaben prüfen.')
-        + (migrated ? ' Ältere Sicherung übernommen; neue Leerstands- und Vergleichsfelder ergänzt. Bisherige Werte bleiben erhalten.' : ''));
+        + (migrated ? ' Ältere Sicherung übernommen; neue Prüffelder ergänzt. Bisherige Werte bleiben erhalten.' : ''));
     } catch (error) {
       blocked = true; recoveryText = raw;
       announce('Gespeicherter Stand nicht geladen: ' + error.message
@@ -127,7 +127,7 @@ export function setupPersistence({ root, tariffYear, captureState, applyState, r
       const raw = await readFile(file);
       if (sequence !== importSequence) return;
       const snapshot = parseSnapshot(raw, tariffYear);
-      const migrationNote = JSON.parse(raw).schemaVersion < 3 ? ' Ältere Sicherung übernommen; neue Leerstands- und Vergleichsfelder ergänzt. Bisherige Werte bleiben erhalten.' : '';
+      const migrationNote = JSON.parse(raw).schemaVersion < SCHEMA_VERSION ? ' Ältere Sicherung übernommen; neue Prüffelder ergänzt. Bisherige Werte bleiben erhalten.' : '';
       const before = captureState();
       cancel();
       const valid = applyWithRollback(snapshot.state);

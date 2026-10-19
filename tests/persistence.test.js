@@ -25,7 +25,7 @@ function state() {
     costs: [{
       name: 'Betriebskosten', amount: '170', period: 'month', payer: 'unknown', forward: '0',
       taxStatus: 'unknown', taxAnnual: '0', evidence: '', kind: 'bk', group: 'house',
-      paymentMonths: '12', yearTaxStatus: 'unknown', yearTaxAnnual: '0'
+      paymentMonths: '12', yearTaxStatus: 'unknown', yearTaxAnnual: '0', composition: '', agreement: 'unknown'
     }],
     calculationMode: 'target', step: 1, adoptedLandSuggestion: false
   };
@@ -168,7 +168,7 @@ test('storage security, quota and deletion errors propagate without claiming suc
 function legacySnapshot() {
   const input = state();
   for (const key of ['periodMode', 'startMonth', 'vacantMonths', 'yearAfaMode', 'yearAfa', 'yearAfaMonths', 'expectedVacantMonths', 'area', 'referenceRent']) delete input.fields[key];
-  input.costs.forEach(row => { delete row.paymentMonths; delete row.yearTaxStatus; delete row.yearTaxAnnual; });
+  input.costs.forEach(row => { delete row.composition; delete row.agreement; delete row.paymentMonths; delete row.yearTaxStatus; delete row.yearTaxAnnual; });
   return { app: 'mietklar', schemaVersion: 1, tariffYear: 2026, savedAt: date, state: input };
 }
 
@@ -177,7 +177,7 @@ test('Alpha 0.5 backups migrate every existing value while defaulting to identic
   old.state.costs[0].taxStatus = 'full'; old.state.calculationMode = 'rent'; old.state.step = 3;
   const original = raw(old), storage = memory(); storage.values.set(STORAGE_KEY, original);
   const migrated = readSavedSnapshot(storage, 2026);
-  assert.equal(migrated.schemaVersion, 3); assert.equal(migrated.savedAt, date);
+  assert.equal(migrated.schemaVersion, 4); assert.equal(migrated.savedAt, date);
   for (const [key, value] of Object.entries(old.state.fields)) assert.equal(migrated.state.fields[key], value);
   for (const [key, value] of Object.entries(old.state.costs[0])) assert.equal(migrated.state.costs[0][key], value);
   assert.equal(migrated.state.calculationMode, 'rent'); assert.equal(migrated.state.step, 3);
@@ -201,4 +201,21 @@ test('year fields and separate year tax data survive current-schema draft roundt
   Object.assign(input.costs[0], { paymentMonths: '8', yearTaxStatus: 'provided', yearTaxAnnual: '600' });
   assert.deepEqual(parseSnapshot(raw(makeSnapshot(input, 2026, date)), 2026).state, input);
   input.fields.startMonth = '13'; assert.throws(() => validateState(input));
+});
+
+test('format 3 migrates review fields without inferring agreements or changing raw money', () => {
+  const snapshot = makeSnapshot(state(), 2026, date); snapshot.schemaVersion = 3;
+  delete snapshot.state.costs[0].composition; delete snapshot.state.costs[0].agreement;
+  snapshot.state.costs[0].amount = '170,1234'; snapshot.state.costs[0].payer = 'tenant';
+  const original = raw(snapshot), migrated = parseSnapshot(original, 2026);
+  assert.equal(migrated.schemaVersion, 4); assert.equal(migrated.state.costs[0].amount, '170,1234');
+  assert.equal(migrated.state.costs[0].payer, 'tenant'); assert.equal(migrated.state.costs[0].agreement, 'unknown');
+  assert.equal(migrated.state.costs[0].composition, ''); assert.equal(raw(snapshot), original);
+  snapshot.state.costs[0].kind = 'garage'; assert.throws(() => parseSnapshot(raw(snapshot), 2026));
+});
+test('new review data roundtrips as text with strict sizes and choices', () => {
+  const input = state(); Object.assign(input.costs[0], { kind: 'garage', composition: '<b>Nur Text</b>', agreement: 'planned' });
+  assert.deepEqual(parseSnapshot(raw(makeSnapshot(input, 2026, date)), 2026).state, input);
+  input.costs[0].composition = 'x'.repeat(401); assert.throws(() => validateState(input));
+  input.costs[0].composition = ''; input.costs[0].agreement = 'approved-by-app'; assert.throws(() => validateState(input));
 });

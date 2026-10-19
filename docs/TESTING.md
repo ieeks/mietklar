@@ -1,10 +1,10 @@
-# Prüfstand Alpha 0.7
+# Prüfstand Alpha 0.8
 
 Stand: 19.10.2026. Die Abnahme gilt jeweils für den genannten Umfang, nicht pauschal für spätere Oberflächen.
 
 ## Lokal erfolgreich
 
-- `npm test`: 83 reine Tests in Tarif-, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Szenariomodulen.
+- `npm test`: 95 reine Tests in Tarif-, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Szenariomodulen.
 - Enthalten: 3.000 deterministische Modelle mit unterschiedlichen Einkommen, Kosten, AfA, Erstattungen, 1–12 Mietmonaten und Zielbeträgen. Jedes Ergebnis erreicht das Ziel; ein Cent weniger Miete reicht nicht, sofern die Lösung nicht bereits 0 € ist. Fester Seed für reproduzierbare Fehler.
 - `npm run check`: Syntaxprüfung aller automatisch gefundenen JavaScript-Dateien in src, tests, e2e und scripts sowie Playwright-Konfiguration. Zusätzlich Versionszuordnung von Browsermodulen, Stylesheet und Tarifabruf geprüft, um gemischte alte/neue Assets nach Pages-Updates zu verhindern. Kein ESLint-/Typprüfungsnachweis.
 - Playwright-Testliste: neun Fälle × zwei Engines = 18 Fälle gefunden. Dies allein ist kein Browserlauf.
@@ -74,3 +74,9 @@ Commit `6c4e946e43381d657ff3acff4083b3edf08da1d0`, [Actions-Lauf 39303286104](ht
 ## AfA-Erklärung Alpha 0.7.0-alpha.4
 
 Commit `109bcf90dfb8c0c94a6faeb5bee08f6a5fbd9ede`, [Actions-Lauf 39305412730](https://github.com/ieeks/mietklar/actions/runs/39305412730): Syntax/Asset-Zuordnung, 83 reine Tests und alle 18 Chromium-/WebKit-Fälle ohne Retry erfolgreich. Bestehende Browserfälle erweitert: eingegebener Kaufpreis und Kaufjahr, aber Grundanteilstatus offen → konkreter Hinweis direkt an der Summe; bewusste Einordnung → Hinweis verschwindet; tatsächlicher Nullwert ohne falschen Offen-Status. Jahresroute separat geprüft: bekannter Volljahreswert bei noch offener Jahresauswahl sowie reguläre 0 Nutzungsmonate. Rechenwerte und Speicherformat unverändert.
+
+## Kosten-Prüfhilfe Alpha 0.8
+
+Lokal Syntax/Assetprüfung und 95 reine Tests erfolgreich. Neue Gegenfälle: Voll-MRG ohne künstliche Einzelvereinbarungspflicht für Wasser, Teil-MRG ohne Vertrag, widersprüchlich als geprüft angegebene Grundlage, ausgeschlossene Überwälzung trotz eingeplanter Zahlung, Reparatur/Beratung außerhalb zusätzlicher MRG-BK, Rücklageneinzahlung gegenüber tatsächlicher Fondsarbeit, kalenderjährlich unabhängiger Abzug. Neue Metadaten verändern das finanzielle Modell nicht. Format 3 → 4 erhält rohe Kommawerte und ergänzt ausschließlich leere/offene Prüffelder; strikte alte Kategorien bleiben geschützt.
+
+Browser-Suite jetzt zehn Fälle × Chromium/WebKit = 20. Neuer Fall: geerbter Kontext, Kategorie und Vereinbarung, Quellen, Hinweise im Ergebnisblatt, Text ohne HTML-Ausführung, Breiten 320/390/1280, Reservewechsel mit gesperrten Auswahlen, erneutes Öffnen nach Import und Alles-zuklappen ohne Datenverlust. CI-Nachweis für diesen Stand wird nach Abschluss ergänzt. Neue manuelle iPhone-Abnahme weiterhin offen.

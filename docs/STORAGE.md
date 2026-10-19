@@ -1,6 +1,6 @@
 # Eingaben speichern und übertragen
 
-Stand: Alpha 0.7, 19.10.2026. Speichern/Sicherung der Alpha 0.5 wurde vom Nutzer am 19.10.2026 abgenommen. Die Einseitenansicht verwendet zusätzliche Leerstands-/Vergleichsfelder und monetäre Texteingaben mit Dezimalkomma.
+Stand: Alpha 0.8, 19.10.2026. Speichern/Sicherung der Alpha 0.5 wurde vom Nutzer am 19.10.2026 abgenommen. Die Einseitenansicht verwendet zusätzliche Leerstands-/Vergleichsfelder und monetäre Texteingaben mit Dezimalkomma.
 
 ## Bedienung
 
@@ -12,14 +12,14 @@ Stand: Alpha 0.7, 19.10.2026. Speichern/Sicherung der Alpha 0.5 wurde vom Nutzer
 
 Die Dateien enthalten Gehalt, Kosten, AfA und Freitextangaben im Klartext. Auch der Browserstand ist unverschlüsselt. Keine persönlichen Sicherungen ins öffentliche Repository laden. Die App sendet die Formulareingaben nicht an einen Server und synchronisiert keine Geräte. Lokale Website-Daten sind an Browser und Herkunft gebunden; GitHub Pages teilt eine Herkunft mit anderen Seiten desselben `ieeks.github.io`-Hosts. Die App nutzt keine fremden Laufzeitskripte. Für stärkere Isolation später eine eigene Herkunft prüfen.
 
-## Format 3 und Übernahme von Format 1/2
+## Format 4 und Übernahme von Format 1/2/3
 
 Lokale Kennung: `mietklar:saved-inputs`. Eine stabile Kennung ermöglicht es, einen unbekannten älteren/neuen Stand zu erkennen, statt ihn durch neue Defaults zu ersetzen.
 
 | Schlüssel | Inhalt |
 | --- | --- |
 | `app` | Exakt `mietklar` |
-| `schemaVersion` | Ganzzahl `3`; vorhandene Formate `1` und `2` werden geprüft migriert |
+| `schemaVersion` | Ganzzahl `4`; vorhandene Formate `1`, `2` und `3` werden geprüft migriert |
 | `tariffYear` | Gleich dem Tarifjahr der geöffneten App, derzeit `2026` |
 | `savedAt` | Kanonischer UTC-Zeitstempel mit Millisekunden |
 | `state.fields` | Vollständige erlaubte `data-key`-Felder als rohe Zeichenketten, jetzt auch `periodMode`, `startMonth`, `vacantMonths`, `yearAfaMode`, `yearAfa`, `yearAfaMonths`, `expectedVacantMonths`, `area`, `referenceRent` |
@@ -30,7 +30,7 @@ Lokale Kennung: `mietklar:saved-inputs`. Eine stabile Kennung ermöglicht es, ei
 
 Kein gespeicherter Tarif, Ergebniswert, HTML oder ausführbarer Code. Die Feldliste und Auswahlen sind in `src/persistence.js` pro Version festgelegt. Unbekannte/fehlende Schlüssel werden auf jeder Ebene abgewiesen; nur neue erlaubte Objekte werden aufgebaut. Texte werden durch die UI als Text bzw. Feldwert verwendet.
 
-Gültiges Format 1 zunächst wie bisher nach Format 2 überführen: zunächst vollständig gegen die damalige Feldliste prüfen, dann unverändert alle alten Werte kopieren und Defaults ergänzen: Volljahresmodus, Start Jänner, Leerstand 0, Jahres-AfA offen/0, AfA-Nutzungsmonate offen. Pro Position Zahlungsmonate 12 und Jahresabzug offen/0; Rücklage zwingend ohne Jahresabzug. Übernahmehinweis wird angezeigt. Laden allein schreibt die alte lokale Kopie nicht um. Die nächste bewusste Änderung mit eingeschalteter Speicherung sowie neuer Export verwenden Format 3. Ältere Dateien können weiterhin importiert werden; fehlerhafte oder gemischte Versionsformate werden nicht still repariert. Für Format 1 und Format 2 anschließend erwarteten Regeljahres-Leerstand 0 und leere Fläche/Referenz ergänzen; bestehende Jahreswahl aus Format 2 erhalten. Früherer Schrittwert bleibt kompatibel gespeichert. Alte monetäre Punktangaben mit genau drei Nachkommastellen werden bei Bedarf wertgleich mit Komma geschrieben, damit der neue Parser sie nicht als mehrdeutige Tausendergruppe zurückweist. Geldwerte und bisherige Ergebnisse bleiben erhalten.
+Gültiges Format 1 zunächst wie bisher nach Format 2 überführen: zunächst vollständig gegen die damalige Feldliste prüfen, dann unverändert alle alten Werte kopieren und Defaults ergänzen: Volljahresmodus, Start Jänner, Leerstand 0, Jahres-AfA offen/0, AfA-Nutzungsmonate offen. Pro Position Zahlungsmonate 12 und Jahresabzug offen/0; Rücklage zwingend ohne Jahresabzug. Übernahmehinweis wird angezeigt. Laden allein schreibt die alte lokale Kopie nicht um. Die nächste bewusste Änderung mit eingeschalteter Speicherung sowie neuer Export verwenden Format 4. Ältere Dateien können weiterhin importiert werden; fehlerhafte oder gemischte Versionsformate werden nicht still repariert. Für Format 1 und Format 2 anschließend erwarteten Regeljahres-Leerstand 0 und leere Fläche/Referenz ergänzen; bestehende Jahreswahl aus Format 2 erhalten. Früherer Schrittwert bleibt kompatibel gespeichert. Alte monetäre Punktangaben mit genau drei Nachkommastellen werden bei Bedarf wertgleich mit Komma geschrieben, damit der neue Parser sie nicht als mehrdeutige Tausendergruppe zurückweist. Geldwerte und bisherige Ergebnisse bleiben erhalten.
 
 Maximal 256 KiB UTF-8 und 100 Kostenpositionen. Texte sind feldweise begrenzt; numerische Rohwerte maximal 64 Zeichen; gültige Zahlen endlich und im Betrag höchstens 10¹². Komma/Punkt und deutsche Gruppierung mit Komma sind erlaubt. Ein Minuszeichen oder unvollständiger Exponent darf als Entwurf bleiben. Mehrdeutige reine Punktgruppen werden gespeichert, aber im aktiven Rechenweg erklärt zurückgewiesen. Beliebige Texte/HTML bleiben in numerischen Feldern unzulässig. Die alten Formate werden vor Migration weiterhin gegen ihre damalige strikte Zahlensyntax geprüft. Auswahlwerte, Schritt und Rücklagenstatus müssen passen. Ein als übernommen markierter Grundanteil muss den zugehörigen Hilfsangaben entsprechen, damit die spätere Invalidierung weiter funktioniert.
 
@@ -51,3 +51,7 @@ Schema bei inkompatiblen Änderungen erhöhen. Eine Migration muss alte Werte ex
 ## Anzeigeformat ab 0.7.0-alpha.3
 
 Die gruppierte Geldanzeige liegt ausschließlich in der Bedienoberfläche. Ein getrennter Rohwert hält Eingabe und zusätzliche Dezimalstellen fest; Berechnung, Kosteneditor, Autospeicherung und Dateiexport lesen diesen Rohwert. Formatierung bei Fokus/Blur verändert ihn nicht. Null-Ersetzung beim Tippen ist eine normale Eingabe mit gleichem Zahlenwert; reine Fokus-/Klickauswahl schreibt keinen neuen Stand. Schema und Migration bleiben unverändert.
+
+## Prüffelder in Format 4
+
+Pro Kostenkarte `composition`: Text bis 400 Zeichen; `agreement`: unknown/planned/documented/excluded. `kind` umfasst jetzt 18 Kategorien aus `cost-guidance.js`. Alle alten Formate behalten ihre frühere Kategorienliste und strikte Feldzahl; neue Kategorien in einer angeblichen Format-3-Datei werden abgewiesen. Nach Prüfung von 1–3 ergänzt die Migration composition leer und agreement unknown. Ein bisher eingeplanter Kostenersatz bleibt erhalten, beweist aber keine Vereinbarung; die Prüfhilfe macht das sichtbar. Bestehende Format-3-Kommaentwürfe und zusätzliche Nachkommastellen bleiben exakt erhalten. Format 3 verwendet weiterhin die damalige Komma-/Entwurfssyntax; nur 1/2 nutzen die alte Punkt-Zahlensyntax. Anzeigen, Import und Rückgängig enthalten die Prüffelder als Text, ohne HTML-Ausführung.

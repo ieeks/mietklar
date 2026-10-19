@@ -1,6 +1,6 @@
 # mietklar.
 
-**Alpha 0.7 · Stand 19.10.2026**
+**Alpha 0.8 · Stand 19.10.2026**
 
 Welche Hauptmiete brauchst du für deinen Wunschüberschuss – und was bleibt von einer vorgegebenen Miete nach Zahlungen, Rücklage und zusätzlicher Einkommensteuer?
 
@@ -23,7 +23,7 @@ npm run check
 npm test
 ```
 
-Die Syntaxprüfung findet JavaScript-Dateien automatisch und prüft konsistente Asset-Versionen. 83 reine Rechen-, Kosten-, AfA-, Jahres-, Speicher- und Szenariotests, einschließlich 3.000 deterministischer Zielmietfälle. Für die zusätzlichen Browserprüfungen ist Playwright ausschließlich als Entwicklungsabhängigkeit enthalten:
+Die Syntaxprüfung findet JavaScript-Dateien automatisch und prüft konsistente Asset-Versionen. 95 reine Rechen-, Kosten-, AfA-, Jahres-, Speicher- und Szenariotests, einschließlich 3.000 deterministischer Zielmietfälle. Für die zusätzlichen Browserprüfungen ist Playwright ausschließlich als Entwicklungsabhängigkeit enthalten:
 
 ```sh
 npm ci
@@ -31,7 +31,7 @@ npx playwright install --with-deps chromium webkit
 npm run test:e2e
 ```
 
-GitHub Actions prüft Syntax und Rechenfälle sowie neun Bedienungsfälle in Chromium und WebKit. Nachweise und verbleibende manuelle Abnahme: [TESTING.md](docs/TESTING.md).
+GitHub Actions prüft Syntax und Rechenfälle sowie zehn Bedienungsfälle in Chromium und WebKit. Nachweise und verbleibende manuelle Abnahme: [TESTING.md](docs/TESTING.md).
 
 ## Bedienung
 
@@ -43,6 +43,12 @@ GitHub Actions prüft Syntax und Rechenfälle sowie neun Bedienungsfälle in Chr
 - Bei noch offener AfA steht der konkrete fehlende Schritt direkt an der Summe. Vorläufige 0 € werden als „AfA noch offen“ bezeichnet; ein tatsächlich eingegebener oder berechneter Nullbetrag erhält keinen Offen-Hinweis.
 - Optional Wohnfläche und eigenen Vergleichswert pro m² eingeben. Oberhalb dieses Werts erscheint ein Hinweis. Keine gesetzliche Mietpreisgrenze, keine automatische mietrechtliche Freigabe.
 - **Drucken / PDF** öffnet den Browser-Druckdialog. Das Ergebnisblatt enthält aktuellen Jahressaldo, Miete, Einkommensbasis, Kosten-/Steuerbeträge und offene Annahmen. Die App-Bedienelemente werden ausgeblendet. Bei ungültigen Eingaben oder unpassendem USt-Status wird kein veraltetes Ergebnisblatt ausgegeben. Anschaffungen bleiben ein separater Vergleich.
+
+## Kostenpositionen prüfen · Alpha 0.8
+
+Jede Karte hat eine optionale vierteilige Prüfhilfe: enthaltene Leistungen/Kostenart, geerbte Mietrechts-Einordnung, Vereinbarung zur Weiterverrechnung und unabhängiger Steuerabzug. Der nächste Schritt steht bereits auf der geschlossenen Karte. 18 Kostenarten einschließlich Versicherung, Wartung, Bewachung, Anlagen-Notruf und Garage geben bedingte Hinweise mit Primärquellen und Prüfdatum. Kategorien sind keine Rechtsfreigabe.
+
+Bei neuen Positionen zuerst die Kostenart wählen. Beim Aufteilen eines Akontos den Sammelbetrag reduzieren, um Doppelzählung zu vermeiden. Vereinbarungsstatus und Beschreibung werden gespeichert. Geplanter Kostenersatz trotz offener oder widersprüchlicher Grundlage wird auf Karte, im Ergebnis und im Druckblatt ausgewiesen; deine eingegebene Planung bleibt rechnerisch erhalten. Rücklageneinzahlungen bleiben gesperrt für Erstattung/Abzug. Tatsächliche Fondsarbeiten können nach gesonderter Prüfung einen Jahresabzug begründen, ohne denselben Geldabfluss nochmals als neue Zahlung anzusetzen.
 
 ## Rechenumfang
 
@@ -62,7 +68,7 @@ Keine vollständige persönliche Veranlagung: insbesondere keine automatische Ve
 
 Ganze Monate, gleiche Miete je Mietmonat, Zahlung im selben Jahr. Keine Teilmonate, Mietausfälle, Nachzahlungen oder automatische Abgrenzung rund um den Jahreswechsel. Abzüge, Vermietungsanteile, private Vorperioden, Verteilung und ernsthafte Vermietungsabsicht sind selbst zu klären. Ein Akonto ersetzt keine steuerliche Jahresermittlung. Gebäude-AfA nicht doppelt als Kostenposition erfassen.
 
-Keine automatische Bewertung oder beschleunigte AfA. Ältere Käufe, Erbe/Schenkung und frühere Vermietung benötigen passende gesonderte Werte. Mietrechtliche Einordnung und Kostenüberwälzung werden nicht automatisch bestätigt; Details/Garage bleiben ausbaufähig. Die historische Jahresabrechnung ist nur eine fiktive Zusatzansicht und wird nicht ein zweites Mal eingerechnet.
+Keine automatische Bewertung oder beschleunigte AfA. Ältere Käufe, Erbe/Schenkung und frühere Vermietung benötigen passende gesonderte Werte. Mietrechtliche Einordnung und Kostenüberwälzung werden nicht automatisch bestätigt; Die bedingte Prüfhilfe ersetzt keine Prüfung des konkreten Vertrags oder einzelner Belege. Die historische Jahresabrechnung ist nur eine fiktive Zusatzansicht und wird nicht ein zweites Mal eingerechnet.
 
 WebKit-Prüfung ersetzt keinen Test des echten iPhone-/Safari-Datei- oder Druckdialogs. Nutzerabnahme von Speichern/Sicherung der Alpha 0.5 bleibt dokumentiert; die neue Oberfläche benötigt eine eigene Abnahme.
 
@@ -70,7 +76,7 @@ WebKit-Prüfung ersetzt keinen Test des echten iPhone-/Safari-Datei- oder Druckd
 
 **Speichern & Sicherung** öffnen und bewusst einschalten; anfangs aus. Auch zulässige unvollständige Zahlenentwürfe bleiben erhalten. Ausschalten/Löschen entfernt nur die eigene lokale Kopie und lässt die aktuelle Sitzung stehen. JSON-Import/-Export funktionieren ohne Opt-in; Import schaltet Speichern nicht ein. Letzten Import innerhalb der Sitzung rückgängig machen.
 
-Format 3 übernimmt geprüfte Sicherungen der Formate 1 und 2. Neue Leerstands-/Vergleichsfelder starten mit 0 bzw. leer. Frühere Werte bleiben inhaltlich erhalten; mehrdeutige alte Dezimalpunkte werden bei Bedarf wertgleich als Dezimalkomma dargestellt. Ergebnisse/Tarife werden nicht importiert, sondern neu berechnet. Unlesbare/unbekannte/fremde Jahresstände bleiben geschützt und herunterladbar. [Speicherformat](docs/STORAGE.md).
+Format 4 übernimmt geprüfte Sicherungen der Formate 1, 2 und 3. Neue Kosten-Prüffelder starten leer bzw. mit „Noch prüfen“; keine frühere Vereinbarung wird automatisch bestätigt. Neue Leerstands-/Vergleichsfelder starten mit 0 bzw. leer. Frühere Werte bleiben inhaltlich erhalten; mehrdeutige alte Dezimalpunkte werden bei Bedarf wertgleich als Dezimalkomma dargestellt. Ergebnisse/Tarife werden nicht importiert, sondern neu berechnet. Unlesbare/unbekannte/fremde Jahresstände bleiben geschützt und herunterladbar. [Speicherformat](docs/STORAGE.md).
 
 Die App überträgt Formulareingaben nicht an einen Server. Die freiwillige lokale Kopie und exportierte Dateien enthalten persönliche Angaben unverschlüsselt. Speicherung gilt für diesen Browser und diese Herkunft; kein Geräteabgleich. Persönliche Sicherungen, echte Gehaltszahlen, Adressen und Originaldokumente gehören nicht ins öffentliche Repo.
 

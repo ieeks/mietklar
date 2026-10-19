@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="de-AT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Welche Miete brauchst du, und was bleibt dir? Österreichische Mietplanung mit Kosten, Steuer und Leerstand."><title>mietklar. · Deine Mietplanung</title><link rel="stylesheet" href="./style.css?v=0.7.0-alpha.4"></head><body><div id="mietklar-app">
+<html lang="de-AT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Welche Miete brauchst du, und was bleibt dir? Österreichische Mietplanung mit Kosten, Steuer und Leerstand."><title>mietklar. · Deine Mietplanung</title><link rel="stylesheet" href="./style.css?v=0.8.0-alpha.1"></head><body><div id="mietklar-app">
 
 
-<div class="mr-app"><header class="mr-top"><button type="button" class="mr-wordmark" data-home="" aria-label="mietklar. – Zum Ergebnis" title="Zum Ergebnis">mietklar<span style="color:var(--mr-brand)">.</span></button><button type="button" class="mr-print" data-print="" disabled="">Drucken / PDF</button><span class="mr-year">Alpha 0.7 · 2026</span></header><main class="mr-main"><section class="mr-hero" id="ergebnis" aria-label="Dein Miet-Ergebnis">
+<div class="mr-app"><header class="mr-top"><button type="button" class="mr-wordmark" data-home="" aria-label="mietklar. – Zum Ergebnis" title="Zum Ergebnis">mietklar<span style="color:var(--mr-brand)">.</span></button><button type="button" class="mr-print" data-print="" disabled="">Drucken / PDF</button><span class="mr-year">Alpha 0.8 · 2026</span></header><main class="mr-main"><section class="mr-hero" id="ergebnis" aria-label="Dein Miet-Ergebnis">
 <p class="mr-eyebrow">Deine Wohnung. Dein Überblick.</p><h1 data-result-title="">Diese Hauptmiete brauchst du.</h1>
 <div data-result-content=""><p class="mr-result-label" data-result-label="">Benötigte Hauptmiete ohne Kostenersatz</p>
 <div class="mr-hero-amount" role="status" aria-live="polite" aria-atomic="true"><strong data-out="headline">–</strong><span> / Monat</span></div>
@@ -59,6 +59,7 @@
 <div data-cost-list="own"></div>
 </details>
 <div class="mr-section"><h3>Fehlt eine Position?</h3>
+<label class="mr-field">Kostenart für neue Position<select data-new-cost-kind=""></select></label>
 <button type="button" data-add-cost="">+ Kostenposition hinzufügen</button>
 <div data-cost-list="custom"></div></div>
 <details><summary>Zusätzlicher Sicherheitspuffer</summary>
@@ -185,7 +186,7 @@
 </div>
 <input type="file" accept=".json,application/json" data-import-file="" hidden="">
 <div class="mr-hint">Die Sicherungsdatei enthält dieselben persönlichen Eingaben. Für ein anderes Gerät exportieren und dort importieren. Lokales Löschen entfernt den gespeicherten Stand; deine aktuelle Sitzung bleibt erhalten.</div>
-</div></details><p class="mr-note">mietklar. Alpha 0.7 · Bedienungs- und Tarifmodell 2026. Keine vollständige Steuer- oder Mietrechtsprüfung. Deine Angaben bleiben lokal; Speichern ist freiwillig.</p><noscript>Bitte JavaScript aktivieren, um mietklar. zu verwenden.</noscript></main><section class="mr-print-sheet" data-print-sheet="" aria-label="Ergebnisblatt"></section></div>
+</div></details><p class="mr-note">mietklar. Alpha 0.8 · Bedienungs- und Tarifmodell 2026. Keine vollständige Steuer- oder Mietrechtsprüfung. Deine Angaben bleiben lokal; Speichern ist freiwillig.</p><noscript>Bitte JavaScript aktivieren, um mietklar. zu verwenden.</noscript></main><section class="mr-print-sheet" data-print-sheet="" aria-label="Ergebnisblatt"></section></div>
 
 </div>
 
@@ -199,6 +200,20 @@
 <label class="mr-field mr-cost-payer">Was erstattet dir der Mieter?<select data-cost-payer=""><option value="unknown">Noch prüfen · vorerst 0 €</option><option value="tenant">Den vollen Zahlbetrag · geplant</option><option value="partial">Einen Teilbetrag · geplant</option><option value="owner">Nichts · trage ich selbst</option></select></label>
 <label class="mr-field" data-forward-wrap="" hidden=""><span data-forward-period="">Erwartete Erstattung / Monat (€)</span><input data-cost-forward="" type="text" value="0" inputmode="decimal" data-numeric="" data-money="" maxlength="64"></label>
 <div data-year-only="" hidden=""><label class="mr-field" data-payment-months-wrap="">Zahlungsmonate in diesem Kalenderjahr<input data-cost-payment-months="" type="number" min="0" max="12" step="1" value="12" inputmode="numeric"></label></div><div class="mr-hint" data-cost-hint=""></div>
+<p class="mr-cost-next" data-cost-next=""></p>
+<details class="mr-cost-review"><summary>Kostenposition prüfen · nächste Schritte</summary>
+<div class="mr-review-step"><h4>1 · Was steckt in der Position?</h4>
+<label class="mr-field">Kostenart<select data-cost-kind=""></select></label>
+<label class="mr-field">Enthaltene Leistungen / Abgrenzung<textarea data-cost-composition="" maxlength="400" rows="3" placeholder="z. B. Hausbeleuchtung; kein Wohnungsstrom"></textarea></label>
+<p class="mr-hint" data-review-contents=""></p>
+<p class="mr-hint">Beim Aufteilen eines Akontos den Sammelbetrag entsprechend reduzieren oder entfernen. Die App verrechnet neue Positionen zusätzlich.</p></div>
+<div class="mr-review-step"><h4>2 · Welche Regeln gelten?</h4><p data-review-context=""></p><p class="mr-hint" data-review-basis=""></p></div>
+<div class="mr-review-step"><h4>3 · Ist die Weiterverrechnung gedeckt?</h4>
+<label class="mr-field">Grundlage / Vereinbarung zu dieser Position<select data-cost-agreement=""><option value="unknown">Noch prüfen</option><option value="planned">Regelung geplant</option><option value="documented">Anhand der Unterlagen selbst geprüft</option><option value="excluded">Keine Überwälzung vorgesehen</option></select></label><p class="mr-hint" data-review-agreement=""></p><p data-review-tenant=""></p></div>
+<div class="mr-review-step"><h4>4 · Steuerabzug getrennt prüfen</h4><p data-review-tax-status=""></p><p class="mr-hint" data-review-tax=""></p><p class="mr-hint">Den Jahresabzug gibst du in den separaten Steuerdetails darunter an. Keine Auswahl hier erteilt automatisch einen Abzug.</p></div>
+<h4>Deine nächsten Schritte</h4><ul data-review-steps=""></ul>
+<p class="mr-hint" data-review-checked=""></p><ul class="mr-review-sources" data-review-sources=""></ul>
+</details>
 <details class="mr-tax-details"><summary data-tax-summary="">Steuerabzug: noch prüfen</summary>
 <div data-full-only=""><label class="mr-field">Welcher Abzug ist für dieses Jahr geklärt?<select data-cost-tax=""><option value="unknown">Noch prüfen · vorerst 0 € Abzug</option><option value="full">Voller Zahlbetrag ist geklärt</option><option value="annual">Eigener Jahresabzug ist geklärt</option><option value="none">Kein Abzug in diesem Jahr</option></select></label>
 <label class="mr-field" data-tax-annual-wrap="" hidden="">Geklärter Steuerabzug / Jahr (€)<input data-cost-tax-annual="" type="text" value="0" inputmode="decimal" data-numeric="" data-money="" maxlength="64"></label>
@@ -209,7 +224,7 @@
 </article>
 </template>
 
-<script type="module" src="./src/ui.js?v=0.7.0-alpha.4"></script>
+<script type="module" src="./src/ui.js?v=0.8.0-alpha.1"></script>
 
 
 

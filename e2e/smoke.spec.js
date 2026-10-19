@@ -151,7 +151,7 @@ test('opt-in, reload, export/import/undo and scoped deletion with comma drafts',
   await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key))?.state.fields.monthlyRent, key)).toBe('1500,25');
   await page.reload(); await expect(page.locator('#mietklar-app')).toHaveAttribute('data-ready', 'true');
   await expect(field(page, 'monthlyRent')).toHaveValue('1.500,25');
-  const exported = await exportBackup(page); expect(exported.schemaVersion).toBe(3);
+  const exported = await exportBackup(page); expect(exported.schemaVersion).toBe(4);
   expect(exported.state.fields.monthlyRent).toBe('1500,25');
   const imported = structuredClone(exported); imported.state.fields.monthlyRent = '1600';
   await importBackup(page, imported); await expect(field(page, 'monthlyRent')).toHaveValue('1.600,00');
@@ -168,10 +168,14 @@ test('opt-in, reload, export/import/undo and scoped deletion with comma drafts',
   await expect(page.locator('[data-calc-mode="target"]')).toHaveAttribute('aria-pressed','true');
 });
 
-test('legacy format 1 and 2 imports preserve financial values and do not enable saving', async ({ page }) => {
+test('legacy formats 1, 2 and 3 imports preserve financial values and do not enable saving', async ({ page }) => {
   await page.locator('[data-calc-mode="rent"]').click();
   const exported = await exportBackup(page);
-  const v2 = structuredClone(exported); v2.schemaVersion = 2;
+  const v3 = structuredClone(exported); v3.schemaVersion = 3;
+  v3.state.costs.forEach(row => ['composition','agreement'].forEach(k => delete row[k]));
+  await importBackup(page, v3); await expect(page.locator('[data-storage-status]')).toContainText('Ältere Sicherung');
+  expect((await exportBackup(page)).state.costs[0].agreement).toBe('unknown');
+  const v2 = structuredClone(v3); v2.schemaVersion = 2;
   ['expectedVacantMonths','area','referenceRent'].forEach(k => delete v2.state.fields[k]);
   v2.state.fields.monthlyRent = '1410';
   await importBackup(page, v2); await expect(page.locator('[data-storage-status]')).toContainText('Ältere Sicherung');
@@ -279,4 +283,48 @@ test('money fields group on blur, replace zero and preserve exact backup precisi
   await rent.press('Tab'); await expect(rent).toHaveValue('45.000');
   await expect(page.locator('[data-error]')).toContainText('Mehrdeutiger Punkt');
   await rent.fill('-'); await rent.press('Tab'); await expect(rent).toHaveValue('-');
+});
+
+test('guided costs inherit context, preserve review data and keep legal and tax decisions separate', async ({ page }, testInfo) => {
+  await openSection(page, 'costs');
+  const context = page.locator('.mr-context');
+  await context.locator(':scope > summary').click();
+  await field(page, 'rentalLaw').selectOption('partial');
+  const row = page.locator('[data-cost-row]').first();
+  await row.locator('.mr-cost-review > summary').click();
+  await row.locator('[data-cost-kind]').selectOption('garage');
+  await row.locator('[data-cost-composition]').fill('<b>Fiktive gemeinsame Garage</b>');
+  await row.locator('[data-cost-agreement]').selectOption('planned');
+  await row.locator('[data-cost-payer]').selectOption('tenant');
+  await expect(row.locator('[data-cost-next]')).toContainText('Grundlage ist noch offen');
+  await expect(row.locator('[data-review-context]')).toContainText('Teilanwendung');
+  await expect(row.locator('[data-review-tax-status]')).toContainText('offen');
+  await expect(row.locator('[data-review-sources] a').first()).toHaveAttribute('href', /ris.bka.gv.at/);
+  await expect(page.locator('[data-print-sheet]')).toContainText('Grundlage ist noch offen');
+  await expect(row.locator('textarea b')).toHaveCount(0);
+  for (const width of [320, 390, 1280]) {
+    await page.setViewportSize({ width, height: 844 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await row.screenshot({ path: testInfo.outputPath('cost-review.png') });
+  const saved = await exportBackup(page);
+  expect(saved.state.costs[0].composition).toBe('<b>Fiktive gemeinsame Garage</b>');
+  expect(saved.state.costs[0].agreement).toBe('planned');
+  await row.locator('[data-cost-kind]').selectOption('reserve');
+  await expect(row.locator('[data-cost-payer]')).toBeDisabled();
+  await expect(row.locator('[data-cost-tax]')).toHaveValue('none');
+  await row.locator('[data-cost-kind]').selectOption('water');
+  await expect(row.locator('[data-cost-payer]')).toBeEnabled();
+  await expect(row.locator('[data-cost-payer]')).toHaveValue('unknown');
+  await expect(row.locator('[data-cost-tax]')).toHaveValue('unknown');
+  await importBackup(page, saved);
+  const restored = page.locator('[data-cost-row]').first();
+  await restored.locator('.mr-cost-review > summary').click();
+  await expect(restored.locator('[data-cost-kind]')).toHaveValue('garage');
+  await expect(restored.locator('[data-cost-composition]')).toHaveValue('<b>Fiktive gemeinsame Garage</b>');
+  await expect(restored.locator('[data-cost-agreement]')).toHaveValue('planned');
+  await page.locator('[data-collapse-all]').click();
+  await expect(page.locator('details[open]')).toHaveCount(0);
+  const again = await exportBackup(page); expect(again.state).toEqual(saved.state);
 });

@@ -104,8 +104,9 @@ test('optional square-metre comparison has a strict boundary and cannot modify r
 test('format 2 migrates with identical cash, new defaults and strict old numeric syntax', () => {
   const input = state(); const old = { app: 'mietklar', schemaVersion: 2, tariffYear: 2026, savedAt: '2026-10-19T12:00:00.000Z', state: input };
   ['expectedVacantMonths', 'area', 'referenceRent'].forEach(key => delete old.state.fields[key]);
+  old.state.costs.forEach(row => { delete row.composition; delete row.agreement; });
   const migrated = parseSnapshot(JSON.stringify(old), 2026);
-  assert.equal(migrated.schemaVersion, 3); assert.equal(migrated.state.fields.expectedVacantMonths, '0');
+  assert.equal(migrated.schemaVersion, 4); assert.equal(migrated.state.fields.expectedVacantMonths, '0');
   assert.equal(evaluateScenario(migrated.state, tariff).solved.monthlyCash, 505);
   old.state.fields.monthlyRent = '1400,50'; assert.throws(() => parseSnapshot(JSON.stringify(old), 2026));
   migrated.state.fields.monthlyRent = '1400,50';
@@ -114,6 +115,7 @@ test('format 2 migrates with identical cash, new defaults and strict old numeric
 
 test('old dot fractions keep their numeric value instead of becoming a thousands separator', () => {
   const input = state(); ['expectedVacantMonths', 'area', 'referenceRent'].forEach(key => delete input.fields[key]);
+  input.costs.forEach(row => { delete row.composition; delete row.agreement; });
   input.fields.monthlyRent = '1.234'; input.costs[0].amount = '45.000';
   const converted = parseSnapshot(JSON.stringify({ app: 'mietklar', schemaVersion: 2, tariffYear: 2026, savedAt: '2026-10-19T12:00:00.000Z', state: input }), 2026).state;
   assert.equal(converted.fields.monthlyRent, '1,234'); assert.equal(parseAmount(converted.fields.monthlyRent), 1.234);
@@ -130,4 +132,12 @@ test('3000 seeded rental models meet target and no smaller cent amount suffices'
     assert.ok(result.monthlyCash >= model.target - 1e-6, 'target case ' + i);
     if (result.rent > 0) assert.ok(cashAtRent(result.rent - .01, model, tariff).monthlyCash < model.target - 1e-9, 'minimal cent case ' + i);
   }
+});
+
+test('review metadata and non-reserve categories never grant reimbursement or deduction automatically', () => {
+  const input = state(), before = evaluateScenario(input, tariff);
+  input.costs.forEach(row => Object.assign(row, { composition: 'Fiktiver Beleg', agreement: 'documented' }));
+  input.costs[0].kind = 'garage';
+  const after = evaluateScenario(input, tariff);
+  assert.deepEqual(after.model, before.model); assert.deepEqual(after.solved, before.solved);
 });

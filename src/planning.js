@@ -1,4 +1,4 @@
-import { nonnegative, cashAtRent, solveRent } from './calc.js?v=0.7.0-alpha.4';
+import { nonnegative, cashAtRent, solveRent } from './calc.js?v=0.8.0-alpha.1';
 
 /** One salary income only. Already adjusted bases must never receive another deduction. */
 export function resolveIncomeBase(input) {

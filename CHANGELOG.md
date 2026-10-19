@@ -1,5 +1,13 @@
 # Änderungen
 
+## 0.8.0-alpha.1 · 19.10.2026
+
+- Vier Schritte pro Kostenkarte mit 18 Kostenarten, Quellen und konkreten nächsten Aktionen.
+- Geerbter Mietrechts-/Vertragskontext, Leistungsbeschreibung und eigener Vereinbarungsstatus; Zahlung, Erstattung und Steuerentscheidung bleiben unabhängig.
+- Hinweise bei geplanter Erstattung mit offener oder widersprüchlicher Grundlage, auch im Ergebnisblatt.
+- Schema 4; Formate 1–3 werden ohne Änderung ihrer Geldwerte übernommen. Neue Angaben leer/offen.
+- 95 reine Tests; zusätzlicher Browserfall für Prüfhilfe, Quellen, sichere Textdarstellung, Kategorienwechsel und Sicherung.
+
 ## 0.7.0-alpha.4 – 19.10.2026
 
 Offene Gebäude-AfA erklärt den konkreten fehlenden Schritt direkt an der effektiven Summe, etwa den noch nicht eingeordneten Grundanteil. Regeljahr und Kalenderjahresauswahl werden getrennt erklärt. Tatsächlich angegebene oder berechnete Nullbeträge bleiben ohne Offen-Hinweis. Rechenmodell und Speicherformat unverändert.

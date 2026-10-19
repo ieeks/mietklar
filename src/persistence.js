@@ -1,8 +1,9 @@
-import { suggestLandShare } from './afa.js?v=0.7.0-alpha.4';
-import { numericDraft, numeric as parsedNumeric } from './numbers.js?v=0.7.0-alpha.4';
+import { COST_KIND_IDS } from './cost-guidance.js?v=0.8.0-alpha.1';
+import { suggestLandShare } from './afa.js?v=0.8.0-alpha.1';
+import { numericDraft, numeric as parsedNumeric } from './numbers.js?v=0.8.0-alpha.1';
 
 export const STORAGE_KEY = 'mietklar:saved-inputs';
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 4;
 export const MAX_BACKUP_BYTES = 256 * 1024;
 export const MAX_COST_ROWS = 100;
 const numeric = { type: 'number' };
@@ -46,7 +47,8 @@ const V1_COST_RULES = {
   kind: choice('bk', 'water', 'heat', 'reserve', 'admin', 'repair', 'adviser', 'other'),
   group: choice('house', 'own', 'custom')
 };
-const COST_RULES = { ...V1_COST_RULES, paymentMonths: numeric, yearTaxStatus: choice('unknown', 'provided', 'none'), yearTaxAnnual: numeric };
+const V3_COST_RULES = { ...V1_COST_RULES, paymentMonths: numeric, yearTaxStatus: choice('unknown', 'provided', 'none'), yearTaxAnnual: numeric };
+const COST_RULES = { ...V3_COST_RULES, kind: choice(...COST_KIND_IDS), composition: text(400), agreement: choice('unknown', 'planned', 'documented', 'excluded') };
 function exactKeys(value, keys, label) {
   if (value === null || typeof value !== 'object' || Array.isArray(value)
     || Object.keys(value).length !== keys.length
@@ -62,7 +64,7 @@ function validateValues(value, rules, label, version) {
     const raw = value[key];
     if (typeof raw !== 'string') throw new TypeError(label + ': Eingabewerte müssen als Text gespeichert sein.');
     if (rule.type === 'number') {
-      const valid = version === 3 ? numericDraft(raw) : raw.length <= 64 && (raw === '' || (/^-?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(raw)
+      const valid = version >= 3 ? numericDraft(raw) : raw.length <= 64 && (raw === '' || (/^-?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(raw)
         && Number.isFinite(Number(raw)) && Math.abs(Number(raw)) <= 1e12));
       if (!valid) {
         throw new RangeError(label + ': ungültiger oder zu großer Zahlenwert.');
@@ -77,12 +79,12 @@ function validateValues(value, rules, label, version) {
   return result;
 }
 export function validateState(state, version = SCHEMA_VERSION) {
-  if (![1, 2, SCHEMA_VERSION].includes(version)) throw new RangeError('Unbekannte Sicherungsversion.');
+  if (![1, 2, 3, SCHEMA_VERSION].includes(version)) throw new RangeError('Unbekannte Sicherungsversion.');
   exactKeys(state, ['fields', 'costs', 'calculationMode', 'step', 'adoptedLandSuggestion'], 'Eingabestand');
   const fields = validateValues(state.fields, version === 1 ? V1_FIELD_RULES : version === 2 ? V2_FIELD_RULES : FIELD_RULES, 'Eingabefelder', version);
   if (!Array.isArray(state.costs) || state.costs.length > MAX_COST_ROWS) throw new RangeError('Sicherung: höchstens 100 Kostenpositionen möglich.');
   const costs = state.costs.map(row => {
-    const copy = validateValues(row, version === 1 ? V1_COST_RULES : COST_RULES, 'Kostenposition', version);
+    const copy = validateValues(row, version === 1 ? V1_COST_RULES : version <= 3 ? V3_COST_RULES : COST_RULES, 'Kostenposition', version);
     if (copy.kind === 'reserve' && (copy.payer !== 'owner' || copy.taxStatus !== 'none')) {
       throw new RangeError('Rücklageneinzahlung: unzulässige Erstattungs-/Steuerauswahl in der Sicherung.');
     }
@@ -98,7 +100,7 @@ export function validateState(state, version = SCHEMA_VERSION) {
       units: fields.afaUnits, exception: fields.afaLandException
     });
     if (suggestion.percent === null || fields.afaLandStatus !== 'estimate'
-      || fields.afaLandPercent === '' || (version === 3 ? parsedNumeric(fields.afaLandPercent) : Number(fields.afaLandPercent)) !== suggestion.percent) {
+      || fields.afaLandPercent === '' || (version >= 3 ? parsedNumeric(fields.afaLandPercent) : Number(fields.afaLandPercent)) !== suggestion.percent) {
       throw new RangeError('Sicherung: übernommener Grundanteil passt nicht zu den Hilfsangaben.');
     }
   }
@@ -118,7 +120,7 @@ export function parseSnapshot(raw, expectedYear) {
   try { value = JSON.parse(raw); } catch { throw new TypeError('Datei ist keine lesbare mietklar-JSON-Sicherung.'); }
   exactKeys(value, ['app', 'schemaVersion', 'tariffYear', 'savedAt', 'state'], 'Sicherung');
   if (value.app !== 'mietklar') throw new TypeError('Diese Datei ist keine mietklar-Sicherung.');
-  if (![1, 2, SCHEMA_VERSION].includes(value.schemaVersion)) throw new RangeError('Diese Sicherungsversion wird von der App noch nicht unterstützt.');
+  if (![1, 2, 3, SCHEMA_VERSION].includes(value.schemaVersion)) throw new RangeError('Diese Sicherungsversion wird von der App noch nicht unterstützt.');
   if (!Number.isInteger(value.tariffYear) || value.tariffYear !== expectedYear) throw new RangeError('Sicherung und App gehören nicht zum gleichen Steuerjahr.');
   let state = validateState(value.state, value.schemaVersion);
   if (value.schemaVersion === 1) state = {
@@ -133,6 +135,7 @@ export function parseSnapshot(raw, expectedYear) {
       [key, rules[key]?.type === 'number' && /^-?\d{1,3}\.\d{3}$/.test(raw) ? raw.replace('.', ',') : raw]));
     state = { ...state, fields: convert(state.fields, FIELD_RULES), costs: state.costs.map(row => convert(row, COST_RULES)) };
   }
+  if (value.schemaVersion <= 3) state = { ...state, costs: state.costs.map(row => ({ ...row, composition: '', agreement: 'unknown' })) };
   return makeSnapshot(state, value.tariffYear, value.savedAt);
 }
 export function readSavedSnapshot(storage, tariffYear) {

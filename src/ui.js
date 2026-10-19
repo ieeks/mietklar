@@ -1,10 +1,10 @@
-import { createAmountInputs } from './amount-inputs.js?v=0.7.0-alpha.4';
-import { validateTariff } from './calc.js?v=0.7.0-alpha.4';
-import { setupPersistence } from './storage-ui.js?v=0.7.0-alpha.4';
-import { createCostEditor } from './cost-editor.js?v=0.7.0-alpha.4';
-import { renderForm, landSuggestion } from './form-view.js?v=0.7.0-alpha.4';
-import { evaluateScenario } from './scenario.js?v=0.7.0-alpha.4';
-import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.4';
+import { createAmountInputs } from './amount-inputs.js?v=0.8.0-alpha.1';
+import { validateTariff } from './calc.js?v=0.8.0-alpha.1';
+import { setupPersistence } from './storage-ui.js?v=0.8.0-alpha.1';
+import { createCostEditor } from './cost-editor.js?v=0.8.0-alpha.1';
+import { renderForm, landSuggestion } from './form-view.js?v=0.8.0-alpha.1';
+import { evaluateScenario } from './scenario.js?v=0.8.0-alpha.1';
+import { renderResult, renderError } from './result-view.js?v=0.8.0-alpha.1';
 
 (async () => {
   const root = document.getElementById('mietklar-app');
@@ -44,7 +44,7 @@ import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.4';
     all('[aria-invalid="true"]').forEach(node => node.setAttribute('aria-invalid', 'false'));
     try {
       renderForm(root, state);
-      if (!light) editor.render(state.fields.periodMode === 'year');
+      if (!light) editor.render(state.fields);
       const result = evaluateScenario(state, tariff);
       q('[data-error]').hidden = true;
       renderResult(root, result, tariff);
@@ -60,6 +60,7 @@ import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.4';
 
   root.addEventListener('input', event => {
     if (event.target.closest('[data-storage-panel]')) return;
+    editor.changeKind(event.target);
     if (event.target.matches('[data-slider]')) {
       amounts.writeValue(field(calculationMode === 'target' ? 'target' : 'monthlyRent'), event.target.value);
       changed(true); return;
@@ -73,6 +74,7 @@ import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.4';
   // Select changes and native month controls also work in engines that omit input events.
   root.addEventListener('change', event => {
     if (!event.target.closest('[data-storage-panel]')) {
+      editor.changeKind(event.target);
       if (adoptedLandSuggestion && event.target.hasAttribute('data-land-guide')) {
         field('afaLandStatus').value = 'unknown'; field('afaLandPercent').value = ''; adoptedLandSuggestion = false;
       }
@@ -108,7 +110,7 @@ import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.4';
   window.addEventListener('beforeprint', () => compute(false, true));
 
   try {
-    const response = await fetch(new URL('../data/tarif-2026.json?v=0.7.0-alpha.4', import.meta.url));
+    const response = await fetch(new URL('../data/tarif-2026.json?v=0.8.0-alpha.1', import.meta.url));
     if (!response.ok) throw new Error('Tarifdatei nicht erreichbar');
     tariff = validateTariff(await response.json());
     if (tariff.year !== 2026) throw new Error('Tarifjahr stimmt nicht mit der Oberfläche überein');

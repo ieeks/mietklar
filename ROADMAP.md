@@ -16,7 +16,7 @@
 - [x] Eigene Positionen hinzufügen/entfernen; Zeitraum Monat/Jahr pro Position.
 - [x] „Noch prüfen“ unabhängig für Erstattung und Steuerabzug; 0 € bis zur Klärung, offene Positionen im Ergebnis.
 - [x] Mietrechtsszenario, Vertragsstatus und allgemeine bedingte Hinweise ergänzen; keine automatische Freigabe.
-- [ ] Detaillierte Kostenarten-/Vertragshinweise ausbauen, insbesondere Garage; allgemeine BK und Heizung/Warmwasser sind bereits getrennte Karten.
+- [x] Detaillierte bedingte Kostenarten-/Vertragshinweise mit Quellen, Datum und nächsten Schritten, einschließlich Garage (Alpha 0.8); allgemeine BK und Heizung/Warmwasser sind bereits getrennte Karten.
 - [ ] Neue Kostenkarten auf iPhone/Safari prüfen; frühere Alpha-0.1-Abnahme bleibt dokumentiert.
 
 **Stand:** unabhängige Rechenfälle für bekannte/ungeklärte/nicht abgezogene Kosten geprüft; fachliche Detailhinweise und erneute mobile Abnahme bleiben offen. Keine automatische Rechtsfreigabe.
@@ -96,3 +96,14 @@ PDF-/OCR-Import, mehrere Eigentümer/Objekte, Rendite, Kredit oder Airbnb. Diese
 
 
 
+
+## Alpha 0.8 – Kosten prüfen
+
+- [x] Vier Prüfschritte je Kostenkarte, kurze nächste Aktion auch eingeklappt.
+- [x] 18 Kostenarten mit bedingten Hinweisen und Primärquellen, Mietrecht/Vertrag aus Gesamtkontext.
+- [x] Leistungsbeschreibung und Vereinbarungsstatus getrennt von Zahlung/Erstattung/Steuerabzug speichern.
+- [x] Widersprüchliche oder ungeklärte eingeplante Erstattung in Ergebnis und Druckblatt markieren.
+- [x] Format 4 mit wertgleicher Übernahme von Formaten 1–3, ohne automatische Vertragsfreigabe.
+- [ ] Neue Prüfhilfe am echten iPhone testen; persönliche Belege und konkrete Klauseln separat prüfen.
+
+Danach: individuelle AfA-Unterlagen vervollständigen, gemeinsame Abnahme der Planung mit belastbaren Eingaben; Teilmonate/Zu- und Abflusszeitpunkte bleiben ein späterer eigener Modellschritt.
