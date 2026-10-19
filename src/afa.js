@@ -1,4 +1,4 @@
-import { nonnegative } from './calc.js?v=0.7.0-alpha.3';
+import { nonnegative } from './calc.js?v=0.7.0-alpha.4';
 
 const pending = message => ({
   status: 'open', annualAfa: 0, buildingBasis: null, landValue: null,

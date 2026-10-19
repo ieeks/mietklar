@@ -1,10 +1,10 @@
-import { createAmountInputs } from './amount-inputs.js?v=0.7.0-alpha.3';
-import { validateTariff } from './calc.js?v=0.7.0-alpha.3';
-import { setupPersistence } from './storage-ui.js?v=0.7.0-alpha.3';
-import { createCostEditor } from './cost-editor.js?v=0.7.0-alpha.3';
-import { renderForm, landSuggestion } from './form-view.js?v=0.7.0-alpha.3';
-import { evaluateScenario } from './scenario.js?v=0.7.0-alpha.3';
-import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.3';
+import { createAmountInputs } from './amount-inputs.js?v=0.7.0-alpha.4';
+import { validateTariff } from './calc.js?v=0.7.0-alpha.4';
+import { setupPersistence } from './storage-ui.js?v=0.7.0-alpha.4';
+import { createCostEditor } from './cost-editor.js?v=0.7.0-alpha.4';
+import { renderForm, landSuggestion } from './form-view.js?v=0.7.0-alpha.4';
+import { evaluateScenario } from './scenario.js?v=0.7.0-alpha.4';
+import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.4';
 
 (async () => {
   const root = document.getElementById('mietklar-app');
@@ -108,7 +108,7 @@ import { renderResult, renderError } from './result-view.js?v=0.7.0-alpha.3';
   window.addEventListener('beforeprint', () => compute(false, true));
 
   try {
-    const response = await fetch(new URL('../data/tarif-2026.json?v=0.7.0-alpha.3', import.meta.url));
+    const response = await fetch(new URL('../data/tarif-2026.json?v=0.7.0-alpha.4', import.meta.url));
     if (!response.ok) throw new Error('Tarifdatei nicht erreichbar');
     tariff = validateTariff(await response.json());
     if (tariff.year !== 2026) throw new Error('Tarifjahr stimmt nicht mit der Oberfläche überein');

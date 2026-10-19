@@ -1,5 +1,5 @@
-import { numeric, money } from './numbers.js?v=0.7.0-alpha.3';
-import { MAX_COST_ROWS } from './persistence.js?v=0.7.0-alpha.3';
+import { numeric, money } from './numbers.js?v=0.7.0-alpha.4';
+import { MAX_COST_ROWS } from './persistence.js?v=0.7.0-alpha.4';
 
 export function createCostEditor(root, readValue = input => input.value) {
   const q = selector => root.querySelector(selector);

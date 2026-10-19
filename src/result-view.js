@@ -1,6 +1,6 @@
-import { buildFlow, comparePerSquareMetre } from './scenario.js?v=0.7.0-alpha.3';
-import { money, numeric, decimal } from './numbers.js?v=0.7.0-alpha.3';
-import { renderAfa } from './form-view.js?v=0.7.0-alpha.3';
+import { buildFlow, comparePerSquareMetre } from './scenario.js?v=0.7.0-alpha.4';
+import { money, numeric, decimal } from './numbers.js?v=0.7.0-alpha.4';
+import { renderAfa } from './form-view.js?v=0.7.0-alpha.4';
 
 function assumptionsFor(result) {
   const { fields: f, income, period, afaResult, yearAfa, costs } = result;
@@ -105,6 +105,19 @@ export function renderResult(root, result, tariff) {
   q('[data-income-explain]').textContent = f.incomeMode === 'provided' ? 'Bereinigte Basis direkt übernommen; kein weiterer Werbungskostenabzug.'
     : money(numeric(f.salary)) + ' KZ 245 minus einmal ' + money(income.appliedDeduction) + ' Werbungskosten.';
   renderAfa(root, afaResult);
+  // An unresolved deduction is a planning fallback, not a calculated zero.
+  let afaPending = null;
+  if (period.mode === 'full' && afaResult.status === 'open') afaPending = afaResult.notes[0];
+  else if (period.mode === 'year') {
+    if (f.yearAfaMode === 'unknown') afaPending = result.yearAfa.notes[0];
+    else if (f.yearAfaMode === 'regular') {
+      if (afaResult.status === 'open') afaPending = afaResult.notes[0];
+      else if (f.yearAfaMonths === 'unknown') afaPending = 'Bitte die AfA-relevanten Nutzungsmonate für das Planjahr auswählen. Vorerst sind 0 € Gebäude-AfA angesetzt.';
+    }
+  }
+  q('[data-afa-effective-label]').textContent = afaPending ? 'Gebäude-AfA noch offen · vorerst' : 'Gebäude-AfA im gewählten Zeitraum';
+  q('[data-afa-pending-note]').hidden = !afaPending;
+  q('[data-afa-pending-note]').textContent = afaPending || '';
   const notes = assumptionsFor(result);
   q('[data-assumptions]').replaceChildren(...notes.map(text => { const li = doc.createElement('li'); li.textContent = text; return li; }));
   q('[data-assumption-count]').textContent = notes.length; q('[data-assumptions-wrap]').hidden = notes.length === 0;
@@ -113,7 +126,7 @@ export function renderResult(root, result, tariff) {
   q('[data-tax-explain]').textContent = 'Gehalts-Tarifbasis ' + money(income.base) + '/Jahr. Vermietungseinkünfte ' + money(solved.rentalIncome) + '/Jahr, einschließlich Kostenersatz und abzüglich separat angegebener Kosten/AfA. Oberster betroffener Tarifteil: ' + Math.round(cutoff.rate * 100) + ' %. Nur der jeweilige Einkommensteil wird so besteuert. Persönliche Sonderfälle fehlen.';
   q('[data-summary="income"]').textContent = money(income.base) + ' / Jahr';
   q('[data-summary="costs"]').textContent = money(costs.annualCashCosts / 12) + ' / Monat · ' + costs.rows.filter(row => row.forwardUnknown || row.taxUnknown).length + ' offen';
-  q('[data-summary="afa"]').textContent = model.annualAfa === 0 && (period.mode === 'year' ? f.yearAfaMode === 'unknown' : afaResult.status === 'open') ? 'AfA offen' : money(model.annualAfa) + ' / Jahr';
+  q('[data-summary="afa"]').textContent = afaPending ? 'AfA offen' : money(model.annualAfa) + ' / Jahr';
   q('[data-summary="result"]').textContent = notes.length + ' Hinweise';
   q('[data-investment-result]').hidden = !purchase || !allowed;
   q('[data-investment-note]').textContent = !allowed ? 'Vergleich nur ohne Umsatzsteuer verfügbar.' : result.purchaseError || 'Nach der Anschaffung bleiben im Kaufjahr ' + money(purchase.burden) + ' weniger frei verfügbar.' + (solved.rentalIncome - purchase.deduction < 0 ? ' Ein Verlustausgleich ist nicht berücksichtigt.' : '');
@@ -138,4 +151,6 @@ export function renderError(root, error) {
   root.querySelectorAll('[data-out]').forEach(node => node.textContent = '–');
   ['income', 'costs', 'afa', 'purchase'].forEach(key => q('[data-summary="' + key + '"]').textContent = 'Bitte prüfen');
   q('[data-open-cost]').textContent = 'Bitte die Eingaben prüfen.';
+  q('[data-afa-pending-note]').hidden = true;
+  q('[data-afa-effective-label]').textContent = 'Gebäude-AfA im gewählten Zeitraum';
 }

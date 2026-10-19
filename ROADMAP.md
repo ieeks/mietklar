@@ -78,6 +78,7 @@
 - [x] Browserlauf nach Druckkorrektur bestätigt: 80 Tests + 16 Chromium-/WebKit-Fälle; mobile Aufnahme und Druckseiten visuell geprüft.
 - [x] Asset-Versionierung gegen gemischte alte/neue Dateien beim Pages-Update ergänzen.
 - [x] Geldfelder mit Tausenderpunkten außerhalb der Bearbeitung, Null überschreiben und exakte Rohwerte für Rechnung/Sicherung bewahren.
+- [x] Konkreten fehlenden AfA-Schritt direkt bei der vorläufigen Summe anzeigen; offene Herleitung von gültigem Nullbetrag unterscheiden.
 - [ ] Neue Einseitenansicht und native iPhone-/Safari-Dialoge manuell abnehmen.
 
 ## Komfort und Veröffentlichung

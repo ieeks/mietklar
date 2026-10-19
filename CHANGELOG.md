@@ -1,5 +1,9 @@
 # Änderungen
 
+## 0.7.0-alpha.4 – 19.10.2026
+
+Offene Gebäude-AfA erklärt den konkreten fehlenden Schritt direkt an der effektiven Summe, etwa den noch nicht eingeordneten Grundanteil. Regeljahr und Kalenderjahresauswahl werden getrennt erklärt. Tatsächlich angegebene oder berechnete Nullbeträge bleiben ohne Offen-Hinweis. Rechenmodell und Speicherformat unverändert.
+
 ## 0.7.0-alpha.3 – 19.10.2026
 
 Geldfelder gruppieren Tausender auf Blur, zeigen mindestens zwei Nachkommastellen und behalten zusätzliche Stellen ohne Rundung. Ursprünglicher Rohwert bleibt getrennt für Berechnung und Sicherung erhalten. Vorbelegte Null bei Fokus/Klick markieren und versehentlich führende Nullen beim Tippen entfernen. Dynamische Kostenbeträge verwenden nun ebenfalls Textfelder mit Kommatastatur. 83 reine Tests, zusätzlicher Browserfall für Formatierung, Null-Ersatz und exakte Sicherungswerte.

@@ -85,9 +85,14 @@ test('rule-year vacancy and calendar-year arithmetic, with invalid-state suppres
   await expect.poll(() => value(page, 'headline')).toBe(85);
   await openSection(page, 'afa');
   await field(page, 'afaMode').selectOption('known'); await field(page, 'afa').fill('2400,00');
+  await expect(page.locator('[data-afa-pending-note]')).toContainText('Planjahr noch offen');
   await field(page, 'yearAfaMode').selectOption('regular'); await field(page, 'yearAfaMonths').selectOption('6');
   await expect.poll(() => value(page, 'headline')).toBe(125);
+  await expect(page.locator('[data-afa-pending-note]')).toBeHidden();
   await field(page, 'yearAfaMonths').selectOption('7'); await expect.poll(() => value(page, 'headline')).toBe(165);
+  await field(page, 'yearAfaMonths').selectOption('0');
+  await expect.poll(() => value(page, 'annualAfa')).toBe(0);
+  await expect(page.locator('[data-afa-pending-note]')).toBeHidden();
   await field(page, 'yearAfaMode').selectOption('unknown'); await field(page, 'afaMode').selectOption('unknown');
   await expect.poll(() => value(page, 'headline')).toBe(85);
   await field(page, 'vacantMonths').fill('1');
@@ -236,6 +241,7 @@ test('money fields group on blur, replace zero and preserve exact backup precisi
   await expect(rent).toHaveValue('1.234,56789');
   await expect(page.locator('[data-out="headline"]').first()).toHaveText(exactResult);
   await field(page, 'afaMode').selectOption('purchase');
+  await field(page, 'afaPurchaseYear').fill('2015');
   await page.locator('[data-afa-section="purchase"] details > summary').first().click();
   const legal = field(page, 'afaLegal');
   await expect(legal).toHaveValue('0,00');
@@ -248,6 +254,16 @@ test('money fields group on blur, replace zero and preserve exact backup precisi
   // Cover a mobile keyboard that leaves the caret after the existing zero.
   await broker.press('ArrowRight'); await broker.pressSequentially('49,5');
   await expect(broker).toHaveValue('49,5');
+  await expect(page.locator('[data-afa-pending-note]')).toContainText('Grundanteil noch nicht eingeordnet');
+  await expect(page.locator('[data-afa-effective-label]')).toContainText('noch offen');
+  await field(page, 'afaLandPercent').fill('30');
+  await expect(page.locator('[data-afa-pending-note]')).toBeVisible();
+  await field(page, 'afaLandStatus').selectOption('estimate');
+  await expect(page.locator('[data-afa-pending-note]')).toBeHidden();
+  await expect.poll(() => value(page, 'annualAfa')).toBeGreaterThan(0);
+  await field(page, 'afaLandPercent').fill('100');
+  await expect.poll(() => value(page, 'annualAfa')).toBe(0);
+  await expect(page.locator('[data-afa-pending-note]')).toBeHidden();
   await openSection(page, 'costs'); await page.locator('[data-add-cost]').click();
   const amount = page.locator('[data-cost-list="custom"] [data-cost-amount]').last();
   await amount.click(); await amount.pressSequentially('12,5');

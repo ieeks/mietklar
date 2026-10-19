@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de-AT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Welche Miete brauchst du, und was bleibt dir? Österreichische Mietplanung mit Kosten, Steuer und Leerstand."><title>mietklar. · Deine Mietplanung</title><link rel="stylesheet" href="./style.css?v=0.7.0-alpha.3"></head><body><div id="mietklar-app">
+<html lang="de-AT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Welche Miete brauchst du, und was bleibt dir? Österreichische Mietplanung mit Kosten, Steuer und Leerstand."><title>mietklar. · Deine Mietplanung</title><link rel="stylesheet" href="./style.css?v=0.7.0-alpha.4"></head><body><div id="mietklar-app">
 
 
 <div class="mr-app"><header class="mr-top"><button type="button" class="mr-wordmark" data-home="" aria-label="mietklar. – Zum Ergebnis" title="Zum Ergebnis">mietklar<span style="color:var(--mr-brand)">.</span></button><button type="button" class="mr-print" data-print="" disabled="">Drucken / PDF</button><span class="mr-year">Alpha 0.7 · 2026</span></header><main class="mr-main"><section class="mr-hero" id="ergebnis" aria-label="Dein Miet-Ergebnis">
@@ -150,7 +150,8 @@
 <div class="mr-row"><span>Kaufpreis + eingegebene Nebenkosten</span><strong data-afa-total=""></strong></div>
 <div class="mr-row"><span>Davon nicht abschreibbarer Grundanteil</span><strong data-afa-land=""></strong></div>
 <div class="mr-row"><span>Abschreibbare Gebäude-Basis</span><strong data-afa-building=""></strong></div><div class="mr-divider"></div></div>
-<div class="mr-row"><span>Gebäude-AfA im gewählten Zeitraum</span><strong data-out="annualAfa"></strong></div>
+<div class="mr-row"><span data-afa-effective-label="">Gebäude-AfA im gewählten Zeitraum</span><strong data-out="annualAfa"></strong></div>
+<div class="mr-help" data-afa-pending-note="" hidden=""></div>
 <div class="mr-hint">Keine zusätzliche Zahlung. Nicht nochmals unter Wohnungskosten erfassen.</div></div>
 <div class="mr-hint mr-afa-source">Stand 19.10.2026 · <a href="https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/absetzung-fuer-abnutzung-bei-vuv.html" target="_blank" rel="noopener noreferrer">BMF: AfA bei Vermietung</a> · <a href="https://www.ris.bka.gv.at/NormDokument.wxe?Abfrage=Bundesnormen&amp;Gesetzesnummer=10004570&amp;Paragraf=16" target="_blank" rel="noopener noreferrer">§ 16 EStG</a></div>
 <div class="mr-section"><h3>Umsatzsteuerstatus</h3><label class="mr-field">Welche Behandlung gilt bei dir?<select data-key="vat"><option value="exempt">Kleinunternehmerbefreiung · Beispiel</option><option value="unknown">Noch zu klären</option><option value="taxable">Umsatzsteuerpflichtig</option></select></label><div class="mr-hint">Diese Alpha rechnet nur den Fall ohne Umsatzsteuer. Ein ungeklärter oder steuerpflichtiger Status unterdrückt das Ergebnis.</div></div>
@@ -208,7 +209,7 @@
 </article>
 </template>
 
-<script type="module" src="./src/ui.js?v=0.7.0-alpha.3"></script>
+<script type="module" src="./src/ui.js?v=0.7.0-alpha.4"></script>
 
 
 
