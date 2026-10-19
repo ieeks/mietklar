@@ -70,3 +70,7 @@ Commit `c903019d44b7e37132fca5fd3374d1fa938ffe63`, [Actions-Lauf 39300301463](ht
 ## Geldfelder Alpha 0.7.0-alpha.3
 
 Commit `6c4e946e43381d657ff3acff4083b3edf08da1d0`, [Actions-Lauf 39303286104](https://github.com/ieeks/mietklar/actions/runs/39303286104): Syntax und Asset-Zuordnung, 83 reine Tests sowie alle 18 Chromium-/WebKit-Fälle ohne Wiederholung erfolgreich. Native Auswahl beim Fokus wird abgeschlossen, bevor die Gruppierung zur Bearbeitung entfernt wird; dadurch bleibt auch die vorhandene Alles-Markierung in Chromium erhalten. Geprüft: Beträge ersetzen, Null überschreiben, Cursor hinter der Null, dynamische Kostenfelder, keine Rundung zusätzlicher Stellen und exakt unveränderte Rohwerte im Export. Nativer iPhone-/Safari-Test weiterhin offen.
+
+## AfA-Erklärung Alpha 0.7.0-alpha.4
+
+Commit `109bcf90dfb8c0c94a6faeb5bee08f6a5fbd9ede`, [Actions-Lauf 39305412730](https://github.com/ieeks/mietklar/actions/runs/39305412730): Syntax/Asset-Zuordnung, 83 reine Tests und alle 18 Chromium-/WebKit-Fälle ohne Retry erfolgreich. Bestehende Browserfälle erweitert: eingegebener Kaufpreis und Kaufjahr, aber Grundanteilstatus offen → konkreter Hinweis direkt an der Summe; bewusste Einordnung → Hinweis verschwindet; tatsächlicher Nullwert ohne falschen Offen-Status. Jahresroute separat geprüft: bekannter Volljahreswert bei noch offener Jahresauswahl sowie reguläre 0 Nutzungsmonate. Rechenwerte und Speicherformat unverändert.

@@ -91,6 +91,8 @@ Syntax und 80 Rechen-/Kosten-/AfA-/Planungs-/Speicher-/Szenariotests lokal erfol
 
 Alpha 0.7.0-alpha.3: Formatierungsänderung mit 83 reinen Tests und 18 Browserfällen ohne Retry bestätigt, Commit 6c4e946e43381d657ff3acff4083b3edf08da1d0 / Actions 39303286104. Gruppierung zur Bearbeitung erst nach Abschluss der nativen Fokus-/Textauswahl per Microtask entfernen, um Chromium-Auswahl zu erhalten. Rohwerte bleiben getrennt und unverändert; Schema bleibt 3. Siehe docs/TESTING.md.
 
+Alpha 0.7.0-alpha.4: Erklärung der offenen AfA mit 83 reinen Tests und 18 Browserfällen bestätigt, Commit 109bcf90dfb8c0c94a6faeb5bee08f6a5fbd9ede / Actions 39305412730, ohne Retry. Grundanteil-Werteingabe allein hebt einen offenen Einordnungsstatus nicht auf. Konkreter fehlender Schritt erscheint zusätzlich direkt an der effektiven Summe; echte Nullbeträge bleiben getrennt.
+
 ## Projektpflege
 
 Kleine statische App ohne unnötiges Framework. Vor einer neuen Versionsnummer `npm run assets:stamp` ausführen; HTML-Einstieg, Modulimporte und Tarifabruf tragen dieselbe Versionskennung, damit Browser beim Pages-Update keine alte Rechen-/UI-Datei wiederverwenden. Keine echten Finanzdaten in Fixtures. Rechenkern und UI getrennt halten. Bei fachlicher Änderung Gegenbeispiele ergänzen. Dokumente nach dem endgültigen Stand umschreiben; ROADMAP erledigte Punkte markieren. Nicht versehentlich persönliche PDFs, OCR-Zwischendateien oder den gesamten Scratch-Ordner committen.
