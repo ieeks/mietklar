@@ -66,3 +66,7 @@ Browser-Nachweis: Commit `84d28f6889a0f0a01946639b26b763a38c528e26`, [Actions-La
 ## Komfortänderung Alpha 0.7.0-alpha.2
 
 Commit `c903019d44b7e37132fca5fd3374d1fa938ffe63`, [Actions-Lauf 39300301463](https://github.com/ieeks/mietklar/actions/runs/39300301463): Syntax, Asset-Zuordnung, 80 reine Tests und alle 16 Chromium-/WebKit-Fälle erfolgreich. Der bestehende mobile Bedienungsfall prüft zusätzlich den erreichbaren Zuklapp-Button, geschlossene Untergruppen, Fokus und unveränderte Sicherungswerte. Die native iPhone-Abnahme bleibt offen.
+
+## Geldfelder Alpha 0.7.0-alpha.3
+
+Commit `6c4e946e43381d657ff3acff4083b3edf08da1d0`, [Actions-Lauf 39303286104](https://github.com/ieeks/mietklar/actions/runs/39303286104): Syntax und Asset-Zuordnung, 83 reine Tests sowie alle 18 Chromium-/WebKit-Fälle ohne Wiederholung erfolgreich. Native Auswahl beim Fokus wird abgeschlossen, bevor die Gruppierung zur Bearbeitung entfernt wird; dadurch bleibt auch die vorhandene Alles-Markierung in Chromium erhalten. Geprüft: Beträge ersetzen, Null überschreiben, Cursor hinter der Null, dynamische Kostenfelder, keine Rundung zusätzlicher Stellen und exakt unveränderte Rohwerte im Export. Nativer iPhone-/Safari-Test weiterhin offen.
