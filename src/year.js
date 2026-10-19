@@ -2,7 +2,11 @@ import { nonnegative } from './calc.js';
 import { regularFirstYearAfa } from './afa.js';
 
 export function resolveYear(input) {
-  if (input.mode === 'full') return { mode: 'full', rentMonths: 12, availableMonths: 12, vacantMonths: 0 };
+  if (input.mode === 'full') {
+    const vacantMonths = input.expectedVacantMonths ?? 0;
+    if (!Number.isInteger(vacantMonths) || vacantMonths < 0 || vacantMonths > 12) throw new RangeError('Erwarteter Leerstand: ganze Zahl von 0 bis 12 erforderlich.');
+    return { mode: 'full', rentMonths: 12 - vacantMonths, availableMonths: 12, vacantMonths };
+  }
   if (input.mode !== 'year') throw new RangeError('Ungültiger Planungszeitraum.');
   if (!Number.isInteger(input.startMonth) || input.startMonth < 1 || input.startMonth > 12) throw new RangeError('Startmonat: ganze Zahl von 1 bis 12 erforderlich.');
   const availableMonths = 13 - input.startMonth;

@@ -15,7 +15,7 @@ export function normalizeCost(line, context = {}) {
     return value;
   };
   const factor = line.period === 'month' ? (yearMode ? months(line.paymentMonths, 'Zahlungsmonate') : 12) : 1;
-  const reimbursementFactor = line.period === 'month' ? (yearMode ? months(context.rentMonths, 'Mietmonate') : 12) : 1;
+  const reimbursementFactor = line.period === 'month' ? months(context.rentMonths ?? 12, 'Mietmonate') : 1;
   const annualPayment = nonnegative(line.amount, name) * factor;
   let reimbursement = 0;
   if (line.payer === 'tenant') reimbursement = line.amount;

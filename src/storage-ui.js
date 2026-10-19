@@ -77,12 +77,12 @@ export function setupPersistence({ root, tariffYear, captureState, applyState, r
     hasSaved = true;
     try {
       const snapshot = parseSnapshot(raw, tariffYear);
-      const migrated = JSON.parse(raw).schemaVersion === 1;
+      const migrated = JSON.parse(raw).schemaVersion < 3;
       const valid = applyWithRollback(snapshot.state);
       remember = true; lastState = JSON.stringify(snapshot.state); lastSavedAt = snapshot.savedAt;
       announce('Gespeicherter Stand geladen: ' + time(snapshot.savedAt)
         + (valid ? '.' : '. Bitte die unvollständigen oder ungültigen Eingaben prüfen.')
-        + (migrated ? ' Sicherung aus Alpha 0.5 übernommen; neue Jahresfelder ergänzt, Volljahresplanung beibehalten.' : ''));
+        + (migrated ? ' Ältere Sicherung übernommen; neue Leerstands- und Vergleichsfelder ergänzt. Bisherige Werte bleiben erhalten.' : ''));
     } catch (error) {
       blocked = true; recoveryText = raw;
       announce('Gespeicherter Stand nicht geladen: ' + error.message
@@ -127,7 +127,7 @@ export function setupPersistence({ root, tariffYear, captureState, applyState, r
       const raw = await readFile(file);
       if (sequence !== importSequence) return;
       const snapshot = parseSnapshot(raw, tariffYear);
-      const migrationNote = JSON.parse(raw).schemaVersion === 1 ? ' Ältere Sicherung übernommen; neue Jahresfelder ergänzt, Volljahresplanung beibehalten.' : '';
+      const migrationNote = JSON.parse(raw).schemaVersion < 3 ? ' Ältere Sicherung übernommen; neue Leerstands- und Vergleichsfelder ergänzt. Bisherige Werte bleiben erhalten.' : '';
       const before = captureState();
       cancel();
       const valid = applyWithRollback(snapshot.state);

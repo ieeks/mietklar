@@ -1,74 +1,48 @@
 <!doctype html>
-<html lang="de-AT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="mietklar. Alpha: Welche Miete ist für deinen Wunschüberschuss nötig?"><title>mietklar. · Alpha</title><link rel="stylesheet" href="./style.css"></head><body><div id="mietklar-app">
+<html lang="de-AT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Welche Miete brauchst du, und was bleibt dir? Österreichische Mietplanung mit Kosten, Steuer und Leerstand."><title>mietklar. · Deine Mietplanung</title><link rel="stylesheet" href="./style.css"></head><body><div id="mietklar-app">
 
 
-<div class="mr-app">
-<header class="mr-top"><button type="button" class="mr-wordmark" data-home aria-label="mietklar. – Zur Startseite" title="Zur Startseite">mietklar<span style="color:var(--mr-brand)">.</span></button><span class="mr-year">Alpha 0.6 · 2026</span></header><div class="mr-help alpha"><strong>Alpha · fiktive Beispieldaten.</strong> Bedienungs- und Tarifmodell ohne USt. Volljahres- oder Kalenderjahresplanung mit ganzen Mietmonaten. Ungeklärte Steuerabzüge werden mit 0 € angesetzt. Keine vollständige Steuer- oder Mietrechtsprüfung.</div>
-<details class="mr-storage-panel" data-storage-panel>
-<summary>Speichern &amp; Sicherung <span class="mr-storage-badge" data-storage-badge>Aus</span></summary>
-<div class="mr-storage-body">
-<label class="mr-remember"><input type="checkbox" data-remember disabled><span>Eingaben in diesem Browser merken</span></label>
-<div class="mr-hint">Speichert deinen Stand inklusive Gehalt, Kosten und AfA auf diesem Gerät in diesem Browser. Auch unvollständige Eingaben bleiben erhalten. Ergebnisse werden beim Laden neu berechnet.</div>
-<p class="mr-storage-status" data-storage-status role="status" aria-live="polite">Speicherung ist aus. Ohne Sicherung gehen die Eingaben beim Neuladen verloren.</p>
-<div class="mr-storage-actions">
-<button type="button" data-export-backup disabled>Sicherung exportieren</button>
-<button type="button" data-import-backup disabled>Sicherung importieren</button>
-<button type="button" data-delete-saved disabled>Lokale Speicherung löschen</button>
-<button type="button" data-undo-import hidden>Letzten Import rückgängig machen</button>
-<button type="button" data-recover-saved hidden>Nicht geladenen Speicherstand herunterladen</button>
-</div>
-<input type="file" accept=".json,application/json" data-import-file hidden>
-<div class="mr-hint">Die Sicherungsdatei enthält dieselben persönlichen Eingaben. Für ein anderes Gerät exportieren und dort importieren. Lokales Löschen entfernt den gespeicherten Stand; deine aktuelle Sitzung bleibt erhalten.</div>
-</div></details>
-
-<div class="mr-progress"><span data-progress-text>Schritt 1 von 5 · Ziel &amp; Einkommen</span><div class="mr-dots" aria-hidden="true"><span class="mr-dot" data-on="true"></span><span class="mr-dot"></span><span class="mr-dot"></span><span class="mr-dot"></span><span class="mr-dot"></span></div></div>
-<main class="mr-main">
-<section class="mr-step-panel" data-panel="0">
-<div class="mr-eyebrow" data-start-eyebrow>Ziel &amp; Einkommen</div>
-<div class="mr-calculation-mode" role="group" aria-label="Rechenrichtung">
+<div class="mr-app"><header class="mr-top"><button type="button" class="mr-wordmark" data-home="" aria-label="mietklar. – Zum Ergebnis" title="Zum Ergebnis">mietklar<span style="color:var(--mr-brand)">.</span></button><button type="button" class="mr-print" data-print="" disabled="">Drucken / PDF</button><span class="mr-year">Alpha 0.7 · 2026</span></header><main class="mr-main"><section class="mr-hero" id="ergebnis" aria-label="Dein Miet-Ergebnis">
+<p class="mr-eyebrow">Deine Wohnung. Dein Überblick.</p><h1 data-result-title="">Diese Hauptmiete brauchst du.</h1>
+<div data-result-content=""><p class="mr-result-label" data-result-label="">Benötigte Hauptmiete ohne Kostenersatz</p>
+<div class="mr-hero-amount" role="status" aria-live="polite" aria-atomic="true"><strong data-out="headline">–</strong><span> / Monat</span></div>
+<p class="mr-per-area" data-per-area="">Wohnfläche optional ergänzen</p>
+<div class="mr-reference-note" data-reference-note="" hidden=""></div>
+<div class="mr-flow"><div class="mr-flow-heading"><h2 data-flow-title="">So verteilen sich deine Mietereinnahmen</h2><span>Ø pro Monat</span></div>
+<div class="mr-flow-bar" data-flow-bar="" role="img" aria-label="Aufteilung der Mietereinnahmen"></div><dl class="mr-flow-legend" data-flow-legend=""></dl>
+<p class="mr-hint" data-flow-note=""></p></div></div>
+<div class="mr-hero-controls"><div data-mode-slot=""><div class="mr-calculation-mode" role="group" aria-label="Rechenrichtung">
 <button type="button" data-calc-mode="target" aria-pressed="true"><strong>Wunschbetrag</strong><span>Welche Miete brauche ich?</span></button>
 <button type="button" data-calc-mode="rent" aria-pressed="false"><strong>Miete vorgeben</strong><span>Was bleibt mir übrig?</span></button>
-</div>
-<h2 data-start-title>Was soll dir bleiben?</h2><div class="mr-section mr-year-plan"><h3>Welchen Zeitraum planst du?</h3>
-<label class="mr-field">Planungszeitraum<select data-key="periodMode"><option value="full">Volles Vermietungsjahr · 12 Monate</option><option value="year">Kalenderjahr 2026 · Start &amp; Leerstand</option></select></label>
-<div data-year-only hidden><div class="mr-fields">
-<label class="mr-field">Erster möglicher Mietmonat 2026<select data-key="startMonth"><option value="1">Jänner</option><option value="2">Februar</option><option value="3">März</option><option value="4">April</option><option value="5">Mai</option><option value="6">Juni</option><option value="7">Juli</option><option value="8">August</option><option value="9">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Dezember</option></select></label>
-<label class="mr-field">Volle Monate ohne Mieter ab diesem Monat<input data-key="vacantMonths" type="number" min="0" max="12" step="1" value="0" inputmode="numeric"></label></div>
-<div class="mr-help" data-year-summary></div>
-<div class="mr-hint">Für ein laufendes Mietverhältnis Jänner wählen. Die Monate davor und der eingetragene Leerstand bringen keine Hauptmiete. Gleiche Miete je vollem Mietmonat, Zahlung im selben Jahr angenommen. Teilmonate, Zahlungsausfälle und Nachzahlungen sind noch nicht abgebildet. Kosten und AfA werden separat erfasst.</div></div>
-</div>
-
-<p data-start-intro>Dein monatlicher Überschuss nach Kosten und zusätzlicher Einkommensteuer.</p>
-<div class="mr-choice" data-calc-field="target"><label for="mk-target" data-target-label>Wunschüberschuss / Monat (€)</label><input id="mk-target" data-key="target" type="number" min="0" step="0.01" value="1000" inputmode="decimal"></div>
-<div class="mr-choice" data-calc-field="rent" hidden><label for="mk-rent">Hauptmiete / Monat, ohne Kostenersatz (€)</label><input id="mk-rent" data-key="monthlyRent" type="number" min="0" step="0.01" value="1400" inputmode="decimal"><div class="mr-hint">Betriebskosten, Heizung und andere Erstattungen kommen im nächsten Schritt gesondert dazu.</div></div>
-<div class="mr-section"><h3>Deine Einkommensbasis</h3>
+</div></div><div data-amount-slot=""><div class="mr-choice" data-calc-field="target"><label for="mk-target" data-target-label="">Wunschüberschuss / Monat (€)</label><input id="mk-target" data-key="target" type="text" value="1000" inputmode="decimal" data-numeric="" maxlength="64"></div><div class="mr-choice" data-calc-field="rent" hidden=""><label for="mk-rent">Hauptmiete / Monat, ohne Kostenersatz (€)</label><input id="mk-rent" data-key="monthlyRent" type="text" value="1400" inputmode="decimal" data-numeric="" maxlength="64"><div class="mr-hint">Betriebskosten, Heizung und andere Erstattungen kommen im nächsten Schritt gesondert dazu.</div></div></div>
+<label class="mr-slider-label" for="mk-slider" data-slider-label="">Wunschüberschuss anpassen</label>
+<input id="mk-slider" data-slider="" type="range" min="0" max="2500" step="1" value="1000" aria-label="Wunschüberschuss anpassen"><div class="mr-slider-scale"><span>0 €</span><span data-slider-max="">2.500 €</span></div></div>
+<div class="mr-error" role="alert" data-error="" hidden=""></div><div class="mr-help" data-caveat=""></div><div class="mr-help" data-shortfall-note="" hidden=""></div></section><p class="mr-alpha-note">Alpha · fiktive Startwerte · ohne Umsatzsteuer · kein Kredit. Offene Abzüge werden mit 0 € angesetzt.</p><details class="mr-accordion" data-result-details=""><summary><span>Aufschlüsselung &amp; offene Punkte</span><span data-summary="result"></span></summary><div class="mr-accordion-body">
+<div class="mr-summary" data-year-result="" hidden=""><div class="mr-row"><span>Hauptmiete im Planjahr</span><strong data-out="annualRent"></strong></div><div class="mr-row"><span>Kostenersatz im Planjahr</span><strong data-out="annualReimbursement"></strong></div><div class="mr-row"><span>Zahlungen inkl. Rücklage &amp; Puffer im Planjahr</span><strong data-out="annualPayments"></strong></div><div class="mr-row"><span>Zusätzliche Steuer im Planjahr</span><strong data-out="annualTax"></strong></div><div class="mr-row"><span>Dein Jahressaldo</span><strong data-out="annualCash"></strong></div><div class="mr-hint">Monatsüberschuss = Jahressaldo ÷ 12. Das ist kein gleichmäßiger monatlicher Zahlungseingang; die Hauptmiete gilt je vermietetem Monat.</div></div><details open=""><summary class="">So setzt es sich zusammen · Jahresdurchschnitt / Monat</summary><div class="mr-row"><span data-total-label="">Gesamtzahlung des Mieters</span><strong data-out="total"></strong></div><div class="mr-row"><span>Deine Zahlungen inkl. Rücklage &amp; Puffer</span><strong data-out="payments"></strong></div><div class="mr-row"><span>Zusätzliche Steuerrücklage</span><strong data-out="tax"></strong></div><div class="mr-divider"></div><div class="mr-row"><span>Angesetzter Kostenabzug / Jahr</span><strong data-out="taxCosts"></strong></div><div class="mr-row"><span>Steuerlich wirksame AfA / Jahr</span><strong data-out="annualAfa"></strong></div><div class="mr-hint">Monatlicher Jahresdurchschnitt. Die AfA ist in der Steuerberechnung enthalten und wird nicht nochmals als Zahlung abgezogen.</div></details>
+<details data-assumptions-wrap="" open=""><summary>Noch zu prüfen (<span data-assumption-count="">0</span>)</summary><ul class="mr-assumptions" data-assumptions=""></ul></details><details><summary class="">Meine Steuerstufen verstehen</summary><div class="mr-help" data-tax-explain=""></div></details></div></details><details class="mr-accordion" data-section="income"><summary><span>Einkommen &amp; Steuerbasis</span><span data-summary="income"></span></summary><div class="mr-accordion-body"><div class="mr-section"><h3>Deine Einkommensbasis</h3>
 <label class="mr-field">Welchen Jahreswert hast du?<select data-key="incomeMode"><option value="payslip">Lohnzettel · KZ 245</option><option value="provided">Bereinigte Tarifbasis ohne Vermietung</option></select></label>
 <div data-income-section="payslip">
-<label class="mr-field mr-afa-field">Steuerpflichtige Bezüge · KZ 245 / Jahr (€)<input data-key="salary" type="number" min="0" step="0.01" value="45132" inputmode="decimal"></label>
+<label class="mr-field mr-afa-field">Steuerpflichtige Bezüge · KZ 245 / Jahr (€)<input data-key="salary" type="text" value="45132" inputmode="decimal" data-numeric="" maxlength="64"></label>
 <details><summary>Wo finde ich diesen Betrag?</summary><div class="mr-help">Im Jahreslohnzettel L16 unter <strong>Kennzahl 245</strong>. Das ist weder dein Jahresbrutto noch das ausbezahlte Netto. Sozialversicherung und begünstigte Sonderzahlungen nicht nochmals pauschal abziehen oder addieren. Das Modell setzt eine aktive nichtselbstständige Tätigkeit voraus.</div></details>
 <label class="mr-field mr-afa-field">Werbungskosten aus deiner Arbeit<select data-key="deductionMode"><option value="flat">132 € Pauschale verwenden</option><option value="custom">Höhere Werbungskosten statt Pauschale eingeben</option></select></label>
-<label class="mr-field mr-afa-field" data-deduction-custom hidden>Werbungskosten statt Pauschale / Jahr (€)<input data-key="salaryDeduction" type="number" min="0" step="0.01" value="132" inputmode="decimal"></label>
+<label class="mr-field mr-afa-field" data-deduction-custom="" hidden="">Werbungskosten statt Pauschale / Jahr (€)<input data-key="salaryDeduction" type="text" value="132" inputmode="decimal" data-numeric="" maxlength="64"></label>
 <div class="mr-hint">Hier sind Werbungskosten mit Anrechnung auf die Pauschale gemeint, etwa Arbeitsmittel oder Fortbildung. Ein höherer Jahresbetrag ersetzt die 132 €; die Pauschale kommt nicht nochmals dazu. Für zusätzlich zur Pauschale abziehbare Beträge oder weitere persönliche Abzüge eine passend bereinigte Tarifbasis verwenden. Bereits enthaltene Abzüge nicht nochmals erfassen; Wohnungskosten kommen separat.</div>
 <div class="mr-row"><span>Angesetzte Werbungskosten / Jahr</span><strong data-out="salaryAppliedDeduction"></strong></div>
 </div>
-<div data-income-section="provided" hidden>
-<label class="mr-field mr-afa-field">Bereinigte Tarifbasis ohne diese Vermietung / Jahr (€)<input data-key="salaryBase" type="number" min="0" step="0.01" value="45000" inputmode="decimal"></label>
+<div data-income-section="provided" hidden="">
+<label class="mr-field mr-afa-field">Bereinigte Tarifbasis ohne diese Vermietung / Jahr (€)<input data-key="salaryBase" type="text" value="45000" inputmode="decimal" data-numeric="" maxlength="64"></label>
 <div class="mr-help">Hier sind die passenden Abzüge bereits berücksichtigt. Die App zieht weder 132 € noch die Werbungskosten aus dem anderen Eingabeweg nochmals ab. Verwende eine vergleichbare Jahresbasis für dein Gehalt <strong>vor Hinzurechnung dieser Vermietung</strong>.</div>
 <div class="mr-hint">Kein Bescheid-Einkommen übernehmen, in dem diese Vermietung bereits enthalten ist. Kein Brutto-/Netto-Lohnrechner; weitere Einkünfte und persönliche Steuerbesonderheiten werden nicht automatisch ergänzt.</div>
 </div>
-<div class="mr-summary" aria-live="polite"><div class="mr-row"><span>Tarifbasis vor Vermietung / Jahr</span><strong data-out="salaryBase"></strong></div><div class="mr-hint" data-income-explain></div></div>
-</div>
-<div class="mr-help">Eigentumswohnung in Österreich · kein Kredit · 100 % Eigentümeranteil. Monatsüberschuss = Jahresergebnis ÷ 12.</div>
-</section>
+<div class="mr-summary" aria-live="polite"><div class="mr-row"><span>Tarifbasis vor Vermietung / Jahr</span><strong data-out="salaryBase"></strong></div><div class="mr-hint" data-income-explain=""></div></div>
+</div></div></details><details class="mr-accordion" data-section="costs"><summary><span>Kosten &amp; Rücklage</span><span data-summary="costs"></span></summary><div class="mr-accordion-body"><section class="mr-step-panel">
 
-<section class="mr-step-panel" data-panel="1" hidden>
-<div class="mr-eyebrow">Wohnungskosten</div><h2>Was zahlst du.<br>Was trägt dein Mieter?</h2>
-<p>Erfasse deine Zahlungen. Mietererstattung und Steuerabzug entscheidest du für jede Position getrennt.</p><div class="mr-help" data-year-only hidden>Monatliche Kosten laufen anfangs alle 12 Monate weiter; Zahlungsmonate kannst du pro Position anpassen. Monats-Erstattungen entstehen nur in Mietmonaten. Jahresbeträge sind die geplanten Summen dieses Jahres und werden nicht gekürzt. Frühere Privatkosten und Erstattungen selbst passend abgrenzen. Steuerabzüge für dieses Kalenderjahr findest du je Position unter den Steuerdetails.</div>
+<p>Erfasse deine Zahlungen. Mietererstattung und Steuerabzug entscheidest du für jede Position getrennt.</p><div class="mr-help" data-year-only="" hidden="">Monatliche Kosten laufen anfangs alle 12 Monate weiter; Zahlungsmonate kannst du pro Position anpassen. Monats-Erstattungen entstehen nur in Mietmonaten. Jahresbeträge sind die geplanten Summen dieses Jahres und werden nicht gekürzt. Frühere Privatkosten und Erstattungen selbst passend abgrenzen. Steuerabzüge für dieses Kalenderjahr findest du je Position unter den Steuerdetails.</div>
 <details class="mr-context"><summary>Mietrecht &amp; Vertrag einordnen</summary>
 <div class="mr-fields">
 <label class="mr-field">Mietrechtliche Einordnung<select data-key="rentalLaw"><option value="unknown">Noch zu klären</option><option value="partial">MRG-Teilanwendung · eigene Einordnung</option><option value="full">MRG-Vollanwendung · eigene Einordnung</option><option value="other">Andere / Ausnahme</option></select></label>
 <label class="mr-field">Mietvertrag<select data-key="contract"><option value="none">Noch kein Mietvertrag</option><option value="existing">Vertrag vorhanden</option><option value="unknown">Noch zu prüfen</option></select></label>
-</div><div class="mr-help" data-contract-hint></div>
+</div><div class="mr-help" data-contract-hint=""></div>
 <div class="mr-hint">Diese Angaben sind deine Einordnung. Die App prüft weder Vertrag noch rechtliche Zulässigkeit.
 <a href="https://www.konsumentenfragen.at/konsumentenfragen/Bauen__Wohnen_und_Versorgungsleistungen/Wohnen/Rund_um_die_Miete/Betriebskosten.html" target="_blank" rel="noopener noreferrer">Grundlagen zu Betriebskosten</a> · Stand 19.10.2026</div>
 </details>
@@ -85,21 +59,20 @@
 <div data-cost-list="own"></div>
 </details>
 <div class="mr-section"><h3>Fehlt eine Position?</h3>
-<button type="button" data-add-cost>+ Kostenposition hinzufügen</button>
+<button type="button" data-add-cost="">+ Kostenposition hinzufügen</button>
 <div data-cost-list="custom"></div></div>
 <details><summary>Zusätzlicher Sicherheitspuffer</summary>
-<label class="mr-field">Persönlicher Puffer / Monat (€)<input data-key="buffer" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+<label class="mr-field">Persönlicher Puffer / Monat (€)<input data-key="buffer" type="text" value="0" inputmode="decimal" data-numeric="" maxlength="64"></label>
 <div class="mr-hint">Dieser Betrag bleibt für deine Planung zurückgelegt. Die Rücklage allein ist kein Steuerabzug.</div></details>
 <div class="mr-summary" aria-live="polite">
-<div class="mr-hint" data-year-only hidden>Diese Monatswerte sind Durchschnitte über alle zwölf Kalendermonate. Die einzelne Vorschreibung oben bleibt der Betrag je Zahlungsmonat.</div>
+<div class="mr-hint" data-year-only="" hidden="">Diese Monatswerte sind Durchschnitte über alle zwölf Kalendermonate. Die einzelne Vorschreibung oben bleibt der Betrag je Zahlungsmonat.</div>
 <div class="mr-row"><span>Deine Zahlungen inkl. Puffer / Monat</span><strong data-out="payments"></strong></div>
 <div class="mr-row"><span>Erwartete Mietererstattung / Monat</span><strong data-out="tenant"></strong></div>
 <div class="mr-row"><span>Bei dir verbleibend / Monat</span><strong data-out="ownCosts"></strong></div>
 <div class="mr-divider"></div><div class="mr-row"><span>Angesetzter Steuerabzug / Jahr, ohne Gebäude-AfA</span><strong data-out="taxCosts"></strong></div>
-<div class="mr-hint" data-open-cost></div></div>
-</section>
-<section class="mr-step-panel" data-panel="2" hidden>
-<div class="mr-eyebrow">AfA &amp; Steuerannahmen</div><h2>Woher kommt deine AfA?</h2>
+<div class="mr-hint" data-open-cost=""></div></div>
+</section></div></details><details class="mr-accordion" data-section="afa"><summary><span>Gebäude-AfA &amp; Umsatzsteuer</span><span data-summary="afa"></span></summary><div class="mr-accordion-body"><section class="mr-step-panel">
+
 <p>Du schreibst das Gebäude über mehrere Jahre ab. Das senkt die Steuerbasis, ohne dass jedes Jahr dieser Betrag vom Konto abgeht.</p>
 <label class="mr-field">Welcher Weg passt zu dir?<select data-key="afaMode">
 <option value="unknown">AfA ist noch offen · vorerst 0 €</option>
@@ -107,20 +80,20 @@
 <option value="known">Vollen Jahreswert bereits bekannt</option>
 <option value="basis">Gebäude-Basis und Satz bereits bekannt</option>
 </select></label>
-<div class="mr-help" data-afa-status role="status"></div>
-<div data-afa-section="known" hidden>
-<label class="mr-field mr-afa-field">AfA für ein volles Planungsjahr (€)<input data-key="afa" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Jahreswert aus deiner Berechnung"></label>
+<div class="mr-help" data-afa-status="" role="status"></div>
+<div data-afa-section="known" hidden="">
+<label class="mr-field mr-afa-field">AfA für ein volles Planungsjahr (€)<input data-key="afa" type="text" inputmode="decimal" placeholder="Jahreswert aus deiner Berechnung" data-numeric="" maxlength="64"></label>
 <div class="mr-hint">Aus Anlageverzeichnis, Überschussrechnung oder einer geklärten Berechnung übernehmen. Bei früherer Vermietung die bestehende AfA fortführen. Einen Halbjahreswert nicht ungeprüft als vollen Jahreswert verwenden.</div>
 </div>
-<div data-afa-section="basis" hidden>
+<div data-afa-section="basis" hidden="">
 <div class="mr-fields">
-<label class="mr-field">Abschreibbare Gebäude-Basis (€)<input data-key="building" type="number" min="0" step="0.01" inputmode="decimal"></label>
-<label class="mr-field">Jährlicher AfA-Satz (%)<input data-key="rate" type="number" min="0" max="100" step="0.1" value="1.5" inputmode="decimal"></label>
+<label class="mr-field">Abschreibbare Gebäude-Basis (€)<input data-key="building" type="text" inputmode="decimal" data-numeric="" maxlength="64"></label>
+<label class="mr-field">Jährlicher AfA-Satz (%)<input data-key="rate" type="text" value="1.5" inputmode="decimal" data-numeric="" maxlength="64"></label>
 </div>
 <label class="mr-field">Wie sicher ist diese Grundlage?<select data-key="afaBasisStatus"><option value="unknown">Noch zu klären · vorerst 0 € AfA</option><option value="estimate">Schätzung für die Planung verwenden</option><option value="provided">Basis und Satz sind von mir geklärt</option></select></label>
 <div class="mr-hint">Grund und Boden sind hier bereits abgezogen. Bei Sonderfällen eine passend ermittelte Basis und den Jahres-Satz übernehmen; die App bestätigt deren steuerliche Zulässigkeit nicht.</div>
 </div>
-<div data-afa-section="purchase" hidden>
+<div data-afa-section="purchase" hidden="">
 <div class="mr-section"><h3>1 · Erwerb und bisherige Nutzung</h3>
 <div class="mr-fields">
 <label class="mr-field">Wie erworben?<select data-key="afaAcquisition"><option value="purchase">Gekauft</option><option value="gift">Geerbt / geschenkt</option><option value="other">Hergestellt / anderer Erwerb</option></select></label>
@@ -129,31 +102,31 @@
 </div>
 <div class="mr-hint">Die einfache Kaufherleitung deckt Käufe ab 2003 und erstmalige Vermietung nach Privatnutzung ab. Erbe, Schenkung, frühere Vermietung und ältere Käufe benötigen eine eigene Prüfung. Ein heutiger Marktwert ist hier keine Kaufkostenbasis.</div></div>
 <div class="mr-section"><h3>2 · Kaufpreis und Nebenkosten</h3>
-<label class="mr-field">Immobilien-Kaufpreis inkl. Grundanteil (€)<input data-key="afaPrice" type="number" min="0" step="0.01" inputmode="decimal"></label>
+<label class="mr-field">Immobilien-Kaufpreis inkl. Grundanteil (€)<input data-key="afaPrice" type="text" inputmode="decimal" data-numeric="" maxlength="64"></label>
 <div class="mr-hint">Ohne separat bewertete Möbel/Einrichtung. Garage und andere gesonderte Kaufbestandteile passend abgrenzen. Maßgebliche Kosten inklusive nicht abziehbarer USt verwenden.</div>
 <details><summary>Welche Kaufnebenkosten zählen dazu?</summary>
 <p>Zum Beispiel Grunderwerbsteuer, Eigentumseintragung, Vertragserrichtung und Käuferprovision. Nur den passenden Anteil für diese Immobilie erfassen. Bereits im Kaufpreis enthaltene Beträge nicht nochmals addieren.</p>
 <div class="mr-fields">
-<label class="mr-field">Grunderwerbsteuer (€)<input data-key="afaTransferTax" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
-<label class="mr-field">Eigentumseintragung (€)<input data-key="afaRegistration" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
-<label class="mr-field">Vertrag / zugehörige Rechtskosten (€)<input data-key="afaLegal" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
-<label class="mr-field">Käuferprovision (€)<input data-key="afaBroker" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
-<label class="mr-field">Weitere geklärte Kaufnebenkosten (€)<input data-key="afaOther" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+<label class="mr-field">Grunderwerbsteuer (€)<input data-key="afaTransferTax" type="text" value="0" inputmode="decimal" data-numeric="" maxlength="64"></label>
+<label class="mr-field">Eigentumseintragung (€)<input data-key="afaRegistration" type="text" value="0" inputmode="decimal" data-numeric="" maxlength="64"></label>
+<label class="mr-field">Vertrag / zugehörige Rechtskosten (€)<input data-key="afaLegal" type="text" value="0" inputmode="decimal" data-numeric="" maxlength="64"></label>
+<label class="mr-field">Käuferprovision (€)<input data-key="afaBroker" type="text" value="0" inputmode="decimal" data-numeric="" maxlength="64"></label>
+<label class="mr-field">Weitere geklärte Kaufnebenkosten (€)<input data-key="afaOther" type="text" value="0" inputmode="decimal" data-numeric="" maxlength="64"></label>
 </div><div class="mr-hint">Finanzierungs-/Pfandbestellungskosten gehören nicht pauschal in diese Basis. Umbauten und spätere Arbeiten gesondert einordnen. Unbekannte Nebenkosten können vorerst 0 bleiben; die Herleitung ist dann unvollständig.</div>
 </details></div>
 <div class="mr-section"><h3>3 · Grundanteil abziehen</h3>
 <p>Grund und Boden nutzen sich steuerlich nicht ab. Nur der Gebäudeanteil wird abgeschrieben.</p>
-<div class="mr-fields"><label class="mr-field">Grundanteil (%)<input data-key="afaLandPercent" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+<div class="mr-fields"><label class="mr-field">Grundanteil (%)<input data-key="afaLandPercent" type="text" inputmode="decimal" data-numeric="" maxlength="64"></label>
 <label class="mr-field">Einordnung des Anteils<select data-key="afaLandStatus"><option value="unknown">Noch zu klären · vorerst 0 € AfA</option><option value="estimate">Planungsannahme verwenden</option><option value="provided">Anteil ist von mir geklärt</option></select></label></div>
 <details class="mr-land-guide"><summary>Wie finde ich einen Grundanteil?</summary>
 <div class="mr-help">Die Grundanteil-Verordnung kennt Pauschalansätze. Diese Hilfe zeigt einen bedingten Vorschlag; sie bewertet weder Grundstück noch Unterlagen.</div>
 <div class="mr-fields">
-<label class="mr-field">Gemeindegröße<select data-key="afaMunicipality" data-land-guide><option value="unknown">Noch unklar</option><option value="large">Mindestens 100.000 Einwohner</option><option value="small">Unter 100.000 Einwohner</option></select></label>
-<label class="mr-field">Durchschnittliches baureifes Land<select data-key="afaLandPriceBand" data-land-guide><option value="unknown">Noch unklar</option><option value="low">Unter 400 €/m²</option><option value="high">Mindestens 400 €/m²</option></select></label>
-<label class="mr-field">Wohn-/Geschäftseinheiten im Gebäude<select data-key="afaUnits" data-land-guide><option value="unknown">Noch unklar</option><option value="over10">Mehr als 10</option><option value="upTo10">Bis zu 10</option></select></label>
-<label class="mr-field">Abweichender Nachweis / erhebliche Besonderheit?<select data-key="afaLandException" data-land-guide><option value="unknown">Noch zu prüfen</option><option value="none">Beides nach meiner Prüfung nicht</option><option value="proof">Gesonderter Nachweis vorhanden</option><option value="deviation">Offenkundig erhebliche Abweichung</option></select></label>
+<label class="mr-field">Gemeindegröße<select data-key="afaMunicipality" data-land-guide=""><option value="unknown">Noch unklar</option><option value="large">Mindestens 100.000 Einwohner</option><option value="small">Unter 100.000 Einwohner</option></select></label>
+<label class="mr-field">Durchschnittliches baureifes Land<select data-key="afaLandPriceBand" data-land-guide=""><option value="unknown">Noch unklar</option><option value="low">Unter 400 €/m²</option><option value="high">Mindestens 400 €/m²</option></select></label>
+<label class="mr-field">Wohn-/Geschäftseinheiten im Gebäude<select data-key="afaUnits" data-land-guide=""><option value="unknown">Noch unklar</option><option value="over10">Mehr als 10</option><option value="upTo10">Bis zu 10</option></select></label>
+<label class="mr-field">Abweichender Nachweis / erhebliche Besonderheit?<select data-key="afaLandException" data-land-guide=""><option value="unknown">Noch zu prüfen</option><option value="none">Beides nach meiner Prüfung nicht</option><option value="proof">Gesonderter Nachweis vorhanden</option><option value="deviation">Offenkundig erhebliche Abweichung</option></select></label>
 </div>
-<div class="mr-help" data-land-suggestion></div><button type="button" data-apply-land disabled>Vorschlag als Planungsannahme übernehmen</button>
+<div class="mr-help" data-land-suggestion=""></div><button type="button" data-apply-land="" disabled="">Vorschlag als Planungsannahme übernehmen</button>
 <div class="mr-hint">Einwohner laut maßgeblichem Volkszählungsergebnis. Geschäftseinheiten nach der Verordnung zählen; nicht bloß Grundbuchanteile. Der Baulandpreis meint den örtlichen Durchschnitt, nicht den Wohnungspreis pro m².
 <a href="https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=Bundesnormen&amp;Gesetzesnummer=20009521" target="_blank" rel="noopener noreferrer">GrundanteilV 2016, §§ 2–3</a></div>
 </details></div>
@@ -162,72 +135,83 @@
 <details><summary>Was gilt im ersten Vermietungsjahr?</summary>
 <label class="mr-field">AfA-relevante Nutzungsmonate im Startjahr<select data-key="afaFirstMonths"><option value="unknown">Noch zu klären</option><option value="0">0 Monate</option><option value="1">1 Monate</option><option value="2">2 Monate</option><option value="3">3 Monate</option><option value="4">4 Monate</option><option value="5">5 Monate</option><option value="6">6 Monate</option><option value="7">7 Monate</option><option value="8">8 Monate</option><option value="9">9 Monate</option><option value="10">10 Monate</option><option value="11">11 Monate</option><option value="12">12 Monate</option></select></label>
 <div class="mr-hint">Gemeint ist die Nutzung zur Einkünfteerzielung, nicht bloß das Datum eines Mietvertrags. Bei regulärer AfA: mehr als sechs Monate = voller Jahreswert, sonst bei begonnener Nutzung die Hälfte. Diese Vorschau ändert die Jahresplanung nicht automatisch. Für ein konkretes Kalenderjahr den AfA-Weg unten separat auswählen.</div>
-<div class="mr-row" data-afa-first-wrap hidden><span>Reguläre AfA im Startjahr · nur zur Information</span><strong data-afa-first></strong></div>
+<div class="mr-row" data-afa-first-wrap="" hidden=""><span>Reguläre AfA im Startjahr · nur zur Information</span><strong data-afa-first=""></strong></div>
 </details></div>
 </div>
-<div class="mr-section" data-year-only hidden><h3>AfA für das Kalenderjahr 2026</h3>
+<div class="mr-section" data-year-only="" hidden=""><h3>AfA für das Kalenderjahr 2026</h3>
 <label class="mr-field">Welcher Jahresbetrag passt für 2026?<select data-key="yearAfaMode"><option value="unknown">Noch offen · vorerst 0 €</option><option value="provided">Betrag für dieses Jahr selbst angeben</option><option value="regular">Reguläres erstes AfA-Jahr · Halb/Ganz</option></select></label>
-<label class="mr-field" data-year-afa-section="provided" hidden>Gebäude-AfA im Planjahr (€)<input data-key="yearAfa" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
-<label class="mr-field" data-year-afa-section="regular" hidden>AfA-relevante Nutzungsmonate im ersten Jahr<select data-key="yearAfaMonths"><option value="unknown">Noch zu klären</option><option value="0">0 Monate</option><option value="1">1 Monate</option><option value="2">2 Monate</option><option value="3">3 Monate</option><option value="4">4 Monate</option><option value="5">5 Monate</option><option value="6">6 Monate</option><option value="7">7 Monate</option><option value="8">8 Monate</option><option value="9">9 Monate</option><option value="10">10 Monate</option><option value="11">11 Monate</option><option value="12">12 Monate</option></select></label>
+<label class="mr-field" data-year-afa-section="provided" hidden="">Gebäude-AfA im Planjahr (€)<input data-key="yearAfa" type="text" value="0" inputmode="decimal" data-numeric="" maxlength="64"></label>
+<label class="mr-field" data-year-afa-section="regular" hidden="">AfA-relevante Nutzungsmonate im ersten Jahr<select data-key="yearAfaMonths"><option value="unknown">Noch zu klären</option><option value="0">0 Monate</option><option value="1">1 Monate</option><option value="2">2 Monate</option><option value="3">3 Monate</option><option value="4">4 Monate</option><option value="5">5 Monate</option><option value="6">6 Monate</option><option value="7">7 Monate</option><option value="8">8 Monate</option><option value="9">9 Monate</option><option value="10">10 Monate</option><option value="11">11 Monate</option><option value="12">12 Monate</option></select></label>
 <div class="mr-hint">Die reguläre Erstjahresregel verwendet den Volljahreswert aus dem gewählten AfA-Weg: 1–6 Nutzungsmonate = halb, 7–12 = voll. Nur für das reguläre erste AfA-Jahr wählen. AfA-Nutzung ist nicht dasselbe wie bezahlte Mietmonate; Leerstand, frühere Privatnutzung und Vermietungsabsicht separat prüfen. Keine automatische beschleunigte AfA. Für laufende Vermietung oder Sonderfälle den passenden Jahresbetrag selbst angeben.</div>
 </div>
-<label class="mr-field mr-afa-field" data-afa-evidence-wrap hidden>Quelle / Begründung (optional)<input data-key="afaEvidence" type="text" maxlength="300" placeholder="z. B. Kaufunterlagen, Grundanteilsnachweis, Steuerberatung"></label>
+<label class="mr-field mr-afa-field" data-afa-evidence-wrap="" hidden="">Quelle / Begründung (optional)<input data-key="afaEvidence" type="text" maxlength="300" placeholder="z. B. Kaufunterlagen, Grundanteilsnachweis, Steuerberatung"></label>
 <div class="mr-summary" aria-live="polite">
-<div data-afa-purchase-breakdown hidden>
-<div class="mr-row"><span>Kaufpreis + eingegebene Nebenkosten</span><strong data-afa-total></strong></div>
-<div class="mr-row"><span>Davon nicht abschreibbarer Grundanteil</span><strong data-afa-land></strong></div>
-<div class="mr-row"><span>Abschreibbare Gebäude-Basis</span><strong data-afa-building></strong></div><div class="mr-divider"></div></div>
+<div data-afa-purchase-breakdown="" hidden="">
+<div class="mr-row"><span>Kaufpreis + eingegebene Nebenkosten</span><strong data-afa-total=""></strong></div>
+<div class="mr-row"><span>Davon nicht abschreibbarer Grundanteil</span><strong data-afa-land=""></strong></div>
+<div class="mr-row"><span>Abschreibbare Gebäude-Basis</span><strong data-afa-building=""></strong></div><div class="mr-divider"></div></div>
 <div class="mr-row"><span>Gebäude-AfA im gewählten Zeitraum</span><strong data-out="annualAfa"></strong></div>
 <div class="mr-hint">Keine zusätzliche Zahlung. Nicht nochmals unter Wohnungskosten erfassen.</div></div>
 <div class="mr-hint mr-afa-source">Stand 19.10.2026 · <a href="https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/absetzung-fuer-abnutzung-bei-vuv.html" target="_blank" rel="noopener noreferrer">BMF: AfA bei Vermietung</a> · <a href="https://www.ris.bka.gv.at/NormDokument.wxe?Abfrage=Bundesnormen&amp;Gesetzesnummer=10004570&amp;Paragraf=16" target="_blank" rel="noopener noreferrer">§ 16 EStG</a></div>
 <div class="mr-section"><h3>Umsatzsteuerstatus</h3><label class="mr-field">Welche Behandlung gilt bei dir?<select data-key="vat"><option value="exempt">Kleinunternehmerbefreiung · Beispiel</option><option value="unknown">Noch zu klären</option><option value="taxable">Umsatzsteuerpflichtig</option></select></label><div class="mr-hint">Diese Alpha rechnet nur den Fall ohne Umsatzsteuer. Weitere Fälle werden in der eigentlichen App ergänzt.</div></div>
 <div class="mr-help">Die Abzugsfähigkeit prüfst du separat: Bei Leerstand sind Kosten nicht automatisch abziehbar oder ausgeschlossen. Frühere Privatnutzung nicht ungeprüft der Vermietung zurechnen.</div>
-</section>
-<section class="mr-step-panel" data-panel="3" hidden>
-<div class="mr-eyebrow">Dein Ergebnis</div><h2 data-result-title>Diese Miete brauchst du.</h2>
-<div class="mr-help" data-caveat></div>
-<div data-result-content><div class="mr-result" aria-live="polite"><div class="mr-result-label" data-result-label>Benötigte Hauptmiete ohne Kostenersatz</div><div class="mr-amount"><span data-out="headline"></span><small> / Monat</small></div><div class="mr-row" data-result-rent-row hidden><span>Eingegebene Hauptmiete</span><strong data-out="rent"></strong></div><div class="mr-row"><span data-tenant-label>Erwarteter Kostenersatz</span><strong data-out="tenant"></strong></div><div class="mr-row"><span data-total-label>Gesamtzahlung des Mieters</span><strong data-out="total"></strong></div><div class="mr-good" data-cash-summary><span data-cash-label>Für dich frei verfügbar</span><strong data-out="cash"></strong></div></div>
-<div class="mr-summary" data-year-result hidden><div class="mr-row"><span>Hauptmiete im Planjahr</span><strong data-out="annualRent"></strong></div><div class="mr-row"><span>Kostenersatz im Planjahr</span><strong data-out="annualReimbursement"></strong></div><div class="mr-row"><span>Zahlungen inkl. Rücklage &amp; Puffer im Planjahr</span><strong data-out="annualPayments"></strong></div><div class="mr-row"><span>Zusätzliche Steuer im Planjahr</span><strong data-out="annualTax"></strong></div><div class="mr-row"><span>Dein Jahressaldo</span><strong data-out="annualCash"></strong></div><div class="mr-hint">Monatsüberschuss = Jahressaldo ÷ 12. Das ist kein gleichmäßiger monatlicher Zahlungseingang; die Hauptmiete gilt je vermietetem Monat.</div></div><div class="mr-help" data-shortfall-note hidden></div><button type="button" class="mr-change-mode" data-change-calculation>Rechenrichtung / Eingaben ändern</button><details open><summary class="">So setzt es sich zusammen · Jahresdurchschnitt / Monat</summary><div class="mr-row"><span data-total-label>Gesamtzahlung des Mieters</span><strong data-out="total"></strong></div><div class="mr-row"><span>Deine Zahlungen inkl. Rücklage &amp; Puffer</span><strong data-out="payments"></strong></div><div class="mr-row"><span>Zusätzliche Steuerrücklage</span><strong data-out="tax"></strong></div><div class="mr-divider"></div><div class="mr-row"><span>Angesetzter Kostenabzug / Jahr</span><strong data-out="taxCosts"></strong></div><div class="mr-row"><span>Steuerlich wirksame AfA / Jahr</span><strong data-out="annualAfa"></strong></div><div class="mr-hint">Monatlicher Jahresdurchschnitt. Die AfA ist in der Steuerberechnung enthalten und wird nicht nochmals als Zahlung abgezogen.</div></details>
-<details data-assumptions-wrap open><summary>Noch zu prüfen (<span data-assumption-count>0</span>)</summary><ul class="mr-assumptions" data-assumptions></ul></details><details><summary class="">Meine Steuerstufen verstehen</summary><div class="mr-help" data-tax-explain></div></details></div>
-</section>
-<section class="mr-step-panel" data-panel="4" hidden>
-<div class="mr-eyebrow">Anschaffung vergleichen</div><h2>Was kostet es dich<br>nach Steuern?</h2><p>Vergleiche eine ohnehin geplante Anschaffung für die vermietete Wohnung.</p>
+</section></div></details><details class="mr-accordion" data-section="period"><summary><span>Zeitraum &amp; Leerstand</span><span data-summary="period"></span></summary><div class="mr-accordion-body"><div class="mr-section mr-year-plan">
+<label class="mr-field">Planungszeitraum<select data-key="periodMode"><option value="full">Typisches Vermietungsjahr</option><option value="year">Kalenderjahr 2026 · Start &amp; Leerstand</option></select></label>
+<div data-year-only="" hidden=""><div class="mr-fields">
+<label class="mr-field">Erster möglicher Mietmonat 2026<select data-key="startMonth"><option value="1">Jänner</option><option value="2">Februar</option><option value="3">März</option><option value="4">April</option><option value="5">Mai</option><option value="6">Juni</option><option value="7">Juli</option><option value="8">August</option><option value="9">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Dezember</option></select></label>
+<label class="mr-field">Volle Monate ohne Mieter ab diesem Monat<input data-key="vacantMonths" type="number" min="0" max="12" step="1" value="0" inputmode="numeric"></label></div>
+<div class="mr-help" data-year-summary=""></div>
+<div class="mr-hint">Für ein laufendes Mietverhältnis Jänner wählen. Die Monate davor und der eingetragene Leerstand bringen keine Hauptmiete. Gleiche Miete je vollem Mietmonat, Zahlung im selben Jahr angenommen. Teilmonate, Zahlungsausfälle und Nachzahlungen sind noch nicht abgebildet. Kosten und AfA werden separat erfasst.</div></div>
+<div data-full-only=""><label class="mr-field">Erwarteter Leerstand pro Jahr · volle Monate<input data-key="expectedVacantMonths" type="number" min="0" max="12" step="1" value="0" inputmode="numeric"></label><p class="mr-hint">Die laufenden Zahlungen bleiben für zwölf Monate angesetzt. Monatlicher Kostenersatz entsteht nur in Mietmonaten. Den vollen AfA-Wert und geklärte Jahresabzüge prüfen wir separat; Leerstand bestätigt keine Abzugsfähigkeit.</p></div></div></div></details><details class="mr-accordion" data-section="reference"><summary><span>Wohnfläche &amp; Vergleich</span><span data-summary="reference"></span></summary><div class="mr-accordion-body"><div><p>Vergleiche die Hauptmiete je m² mit einem Wert, den du selbst festlegst.</p><div class="mr-fields"><label class="mr-field">Wohnfläche (m²)<input data-key="area" type="text" inputmode="decimal" placeholder="z. B. 55" data-numeric="" maxlength="64"></label><label class="mr-field">Dein Vergleichswert (€/m² je Monat)<input data-key="referenceRent" type="text" inputmode="decimal" placeholder="optional" data-numeric="" maxlength="64"></label></div><p class="mr-hint">Der Vergleich verwendet die Hauptmiete ohne Kostenersatz je Mietmonat. Dein Wert ist eine persönliche Orientierung. Die App bestätigt keine mietrechtliche Zulässigkeit und ermittelt keine gesetzliche Mietpreisgrenze.</p></div></div></details><details class="mr-accordion" data-section="purchase"><summary><span>Anschaffung vergleichen</span><span data-summary="purchase"></span></summary><div class="mr-accordion-body"><section class="mr-step-panel">
+<p>Vergleiche eine ohnehin geplante Anschaffung für die vermietete Wohnung.</p>
 <label class="mr-field">Anschaffung<input data-key="item" type="text" maxlength="200" value="Kühlschrank"></label>
-<div class="mr-fields"><label class="mr-field">Kaufpreis (€)<input data-key="purchase" type="number" min="0" value="500" inputmode="decimal"></label><label class="mr-field">Steuerliche Behandlung<select data-key="treatment"><option value="instant">Sofortabzug · Annahme</option><option value="afa">Abschreibung</option></select></label></div>
-<label class="mr-field" data-purchase-afa hidden>Bestätigter AfA-Betrag im Kaufjahr (€)<input data-key="purchaseAfa" type="number" min="0" value="100" inputmode="decimal"></label>
+<div class="mr-fields"><label class="mr-field">Kaufpreis (€)<input data-key="purchase" type="text" value="500" inputmode="decimal" data-numeric="" maxlength="64"></label><label class="mr-field">Steuerliche Behandlung<select data-key="treatment"><option value="instant">Sofortabzug · Annahme</option><option value="afa">Abschreibung</option></select></label></div>
+<label class="mr-field" data-purchase-afa="" hidden="">Bestätigter AfA-Betrag im Kaufjahr (€)<input data-key="purchaseAfa" type="text" value="100" inputmode="decimal" data-numeric="" maxlength="64"></label>
 <div class="mr-help">Beispiel: vollständig für die vermietete Wohnung, ohne Vorsteuerabzug. Sofortabzug und Jahres-AfA müssen im Einzelfall passen.</div>
-<div class="mr-result" data-investment-result aria-live="polite"><div class="mr-result-label">Effektive Belastung im Kaufjahr</div><div class="mr-amount"><span data-out="burden"></span></div><div class="mr-row"><span>Du bezahlst</span><strong data-out="purchase"></strong></div><div class="mr-row"><span>Geschätzte Einkommensteuerersparnis</span><strong data-out="saving"></strong></div><div class="mr-divider"></div><div class="mr-row"><span>Monatlich übrig im Anschaffungsjahr</span><strong data-out="afterPurchase"></strong></div></div><div class="mr-help" data-investment-note></div><div class="mr-hint">Die Hauptmiete bleibt beim Vergleich unverändert. Der Monatswert ist der Jahresbetrag ÷ 12. Der volle Kaufpreis wird bezahlt; eine Steuerersparnis kann erst später wirken.</div>
-</section>
-<div class="mr-error" role="alert" data-error hidden></div><noscript>Bitte JavaScript aktivieren, um die Alpha zu verwenden.</noscript>
-<nav class="mr-nav" aria-label="Rechenschritte"><button type="button" data-back class="">← Zurück</button><button type="button" disabled data-next class="mr-primary ">Weiter zu den Kosten →</button></nav>
-<div class="mr-note">Alpha 0.6 · Sämtliche vorausgefüllten Zahlen sind fiktive Beispiele. Speicherung nur nach deiner Auswahl unter „Speichern &amp; Sicherung“.</div>
-</main></div>
+<div class="mr-result" data-investment-result="" aria-live="polite"><div class="mr-result-label">Effektive Belastung im Kaufjahr</div><div class="mr-amount"><span data-out="burden"></span></div><div class="mr-row"><span>Du bezahlst</span><strong data-out="purchase"></strong></div><div class="mr-row"><span>Geschätzte Einkommensteuerersparnis</span><strong data-out="saving"></strong></div><div class="mr-divider"></div><div class="mr-row"><span>Monatlich übrig im Anschaffungsjahr</span><strong data-out="afterPurchase"></strong></div></div><div class="mr-help" data-investment-note=""></div><div class="mr-hint">Die Hauptmiete bleibt beim Vergleich unverändert. Der Monatswert ist der Jahresbetrag ÷ 12. Der volle Kaufpreis wird bezahlt; eine Steuerersparnis kann erst später wirken.</div>
+</section></div></details><details class="mr-storage-panel" data-storage-panel="">
+<summary>Speichern &amp; Sicherung <span class="mr-storage-badge" data-storage-badge="">Aus</span></summary>
+<div class="mr-storage-body">
+<label class="mr-remember"><input type="checkbox" data-remember="" disabled=""><span>Eingaben in diesem Browser merken</span></label>
+<div class="mr-hint">Speichert deinen Stand inklusive Gehalt, Kosten und AfA auf diesem Gerät in diesem Browser. Auch unvollständige Eingaben bleiben erhalten. Ergebnisse werden beim Laden neu berechnet.</div>
+<p class="mr-storage-status" data-storage-status="" role="status" aria-live="polite">Speicherung ist aus. Ohne Sicherung gehen die Eingaben beim Neuladen verloren.</p>
+<div class="mr-storage-actions">
+<button type="button" data-export-backup="" disabled="">Sicherung exportieren</button>
+<button type="button" data-import-backup="" disabled="">Sicherung importieren</button>
+<button type="button" data-delete-saved="" disabled="">Lokale Speicherung löschen</button>
+<button type="button" data-undo-import="" hidden="">Letzten Import rückgängig machen</button>
+<button type="button" data-recover-saved="" hidden="">Nicht geladenen Speicherstand herunterladen</button>
+</div>
+<input type="file" accept=".json,application/json" data-import-file="" hidden="">
+<div class="mr-hint">Die Sicherungsdatei enthält dieselben persönlichen Eingaben. Für ein anderes Gerät exportieren und dort importieren. Lokales Löschen entfernt den gespeicherten Stand; deine aktuelle Sitzung bleibt erhalten.</div>
+</div></details><p class="mr-note">mietklar. Alpha 0.7 · Bedienungs- und Tarifmodell 2026. Keine vollständige Steuer- oder Mietrechtsprüfung. Deine Angaben bleiben lokal; Speichern ist freiwillig.</p><noscript>Bitte JavaScript aktivieren, um mietklar. zu verwenden.</noscript></main><section class="mr-print-sheet" data-print-sheet="" aria-label="Ergebnisblatt"></section></div>
 
 </div>
 
 
 <template id="mr-cost-template">
-<article class="mr-cost-card" data-cost-row>
-<div class="mr-cost-title"><label class="mr-field">Kostenposition<input class="mr-cost-name" type="text" data-cost-name maxlength="100"></label><button type="button" data-remove-cost class="mr-remove">Entfernen</button></div>
+<article class="mr-cost-card" data-cost-row="">
+<div class="mr-cost-title"><label class="mr-field">Kostenposition<input class="mr-cost-name" type="text" data-cost-name="" maxlength="100"></label><button type="button" data-remove-cost="" class="mr-remove">Entfernen</button></div>
 <div class="mr-cost-controls">
-<label class="mr-field">Du bezahlst (€)<input data-cost-amount type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
-<label class="mr-field">Zeitraum<select data-cost-period><option value="month">Pro Monat</option><option value="year">Pro Jahr</option></select></label></div>
-<label class="mr-field mr-cost-payer">Was erstattet dir der Mieter?<select data-cost-payer><option value="unknown">Noch prüfen · vorerst 0 €</option><option value="tenant">Den vollen Zahlbetrag · geplant</option><option value="partial">Einen Teilbetrag · geplant</option><option value="owner">Nichts · trage ich selbst</option></select></label>
-<label class="mr-field" data-forward-wrap hidden><span data-forward-period>Erwartete Erstattung / Monat (€)</span><input data-cost-forward type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
-<div data-year-only hidden><label class="mr-field" data-payment-months-wrap>Zahlungsmonate in diesem Kalenderjahr<input data-cost-payment-months type="number" min="0" max="12" step="1" value="12" inputmode="numeric"></label></div><div class="mr-hint" data-cost-hint></div>
-<details class="mr-tax-details"><summary data-tax-summary>Steuerabzug: noch prüfen</summary>
-<div data-full-only><label class="mr-field">Welcher Abzug ist für dieses Jahr geklärt?<select data-cost-tax><option value="unknown">Noch prüfen · vorerst 0 € Abzug</option><option value="full">Voller Zahlbetrag ist geklärt</option><option value="annual">Eigener Jahresabzug ist geklärt</option><option value="none">Kein Abzug in diesem Jahr</option></select></label>
-<label class="mr-field" data-tax-annual-wrap hidden>Geklärter Steuerabzug / Jahr (€)<input data-cost-tax-annual type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
-</div><div data-year-only hidden><label class="mr-field">Steuerabzug für dieses Kalenderjahr<select data-cost-year-tax><option value="unknown">Noch prüfen · vorerst 0 €</option><option value="provided">Eigenen Jahresbetrag angeben</option><option value="none">Kein Abzug</option></select></label><label class="mr-field" data-year-tax-annual-wrap hidden>Steuerabzug im Planjahr (€)<input data-cost-year-tax-annual type="number" min="0" step="0.01" value="0" inputmode="decimal"></label><div class="mr-hint">Wird separat erfasst. Der Volljahres-Abzug wird hier nicht automatisch übernommen; auch bei Leerstand nicht pauschal nach Mietmonaten kürzen.</div></div><label class="mr-field" data-evidence-wrap>Quelle / Begründung (optional)<input data-cost-evidence type="text" maxlength="250" placeholder="z. B. Jahresaufstellung oder Steuerberatung"></label>
+<label class="mr-field">Du bezahlst (€)<input data-cost-amount="" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+<label class="mr-field">Zeitraum<select data-cost-period=""><option value="month">Pro Monat</option><option value="year">Pro Jahr</option></select></label></div>
+<label class="mr-field mr-cost-payer">Was erstattet dir der Mieter?<select data-cost-payer=""><option value="unknown">Noch prüfen · vorerst 0 €</option><option value="tenant">Den vollen Zahlbetrag · geplant</option><option value="partial">Einen Teilbetrag · geplant</option><option value="owner">Nichts · trage ich selbst</option></select></label>
+<label class="mr-field" data-forward-wrap="" hidden=""><span data-forward-period="">Erwartete Erstattung / Monat (€)</span><input data-cost-forward="" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+<div data-year-only="" hidden=""><label class="mr-field" data-payment-months-wrap="">Zahlungsmonate in diesem Kalenderjahr<input data-cost-payment-months="" type="number" min="0" max="12" step="1" value="12" inputmode="numeric"></label></div><div class="mr-hint" data-cost-hint=""></div>
+<details class="mr-tax-details"><summary data-tax-summary="">Steuerabzug: noch prüfen</summary>
+<div data-full-only=""><label class="mr-field">Welcher Abzug ist für dieses Jahr geklärt?<select data-cost-tax=""><option value="unknown">Noch prüfen · vorerst 0 € Abzug</option><option value="full">Voller Zahlbetrag ist geklärt</option><option value="annual">Eigener Jahresabzug ist geklärt</option><option value="none">Kein Abzug in diesem Jahr</option></select></label>
+<label class="mr-field" data-tax-annual-wrap="" hidden="">Geklärter Steuerabzug / Jahr (€)<input data-cost-tax-annual="" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+</div><div data-year-only="" hidden=""><label class="mr-field">Steuerabzug für dieses Kalenderjahr<select data-cost-year-tax=""><option value="unknown">Noch prüfen · vorerst 0 €</option><option value="provided">Eigenen Jahresbetrag angeben</option><option value="none">Kein Abzug</option></select></label><label class="mr-field" data-year-tax-annual-wrap="" hidden="">Steuerabzug im Planjahr (€)<input data-cost-year-tax-annual="" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label><div class="mr-hint">Wird separat erfasst. Der Volljahres-Abzug wird hier nicht automatisch übernommen; auch bei Leerstand nicht pauschal nach Mietmonaten kürzen.</div></div><label class="mr-field" data-evidence-wrap="">Quelle / Begründung (optional)<input data-cost-evidence="" type="text" maxlength="250" placeholder="z. B. Jahresaufstellung oder Steuerberatung"></label>
 <div class="mr-hint">Die Auswahl ist deine Angabe, keine Prüfung durch die App. Steuerabzug und Mietererstattung sind unabhängig. Ein Akonto ersetzt keine steuerliche Jahresermittlung. Gebäude-AfA folgt im nächsten Schritt.</div>
 </details>
-<div class="mr-hint" data-cost-equivalent></div>
+<div class="mr-hint" data-cost-equivalent=""></div>
 </article>
 </template>
 
 <script type="module" src="./src/ui.js"></script>
+
+
+
+
+
 </body></html>
-
-
-
-

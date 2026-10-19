@@ -19,6 +19,7 @@ function state() {
       afaLandPriceBand: 'unknown', afaUnits: 'unknown', afaLandException: 'unknown',
       afaFirstMonths: 'unknown', afaEvidence: '', vat: 'exempt', item: 'Kühlschrank',
       purchase: '500', treatment: 'instant', purchaseAfa: '100',
+      expectedVacantMonths: '0', area: '', referenceRent: '',
       periodMode: 'full', startMonth: '1', vacantMonths: '0', yearAfaMode: 'unknown', yearAfa: '0', yearAfaMonths: 'unknown'
     },
     costs: [{
@@ -75,11 +76,11 @@ test('unknown or missing envelope, state, field and cost keys cannot enter a sna
 });
 
 test('numeric text is bounded and finite, while text fields are data rather than markup', () => {
-  for (const value of ['NaN', 'Infinity', '1,25', '0x10', ' ', '1e999', '1000000000001', '1'.repeat(65), 20, null, {}]) {
+  for (const value of ['NaN', 'Infinity', '0x10', ' ', '1e999', '1000000000001', '1'.repeat(65), 20, null, {}]) {
     const input = state(); input.fields.target = value;
     assert.throws(() => validateState(input));
   }
-  for (const value of ['0', '0.01', '.5', '-1', '1e3', '1000000000000']) {
+  for (const value of ['0', '0.01', '1,25', '1.234,56', '.5', '-1', '1e3', '1000000000000']) {
     const input = state(); input.fields.target = value;
     assert.equal(validateState(input).fields.target, value);
   }
@@ -166,7 +167,7 @@ test('storage security, quota and deletion errors propagate without claiming suc
 
 function legacySnapshot() {
   const input = state();
-  for (const key of ['periodMode', 'startMonth', 'vacantMonths', 'yearAfaMode', 'yearAfa', 'yearAfaMonths']) delete input.fields[key];
+  for (const key of ['periodMode', 'startMonth', 'vacantMonths', 'yearAfaMode', 'yearAfa', 'yearAfaMonths', 'expectedVacantMonths', 'area', 'referenceRent']) delete input.fields[key];
   input.costs.forEach(row => { delete row.paymentMonths; delete row.yearTaxStatus; delete row.yearTaxAnnual; });
   return { app: 'mietklar', schemaVersion: 1, tariffYear: 2026, savedAt: date, state: input };
 }
@@ -176,7 +177,7 @@ test('Alpha 0.5 backups migrate every existing value while defaulting to identic
   old.state.costs[0].taxStatus = 'full'; old.state.calculationMode = 'rent'; old.state.step = 3;
   const original = raw(old), storage = memory(); storage.values.set(STORAGE_KEY, original);
   const migrated = readSavedSnapshot(storage, 2026);
-  assert.equal(migrated.schemaVersion, 2); assert.equal(migrated.savedAt, date);
+  assert.equal(migrated.schemaVersion, 3); assert.equal(migrated.savedAt, date);
   for (const [key, value] of Object.entries(old.state.fields)) assert.equal(migrated.state.fields[key], value);
   for (const [key, value] of Object.entries(old.state.costs[0])) assert.equal(migrated.state.costs[0][key], value);
   assert.equal(migrated.state.calculationMode, 'rent'); assert.equal(migrated.state.step, 3);
