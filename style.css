@@ -63,3 +63,23 @@ html{color-scheme:only light}body{margin:0;padding:20px 12px;background:#fff6f0;
 #mietklar-app button.mr-wordmark{border:0;background:transparent;padding:8px 0;min-width:44px;min-height:44px;font-size:17px;font-weight:600;letter-spacing:-.5px;cursor:pointer}
 #mietklar-app button.mr-wordmark:hover{color:var(--mr-brand)}
 #mietklar-app button.mr-wordmark:focus-visible{outline:2px solid var(--mr-brand);outline-offset:4px}
+
+/* Cost cards keep the three independent decisions close together. */
+#mietklar-app .mr-cost-card{margin-top:14px;padding:16px;background:var(--mr-panel);border:1px solid var(--mr-line);border-radius:14px;min-width:0}
+#mietklar-app .mr-cost-title{display:flex;align-items:flex-end;gap:10px;margin-bottom:14px}
+#mietklar-app .mr-cost-title .mr-field{flex:1;min-width:0}
+#mietklar-app input.mr-cost-name{font-weight:600;font-size:15px}
+#mietklar-app .mr-cost-controls{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+#mietklar-app .mr-cost-payer{margin-top:14px}
+#mietklar-app .mr-cost-card [data-forward-wrap],#mietklar-app .mr-cost-card [data-tax-annual-wrap],#mietklar-app .mr-cost-card [data-evidence-wrap]{margin-top:12px}
+#mietklar-app .mr-tax-details{margin-top:14px;padding-top:12px}
+#mietklar-app .mr-tax-details summary{color:var(--mr-brand);font-weight:500;min-height:44px}
+#mietklar-app .mr-remove{padding:7px;font-size:12px;flex-shrink:0}
+#mietklar-app .mr-assumptions{padding-left:20px;font-size:13px;color:var(--mr-muted)}
+#mietklar-app .mr-assumptions li{margin:8px 0;overflow-wrap:anywhere}
+#mietklar-app .mr-field select{max-width:100%;font-size:16px}
+#mietklar-app .mr-hint a{color:var(--mr-brand)}
+#mietklar-app input:focus-visible,#mietklar-app select:focus-visible,#mietklar-app button:focus-visible,#mietklar-app summary:focus-visible{outline:2px solid var(--mr-brand);outline-offset:2px}
+#mietklar-app select:disabled{opacity:1;cursor:default}
+@media(max-width:440px){#mietklar-app .mr-fields{grid-template-columns:1fr}#mietklar-app .mr-cost-card{padding:12px}#mietklar-app .mr-main{padding:18px}}
+

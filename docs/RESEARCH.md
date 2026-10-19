@@ -15,6 +15,15 @@ Stand: 19.10.2026. Quellen sind Ausgangspunkte; ein Kontoname und ein Baujahr er
 
 Nach [BMF: AfA bei Vermietung](https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/absetzung-fuer-abnutzung-bei-vuv.html), geprüft am 19.10.2026: Ein bisheriger Vermietungs-AfA-Wert muss bei erstmaliger Vermietung nicht vorhanden sein. Bei seit 2013 erstmaliger Vermietung sind fiktive Anschaffungskosten nur im entsprechenden Altvermögensfall möglich; für Neuvermögen sind die tatsächlichen Anschaffungs-/Herstellungskosten maßgeblich. Grund und Boden sind nicht abschreibbar. Erwerbszeitpunkt/-art, anrechenbare Nebenkosten und Vermietungsbeginn prüfen; keinen heutigen Marktwert pauschal ansetzen. Grundsätzlich 1,5 % Jahres-AfA, Halb-/Ganzjahres-AfA und Sonderfälle getrennt behandeln. Der vollständige Assistent ist noch nicht implementiert.
 
+## Kostenmodell seit Alpha 0.2
+
+Mietererstattung und Abzug unabhängig erfassen. Betriebskosten ohne entsprechende Werbungskosten sind als Einnahmen zu berücksichtigen; nicht ungeprüft als durchlaufende Posten neutralisieren. Quellen, geprüft am 19.10.2026:
+
+- [BMF EStR, Einnahmen/Werbungskosten](https://findok.bmf.gv.at/findok/volltext?segmentId=54c121ef-a7f2-464c-bf00-a452b801c149): Eine Durchlaufbehandlung kommt unter Bedingungen für entsprechende mietengeschützte Objekte in Betracht. Stehen den BK keine entsprechenden Werbungskosten gegenüber, als Einnahme erfassen.
+- [BFG: Nichtabzugsfähige Werbungskosten und Vorsteuern bei Vermietung](https://findok.bmf.gv.at/findok/volltext?dokumentId=94116553-73be-4477-80b9-1cca1670dfe5): bestätigt die notwendige Trennung von Betriebskosteneinnahmen und tatsächlich abzugsfähigem Aufwand.
+
+Implementierung: Jahreserlös = Hauptmiete × 12 + erwarteter Kostenersatz; Steuerbasis = Jahreserlös minus angegebener Jahresabzug minus Gebäude-AfA. Cash = Jahreserlös minus Zahlungen/Puffer minus Zusatzsteuer. Unbekannt ist keine steuerliche Freigabe: 0 € Erstattung und 0 € Abzug als getrennte vorläufige Modellannahmen. Akonti sind Zahlungswerte und ersetzen keine steuerliche Jahresermittlung. Eigenständige Jahresabzüge können von Zahlungen abweichen; die App prüft deren rechtliche Zuordnung und Höhe nicht. Keine pauschale Behauptung einer abschließend richtigen Steuerhöhe.
+
 ## Mietrecht vor Kostenfreigabe
 
 - [Sozialministerium: MRG-Anwendungsbereich](https://www.konsumentenfragen.at/konsumentenfragen/Bauen__Wohnen_und_Versorgungsleistungen/Wohnen/Rund_um_die_Miete/Anwendungsbereich_des_Mietrechtsgesetzes.html): Neubau-Eigentumswohnungen mit Baubewilligung nach 8.5.1945 grundsätzlich Teilanwendung; Ausnahme-/Förder-/WGG-Konstellationen nicht unterschlagen.
@@ -37,7 +46,7 @@ Nach [BMF: AfA bei Vermietung](https://www.bmf.gv.at/themen/steuern/immobilien-g
 | Garage | Mitvermietung, Anlagenzuordnung, Vertrag und Schlüssel prüfen |
 | Reparaturrücklage, Reparatur/Sanierung | Keine zusätzlich verrechenbaren BK nach dem MRG-Katalog |
 
-Die Alpha hat noch keinen solchen Regelassistenten. Ein Dropdown mit „an Mieter“ ist eine Eingabeannahme, keine Rechtsfreigabe. Ein zukünftiger Vertrag kann den MRG-Katalog freiwillig heranziehen; das muss aus dem Vertrag erkennbar sein. Rücklage im Ausgangsmodell beim Eigentümer belassen.
+Die Alpha hat bislang nur allgemeine, von Mietrechtsszenario und Vertragsstatus abhängige Hinweise; keinen detaillierten Freigabeassistenten. Ein Dropdown mit „an Mieter“ ist eine Eingabeannahme, keine Rechtsfreigabe. Ein zukünftiger Vertrag kann den MRG-Katalog freiwillig heranziehen; das muss aus dem Vertrag erkennbar sein. Rücklage im Ausgangsmodell beim Eigentümer belassen.
 
 ## Umsatzsteuer – Kleinunternehmerbefreiung als Planungsannahme
 
@@ -54,3 +63,4 @@ Gewünschtes Entwicklungsszenario seit 19.10.2026: vorerst Kleinunternehmerbefre
 ## Private Quellen
 
 Es wurden eine aktuelle Eigentümer-Vorschreibung, eine Vorjahresabrechnung, ein Grundbuchauszug und ein Kaufvertrag als Struktur-/Szenariobeispiele gelesen. Keine Originale, OCR-Texte, persönlichen Identifikatoren oder tatsächlichen Einzelbeträge sind Bestandteil dieses Repos. Bei einer späteren individuellen Berechnung gezielt privat auf aktuelle Dokumente zugreifen; nicht aus fiktiven Fixtures auf reale Verhältnisse schließen.
+

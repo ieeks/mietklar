@@ -9,16 +9,17 @@
 - [x] Tarifmodell 2026, Zielmiete und Anschaffungsvergleich.
 - [x] Rechenkern, Tests und Dokumentation als GitHub-Checkpoint.
 
-## Als Nächstes: Alpha 0.2 – Kosten fachlich sauber machen
+## Alpha 0.2 – Kosten trennen, fachliche Hinweise weiter ausbauen
 
-- [x] Bedienung auf iPhone/Safari ausprobiert; vom Nutzer am 19.10.2026 als erledigt bestätigt.
-- [ ] Pro Kostenposition getrennt: Zahlbetrag, weiterverrechneter Betrag, steuerlicher Jahresabzug, Bestätigungsstatus/Quelle.
-- [ ] Eigene Positionen hinzufügen/entfernen; Zeitraum Monat/Jahr pro Position.
-- [ ] „Noch prüfen“ nicht mit „steuerlich absetzbar“ verknüpfen; offene Annahmen im Ergebnis zusammenfassen.
-- [ ] Mietrechtsszenario, Vertragsstatus und bedingte Kostenhinweise ergänzen.
-- [ ] Allgemeine BK, Heizung/Warmwasser und Garage sinnvoll getrennt abbilden.
+- [x] Bedienung der Alpha 0.1 auf iPhone/Safari ausprobiert; vom Nutzer am 19.10.2026 als erledigt bestätigt.
+- [x] Pro Kostenposition getrennt: Zahlung, erwartete Erstattung, angegebener steuerlicher Jahresabzug, Prüfstatus und optionale Quelle.
+- [x] Eigene Positionen hinzufügen/entfernen; Zeitraum Monat/Jahr pro Position.
+- [x] „Noch prüfen“ unabhängig für Erstattung und Steuerabzug; 0 € bis zur Klärung, offene Positionen im Ergebnis.
+- [x] Mietrechtsszenario, Vertragsstatus und allgemeine bedingte Hinweise ergänzen; keine automatische Freigabe.
+- [ ] Detaillierte Kostenarten-/Vertragshinweise ausbauen, insbesondere Garage; allgemeine BK und Heizung/Warmwasser sind bereits getrennte Karten.
+- [ ] Neue Kostenkarten auf iPhone/Safari prüfen; frühere Alpha-0.1-Abnahme bleibt dokumentiert.
 
-**Fertig, wenn:** bekannte, ungeklärte und nicht abziehbare Kosten in unabhängigen Fällen korrekt gerechnet und verständlich angezeigt werden. Keine automatische Rechtsfreigabe.
+**Stand:** unabhängige Rechenfälle für bekannte/ungeklärte/nicht abgezogene Kosten geprüft; fachliche Detailhinweise und erneute mobile Abnahme bleiben offen. Keine automatische Rechtsfreigabe.
 
 ## Danach: Alpha 0.3 – Jahres- und Steuerrechnung ausbauen
 
@@ -51,3 +52,4 @@
 ## Später, bei Bedarf
 
 PDF-/OCR-Import, mehrere Eigentümer/Objekte, Rendite, Kredit oder Airbnb. Diese Erweiterungen sind nicht Voraussetzung für die erste kleine App.
+

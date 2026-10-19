@@ -3,10 +3,10 @@
 
 
 <div class="mr-app">
-<header class="mr-top"><button type="button" class="mr-wordmark" data-home aria-label="mietklar. – Zur Startseite" title="Zur Startseite">mietklar<span style="color:var(--mr-brand)">.</span></button><span class="mr-year">Alpha 0.1 · 2026</span></header><div class="mr-help alpha"><strong>Alpha · fiktive Beispieldaten.</strong> Bedienungs- und Tarifmodell für 12 vermietete Monate ohne USt. Laufende Kosten gelten vorläufig als sofort abzugsfähig. Keine vollständige Steuer- oder Mietrechtsprüfung.</div>
-<div class="mr-progress"><span data-progress-text>Schritt 2 von 5 · Wohnungskosten</span><div class="mr-dots" aria-hidden="true"><span class="mr-dot" data-on="true"></span><span class="mr-dot" data-on="true"></span><span class="mr-dot"></span><span class="mr-dot"></span><span class="mr-dot"></span></div></div>
+<header class="mr-top"><button type="button" class="mr-wordmark" data-home aria-label="mietklar. – Zur Startseite" title="Zur Startseite">mietklar<span style="color:var(--mr-brand)">.</span></button><span class="mr-year">Alpha 0.2 · 2026</span></header><div class="mr-help alpha"><strong>Alpha · fiktive Beispieldaten.</strong> Bedienungs- und Tarifmodell für 12 vermietete Monate ohne USt. Ungeklärte Steuerabzüge werden mit 0 € angesetzt. Keine vollständige Steuer- oder Mietrechtsprüfung.</div>
+<div class="mr-progress"><span data-progress-text>Schritt 1 von 5 · Ziel &amp; Einkommen</span><div class="mr-dots" aria-hidden="true"><span class="mr-dot" data-on="true"></span><span class="mr-dot"></span><span class="mr-dot"></span><span class="mr-dot"></span><span class="mr-dot"></span></div></div>
 <main class="mr-main">
-<section class="mr-step-panel" data-panel="0" hidden>
+<section class="mr-step-panel" data-panel="0">
 <div class="mr-eyebrow">Ziel &amp; Einkommen</div><h2>Was soll dir bleiben?</h2><p>Dein monatlicher Überschuss nach Kosten und zusätzlicher Einkommensteuer.</p>
 <div class="mr-choice"><label for="mk-target">Wunschüberschuss / Monat (€)</label><input id="mk-target" data-key="target" type="number" min="0" value="1000" inputmode="decimal"></div>
 <label class="mr-field" style="margin-top:20px">Steuerpflichtige Bezüge laut Lohnzettel / Jahr (€)<input data-key="salary" type="number" min="0" value="45132" inputmode="decimal"></label>
@@ -14,17 +14,42 @@
 <div class="mr-fields"><label class="mr-field">Werbungskosten / Jahr (€)<input data-key="salaryDeduction" type="number" min="0" value="132" inputmode="decimal"></label></div><div class="mr-hint">Beispiel: 132 € Pauschale. Weitere persönliche Abzüge werden in dieser Vorschau nicht abgebildet.</div>
 <div class="mr-help">Eigentumswohnung in Österreich · kein Kredit · Berechnung für einen Eigentümer mit 100 % Anteil.</div>
 </section>
-<section class="mr-step-panel" data-panel="1">
-<div class="mr-eyebrow">Wohnungskosten</div><h2>Was zahlst du.<br>Was trägt dein Mieter?</h2><p>Eine fiktive Vorschreibung ist eingetragen. Prüfe, welche Beträge dein Mieter übernehmen soll.</p>
-<div class="mr-section"><h3>Deine monatliche Vorschreibung</h3><div class="mr-hint">Fiktives Beispiel 2026 · Bruttobeträge · ohne Vorsteuerabzug gerechnet.</div><div class="mr-cost-line" data-row><div class="mr-cost-head">Betriebskostenakonto</div><div class="mr-cost-controls"><label class="mr-field">€/Monat<input data-amount type="number" min="0" value="170" step="0.01" inputmode="decimal"></label><label class="mr-field">Was wird weiterverrechnet?<select data-payer><option value="unknown" selected>Noch prüfen</option><option value="tenant">Voller Betrag an Mieter</option><option value="partial">Teilbetrag an Mieter</option><option value="owner">Nichts · trage ich selbst</option></select></label></div><label class="mr-field" data-partial-wrap hidden style="margin-top:10px">Davon an Mieter / Monat (€)<input data-forward type="number" min="0" value="0" step="0.01" inputmode="decimal"></label><div class="mr-hint">Enthält mehrere Einzelpositionen. Nicht pauschal als vollständig weiterverrechenbar einstufen.</div></div><div class="mr-cost-line" data-row><div class="mr-cost-head">Wasser / Abwasser</div><div class="mr-cost-controls"><label class="mr-field">€/Monat<input data-amount type="number" min="0" value="30" step="0.01" inputmode="decimal"></label><label class="mr-field">Was wird weiterverrechnet?<select data-payer><option value="unknown" selected>Noch prüfen</option><option value="tenant">Voller Betrag an Mieter</option><option value="partial">Teilbetrag an Mieter</option><option value="owner">Nichts · trage ich selbst</option></select></label></div><label class="mr-field" data-partial-wrap hidden style="margin-top:10px">Davon an Mieter / Monat (€)<input data-forward type="number" min="0" value="0" step="0.01" inputmode="decimal"></label><div class="mr-hint">Weiterverrechnung und Abrechnung anhand des Mietvertrags und anwendbarer Regeln prüfen.</div></div><div class="mr-cost-line" data-row><div class="mr-cost-head">Heizkosten</div><div class="mr-cost-controls"><label class="mr-field">€/Monat<input data-amount type="number" min="0" value="50" step="0.01" inputmode="decimal"></label><label class="mr-field">Was wird weiterverrechnet?<select data-payer><option value="unknown" selected>Noch prüfen</option><option value="tenant">Voller Betrag an Mieter</option><option value="partial">Teilbetrag an Mieter</option><option value="owner">Nichts · trage ich selbst</option></select></label></div><label class="mr-field" data-partial-wrap hidden style="margin-top:10px">Davon an Mieter / Monat (€)<input data-forward type="number" min="0" value="0" step="0.01" inputmode="decimal"></label><div class="mr-hint">Separat von den allgemeinen Betriebskosten erfassen.</div></div><div class="mr-cost-line" data-row><div class="mr-cost-head">Warmwasser</div><div class="mr-cost-controls"><label class="mr-field">€/Monat<input data-amount type="number" min="0" value="10" step="0.01" inputmode="decimal"></label><label class="mr-field">Was wird weiterverrechnet?<select data-payer><option value="unknown" selected>Noch prüfen</option><option value="tenant">Voller Betrag an Mieter</option><option value="partial">Teilbetrag an Mieter</option><option value="owner">Nichts · trage ich selbst</option></select></label></div><label class="mr-field" data-partial-wrap hidden style="margin-top:10px">Davon an Mieter / Monat (€)<input data-forward type="number" min="0" value="0" step="0.01" inputmode="decimal"></label><div class="mr-hint">Eigener Vorschreibungs- und Abrechnungsposten.</div></div><div class="mr-cost-line"><div class="mr-cost-head">I-Fonds / WEG-Rücklage</div><div class="mr-cost-controls"><label class="mr-field">€/Monat<input data-key="reserve" type="number" min="0" value="75" step="0.01" inputmode="decimal"></label><div class="mr-hint">Eigentümer-Rücklage. In dieser Vorschau keine zusätzliche Weiterverrechnung und kein Steuerabzug für die bloße Einzahlung.</div></div></div>
-<div class="mr-row"><span>Gesamt an Hausverwaltung / Monat</span><strong data-out="prescription"></strong></div>
-<details><summary class="">Warum muss ich die Weiterverrechnung prüfen?</summary><div class="mr-help">Die Hausverwaltung verrechnet dir Eigentümerkosten. Was dein Mieter zusätzlich übernimmt, hängt vom Mietrecht, vom Vertrag und von den einzelnen Kosten ab. Ein Betriebskostenakonto allein zeigt diese Aufteilung noch nicht. Ungeklärte Beträge werden vorläufig von dir getragen.</div></details></div>
+
+<section class="mr-step-panel" data-panel="1" hidden>
+<div class="mr-eyebrow">Wohnungskosten</div><h2>Was zahlst du.<br>Was trägt dein Mieter?</h2>
+<p>Erfasse deine Zahlungen. Mietererstattung und Steuerabzug entscheidest du für jede Position getrennt.</p>
+<details class="mr-context"><summary>Mietrecht &amp; Vertrag einordnen</summary>
+<div class="mr-fields">
+<label class="mr-field">Mietrechtliche Einordnung<select data-key="rentalLaw"><option value="unknown">Noch zu klären</option><option value="partial">MRG-Teilanwendung · eigene Einordnung</option><option value="full">MRG-Vollanwendung · eigene Einordnung</option><option value="other">Andere / Ausnahme</option></select></label>
+<label class="mr-field">Mietvertrag<select data-key="contract"><option value="none">Noch kein Mietvertrag</option><option value="existing">Vertrag vorhanden</option><option value="unknown">Noch zu prüfen</option></select></label>
+</div><div class="mr-help" data-contract-hint></div>
+<div class="mr-hint">Diese Angaben sind deine Einordnung. Die App prüft weder Vertrag noch rechtliche Zulässigkeit.
+<a href="https://www.konsumentenfragen.at/konsumentenfragen/Bauen__Wohnen_und_Versorgungsleistungen/Wohnen/Rund_um_die_Miete/Betriebskosten.html" target="_blank" rel="noopener noreferrer">Grundlagen zu Betriebskosten</a> · Stand 19.10.2026</div>
+</details>
+<div class="mr-section"><h3>Deine Vorschreibung</h3>
+<div class="mr-hint">Fiktive Beispiele · Bruttobeträge ohne Vorsteuerabzug. Bereits enthaltene Kosten nicht nochmals eingeben.</div>
+<div data-cost-list="house"></div>
+<div class="mr-row"><span>Vorschreibung / Monat im Durchschnitt</span><strong data-out="prescription"></strong></div></div>
 <details><summary class="">Jahresabrechnung 2025 ansehen</summary><div class="mr-help">Fiktive historische Beispielabrechnung. Diese Werte werden <strong>nicht zusätzlich</strong> zu den laufenden Akontozahlungen in die Mietkalkulation eingerechnet.</div><div class="mr-row"><span>Betriebskosten</span><strong>400,00 € Guthaben</strong></div><div class="mr-row"><span>Wasser / Abwasser</span><strong>30,00 € Guthaben</strong></div><div class="mr-row"><span>Warmwasser</span><strong>100,00 € Nachzahlung</strong></div><div class="mr-row"><span>Heizung</span><strong>80,00 € Nachzahlung</strong></div><div class="mr-row"><span>Sonstige Direktverrechnung</span><strong>15,00 € Nachzahlung</strong></div><div class="mr-row"><span>Garagenbetriebskosten</span><strong>70,00 € Nachzahlung</strong></div><div class="mr-divider"></div><div class="mr-row"><span>Gesamtabrechnung</span><strong>165,00 € Guthaben</strong></div><div class="mr-hint">Beispiel: Guthaben im Folgejahr verrechnet. Abrechnungsjahr und Zahlungsjahr bleiben getrennt.</div>
 <details><summary class="">Welche Einzelpositionen stecken im BK-Akonto?</summary><div class="mr-help">Typische Jahresabrechnungen enthalten unter anderem Allgemeinstrom, Müllabfuhr, Grundbesitzabgaben, Versicherungen, Bewachung, Schädlingsbekämpfung, Reinigung, Winterdienst, Wartung und Verwaltungshonorar. Die Kontobezeichnung bestätigt die rechtliche Weiterverrechenbarkeit noch nicht.</div></details>
 <details><summary class="">Was wurde aus dem I-Fonds bezahlt?</summary><div class="mr-help">Dieses fiktive Beispiel zeigt 450,00 € anteilige Instandhaltungen. Das ist von deiner monatlichen Rücklageneinzahlung zu trennen. Ob und wann daraus ein steuerlicher Abzug entsteht, hängt von der konkreten Maßnahme ab. In dieser Vorschau wird dafür noch kein zusätzlicher Abzug angesetzt.</div></details></details>
-<details><summary class="">Eigene laufende Kosten</summary><div class="mr-fields"><label class="mr-field">Eigener Verwaltungskostenanteil / Monat (€)<input data-key="admin" type="number" min="0" value="0" inputmode="decimal"></label><label class="mr-field">Reparaturen / Jahr (€)<input data-key="repair" type="number" min="0" value="0" inputmode="decimal"></label><label class="mr-field">Steuerberatung / Jahr (€)<input data-key="adviser" type="number" min="0" value="0" inputmode="decimal"></label></div><div class="mr-hint">Im Beispiel als abzugsfähige Ausgaben des Jahres angenommen. Bereits in der Vorschreibung enthaltene Beträge nicht doppelt erfassen. Ein Reparaturbudget wirkt steuerlich erst bei tatsächlich abzugsfähigem Aufwand.</div></details>
-<details><summary class="">Zusätzlicher Sicherheitspuffer</summary><div class="mr-fields"><label class="mr-field">Persönlicher Puffer / Monat (€)<input data-key="buffer" type="number" min="0" value="0" inputmode="decimal"></label></div><div class="mr-hint">Weniger frei verfügbares Geld. Die Einzahlung allein wird hier nicht als steuerlicher Abzug angesetzt.</div></details>
-<div class="mr-summary" aria-live="polite"><div class="mr-row"><span>Weiterverrechnet / Monat</span><strong data-out="tenant"></strong></div><div class="mr-row"><span>Bei dir verbleibend / Monat</span><strong data-out="ownCosts"></strong></div><div class="mr-hint" data-open-cost></div></div>
+
+<details><summary>Weitere eigene Kosten &amp; Garage</summary>
+<div class="mr-help">Hier passen etwa eigene Verwaltung, tatsächliche Reparaturzahlungen, Steuerberatung oder Garagenkosten hinein. Prüfe jeweils Vermietungsbezug und Jahresabzug. Ein bloßes Reparaturbudget gehört zum Puffer.</div>
+<div data-cost-list="own"></div>
+</details>
+<div class="mr-section"><h3>Fehlt eine Position?</h3>
+<button type="button" data-add-cost>+ Kostenposition hinzufügen</button>
+<div data-cost-list="custom"></div></div>
+<details><summary>Zusätzlicher Sicherheitspuffer</summary>
+<label class="mr-field">Persönlicher Puffer / Monat (€)<input data-key="buffer" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+<div class="mr-hint">Dieser Betrag bleibt für deine Planung zurückgelegt. Die Rücklage allein ist kein Steuerabzug.</div></details>
+<div class="mr-summary" aria-live="polite">
+<div class="mr-row"><span>Deine Zahlungen inkl. Puffer / Monat</span><strong data-out="payments"></strong></div>
+<div class="mr-row"><span>Erwartete Mietererstattung / Monat</span><strong data-out="tenant"></strong></div>
+<div class="mr-row"><span>Bei dir verbleibend / Monat</span><strong data-out="ownCosts"></strong></div>
+<div class="mr-divider"></div><div class="mr-row"><span>Angesetzter Steuerabzug / Jahr, ohne Gebäude-AfA</span><strong data-out="taxCosts"></strong></div>
+<div class="mr-hint" data-open-cost></div></div>
 </section>
 <section class="mr-step-panel" data-panel="2" hidden>
 <div class="mr-eyebrow">AfA &amp; Steuerannahmen</div><h2>Abschreibung verstehen.</h2><p>Die AfA senkt den steuerpflichtigen Überschuss. Sie ist keine laufende Überweisung.</p>
@@ -37,9 +62,9 @@
 <section class="mr-step-panel" data-panel="3" hidden>
 <div class="mr-eyebrow">Dein Ergebnis</div><h2>Diese Miete brauchst du.</h2>
 <div class="mr-help" data-caveat></div>
-<div data-result-content><div class="mr-result" aria-live="polite"><div class="mr-result-label">Hauptmiete ohne Betriebskosten</div><div class="mr-amount"><span data-out="rent"></span><small> / Monat</small></div><div class="mr-row"><span>Weiterverrechnete BK</span><strong data-out="tenant"></strong></div><div class="mr-row"><span>Gesamtzahlung des Mieters</span><strong data-out="total"></strong></div><div class="mr-good"><span>Für dich frei verfügbar</span><strong data-out="cash"></strong></div></div>
-<details open><summary class="">So setzt es sich zusammen / Monat</summary><div class="mr-row"><span>Gesamtzahlung des Mieters</span><strong data-out="total"></strong></div><div class="mr-row"><span>Weitergeleitete BK</span><strong data-out="tenant"></strong></div><div class="mr-row"><span>Bei dir verbleibende Kosten inkl. Rücklage &amp; Puffer</span><strong data-out="ownCosts"></strong></div><div class="mr-row"><span>Zusätzliche Steuerrücklage</span><strong data-out="tax"></strong></div><div class="mr-divider"></div><div class="mr-row"><span>Steuerlich wirksame AfA / Jahr</span><strong data-out="annualAfa"></strong></div><div class="mr-hint">Monatlicher Jahresdurchschnitt. Die AfA ist in der Steuerberechnung enthalten und wird nicht nochmals als Zahlung abgezogen.</div></details>
-<details><summary class="">Meine Steuerstufen verstehen</summary><div class="mr-help" data-tax-explain></div></details></div>
+<div data-result-content><div class="mr-result" aria-live="polite"><div class="mr-result-label">Hauptmiete ohne Kostenersatz</div><div class="mr-amount"><span data-out="rent"></span><small> / Monat</small></div><div class="mr-row"><span>Erwarteter Kostenersatz</span><strong data-out="tenant"></strong></div><div class="mr-row"><span>Gesamtzahlung des Mieters</span><strong data-out="total"></strong></div><div class="mr-good"><span>Für dich frei verfügbar</span><strong data-out="cash"></strong></div></div>
+<details open><summary class="">So setzt es sich zusammen / Monat</summary><div class="mr-row"><span>Gesamtzahlung des Mieters</span><strong data-out="total"></strong></div><div class="mr-row"><span>Deine Zahlungen inkl. Rücklage &amp; Puffer</span><strong data-out="payments"></strong></div><div class="mr-row"><span>Zusätzliche Steuerrücklage</span><strong data-out="tax"></strong></div><div class="mr-divider"></div><div class="mr-row"><span>Angesetzter Kostenabzug / Jahr</span><strong data-out="taxCosts"></strong></div><div class="mr-row"><span>Steuerlich wirksame AfA / Jahr</span><strong data-out="annualAfa"></strong></div><div class="mr-hint">Monatlicher Jahresdurchschnitt. Die AfA ist in der Steuerberechnung enthalten und wird nicht nochmals als Zahlung abgezogen.</div></details>
+<details data-assumptions-wrap open><summary>Noch zu prüfen (<span data-assumption-count>0</span>)</summary><ul class="mr-assumptions" data-assumptions></ul></details><details><summary class="">Meine Steuerstufen verstehen</summary><div class="mr-help" data-tax-explain></div></details></div>
 </section>
 <section class="mr-step-panel" data-panel="4" hidden>
 <div class="mr-eyebrow">Anschaffung vergleichen</div><h2>Was kostet es dich<br>nach Steuern?</h2><p>Vergleiche eine ohnehin geplante Anschaffung für die vermietete Wohnung.</p>
@@ -47,14 +72,35 @@
 <div class="mr-fields"><label class="mr-field">Kaufpreis (€)<input data-key="purchase" type="number" min="0" value="500" inputmode="decimal"></label><label class="mr-field">Steuerliche Behandlung<select data-key="treatment"><option value="instant">Sofortabzug · Annahme</option><option value="afa">Abschreibung</option></select></label></div>
 <label class="mr-field" data-purchase-afa hidden>Bestätigter AfA-Betrag im Kaufjahr (€)<input data-key="purchaseAfa" type="number" min="0" value="100" inputmode="decimal"></label>
 <div class="mr-help">Beispiel: vollständig für die vermietete Wohnung, ohne Vorsteuerabzug. Sofortabzug und Jahres-AfA müssen im Einzelfall passen.</div>
-<div class="mr-result" data-investment-result aria-live="polite"><div class="mr-result-label">Effektive Belastung im Kaufjahr</div><div class="mr-amount"><span data-out="burden"></span></div><div class="mr-row"><span>Du bezahlst</span><strong data-out="purchase"></strong></div><div class="mr-row"><span>Geschätzte Einkommensteuerersparnis</span><strong data-out="saving"></strong></div><div class="mr-divider"></div><div class="mr-row"><span>Frei verfügbar im Kaufjahr / Monat</span><strong data-out="afterPurchase"></strong></div></div><div class="mr-help" data-investment-note></div><div class="mr-hint">Die Hauptmiete bleibt beim Vergleich unverändert. Die ausgewiesene Steuerersparnis ist kein sofortiger Rabatt beim Kauf.</div>
+<div class="mr-result" data-investment-result aria-live="polite"><div class="mr-result-label">Effektive Belastung im Kaufjahr</div><div class="mr-amount"><span data-out="burden"></span></div><div class="mr-row"><span>Du bezahlst</span><strong data-out="purchase"></strong></div><div class="mr-row"><span>Geschätzte Einkommensteuerersparnis</span><strong data-out="saving"></strong></div><div class="mr-divider"></div><div class="mr-row"><span>Monatlich übrig im Anschaffungsjahr</span><strong data-out="afterPurchase"></strong></div></div><div class="mr-help" data-investment-note></div><div class="mr-hint">Die Hauptmiete bleibt beim Vergleich unverändert. Der Monatswert ist der Jahresbetrag ÷ 12. Der volle Kaufpreis wird bezahlt; eine Steuerersparnis kann erst später wirken.</div>
 </section>
 <div class="mr-error" role="alert" data-error hidden></div><noscript>Bitte JavaScript aktivieren, um die Alpha zu verwenden.</noscript>
-<nav class="mr-nav" aria-label="Rechenschritte"><button type="button" data-back class="">← Zurück</button><button type="button" disabled data-next class="mr-primary ">Weiter zur AfA →</button></nav>
-<div class="mr-note">Alpha 0.1 · Sämtliche vorausgefüllten Zahlen sind fiktive Beispiele. Keine automatische Speicherung.</div>
+<nav class="mr-nav" aria-label="Rechenschritte"><button type="button" data-back class="">← Zurück</button><button type="button" disabled data-next class="mr-primary ">Weiter zu den Kosten →</button></nav>
+<div class="mr-note">Alpha 0.2 · Sämtliche vorausgefüllten Zahlen sind fiktive Beispiele. Keine automatische Speicherung.</div>
 </main></div>
 
 </div>
 
+
+<template id="mr-cost-template">
+<article class="mr-cost-card" data-cost-row>
+<div class="mr-cost-title"><label class="mr-field">Kostenposition<input class="mr-cost-name" type="text" data-cost-name maxlength="100"></label><button type="button" data-remove-cost class="mr-remove">Entfernen</button></div>
+<div class="mr-cost-controls">
+<label class="mr-field">Du bezahlst (€)<input data-cost-amount type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+<label class="mr-field">Zeitraum<select data-cost-period><option value="month">Pro Monat</option><option value="year">Pro Jahr</option></select></label></div>
+<label class="mr-field mr-cost-payer">Was erstattet dir der Mieter?<select data-cost-payer><option value="unknown">Noch prüfen · vorerst 0 €</option><option value="tenant">Den vollen Zahlbetrag · geplant</option><option value="partial">Einen Teilbetrag · geplant</option><option value="owner">Nichts · trage ich selbst</option></select></label>
+<label class="mr-field" data-forward-wrap hidden><span data-forward-period>Erwartete Erstattung / Monat (€)</span><input data-cost-forward type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+<div class="mr-hint" data-cost-hint></div>
+<details class="mr-tax-details"><summary data-tax-summary>Steuerabzug: noch prüfen</summary>
+<label class="mr-field">Welcher Abzug ist für dieses Jahr geklärt?<select data-cost-tax><option value="unknown">Noch prüfen · vorerst 0 € Abzug</option><option value="full">Voller Zahlbetrag ist geklärt</option><option value="annual">Eigener Jahresabzug ist geklärt</option><option value="none">Kein Abzug in diesem Jahr</option></select></label>
+<label class="mr-field" data-tax-annual-wrap hidden>Geklärter Steuerabzug / Jahr (€)<input data-cost-tax-annual type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+<label class="mr-field" data-evidence-wrap>Quelle / Begründung (optional)<input data-cost-evidence type="text" maxlength="250" placeholder="z. B. Jahresaufstellung oder Steuerberatung"></label>
+<div class="mr-hint">Die Auswahl ist deine Angabe, keine Prüfung durch die App. Steuerabzug und Mietererstattung sind unabhängig. Ein Akonto ersetzt keine steuerliche Jahresermittlung. Gebäude-AfA folgt im nächsten Schritt.</div>
+</details>
+<div class="mr-hint" data-cost-equivalent></div>
+</article>
+</template>
+
 <script type="module" src="./src/ui.js"></script>
 </body></html>
+

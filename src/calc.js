@@ -39,12 +39,14 @@ export function additionalTax(base, rentalIncome, tariff) {
 }
 export function cashAtRent(monthlyRent, model, tariff) {
   nonnegative(monthlyRent, 'Miete');
-  const rentalIncome = monthlyRent * 12 - model.annualTaxCosts - model.annualAfa;
+  const reimbursements = nonnegative(model.annualReimbursements ?? 0, 'Mietererstattungen');
+  const rentalIncome = monthlyRent * 12 + reimbursements - model.annualTaxCosts - model.annualAfa;
   const annualTax = additionalTax(model.base, rentalIncome, tariff);
-  return { rentalIncome, annualTax, monthlyCash: (monthlyRent * 12 - model.annualCashCosts - annualTax) / 12 };
+  return { rentalIncome, annualTax, monthlyCash: (monthlyRent * 12 + reimbursements - model.annualCashCosts - annualTax) / 12 };
 }
 export function solveRent(model, tariff) {
   for (const key of ['base', 'annualTaxCosts', 'annualAfa', 'annualCashCosts', 'target']) nonnegative(model[key], key);
+  nonnegative(model.annualReimbursements ?? 0, 'Mietererstattungen');
   validateTariff(tariff);
   let lo = 0, hi = 1000;
   while (cashAtRent(hi, model, tariff).monthlyCash < model.target) {
@@ -69,3 +71,4 @@ export function comparePurchase({ base, rentalIncome, monthlyCash, purchase, ded
   const burden = purchase - saving;
   return { saving, burden, afterPurchase: monthlyCash - burden / 12 };
 }
+

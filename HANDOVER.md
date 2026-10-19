@@ -1,4 +1,4 @@
-# Übergabe: mietklar. Alpha 0.1
+# Übergabe: mietklar. Alpha 0.2
 
 Stand: 19.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADMAP, docs/RESEARCH lesen. Danach zuerst den aktuellen Branch/Commit prüfen; die nächste Sitzung nicht aus dem Gesprächsgedächtnis rekonstruieren.
 
@@ -17,22 +17,26 @@ Stand: 19.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADM
 
 ## Was tatsächlich implementiert ist
 
-`index.html`, `style.css`, `src/ui.js`: fünf klickbare Schritte; die App startet regulär bei Ziel/Einkommen. Einzelne Kostenpositionen, Teilweiterverrechnung, „noch prüfen“, Rücklage, eigene Kosten und persönlicher Puffer. AfA-Eingabe oder einfache Herleitung aus einer bereits bestätigten Basis. Ergebnis und Anschaffungsvergleich. Die Wortmarke im Kopf ist ein zugänglicher Home-Button: führt direkt zu Schritt 1, erhält alle Eingaben und setzt den Tastaturfokus auf die erste Überschrift.
+Statische App mit fünf Schritten, heller Darstellung und Home-Button über die Wortmarke. Alpha 0.2 ergänzt dynamische Kostenkarten mit Monats-/Jahreszahlung, voller/teilweiser/keiner/ungeklärter Erstattung, eigener Steuerentscheidung und optionaler Quelle. Eigene Positionen sind hinzufügbar und entfernbar. Die Steuerdetails sind aufklappbar. „Geklärt“ ist die Angabe des Nutzers, keine Bestätigung der App.
 
-`src/calc.js`: geprüfte 2026-Tarifberechnung, positiver Vermietungsüberschuss, vereinfachter Veranlagungsfreibetrag im Fall Arbeitnehmer + eine Vermietung, keine Verlust-Steuergutschrift. Bisektion mit abschließender Prüfung des minimalen Cent-Mietbetrags. Cash-only-Rücklagen und AfA sind getrennt.
+`src/costs.js`: reine Normalisierung je Position und Aggregation. Ungeklärte Erstattung = 0 € Einnahme, ungeklärter Steuerabzug = 0 € Abzug. Zahlung bleibt vollständig als Cash-Kosten enthalten. Bekannter Jahresabzug kann separat erfasst werden, auch wenn er von den Zahlungen abweicht. Rücklagen-/Puffereinzahlung bleibt ohne Erstattung/Abzug.
 
-`data/tarif-2026.json`: einzige Tarifquelle im Code mit Quelle und Prüfdatum. `tests/calc.test.js`: 11 Testfälle, einschließlich Grenzstufen und Vorwärts-/Rückwärtsabgleich. `.github/workflows/checks.yml`: Syntax und Rechentests bei Push/PR.
+`src/calc.js`: Jahresmodell mit getrennten `annualCashCosts`, `annualReimbursements`, `annualTaxCosts`, `annualAfa`. Mietererstattungen erhöhen Cash-Einnahmen und steuerliche Einnahmen. Keine automatische Neutralisierung gegen eine Ausgabe. 2026-Tarif, vereinfachter Veranlagungsfreibetrag für Gehalt plus eine Vermietung, keine Verlustgutschrift. Zielmiete mit minimaler Cent-Rundung.
 
-## Wichtige Alpha-Annahmen und Schulden
+`src/ui.js`: offene Positionen im Ergebnis; Mietrechtsszenario/Vertragsstatus beeinflussen erklärende Hinweise, erteilen keine Rechtsfreigabe und ändern nicht automatisch die eingegebene Erstattung. Noch kein Mietvertrag ist der Startwert, Mietrecht startet ungeklärt. Keine persönlichen Objektwerte als Defaults.
 
-1. „Noch prüfen“ lässt den gesamten Kostenbetrag beim Eigentümer, Teilweiterverrechnung nur den Rest. Das ist eine konservative **Weiterverrechnungsannahme**. Die Alpha nimmt trotzdem alle laufenden Kosten als sofort abzugsfähig an. Nicht als konservative Gesamtsteuerrechnung verkaufen. Vor Beta beide Prüfungen unabhängig modellieren.
-2. Einnahmen aus weiterverrechneten Kosten und entsprechende Ausgaben gleichen sich im 12-Monate-Modell aus; nur der selbst getragene Kostenrest bleibt in der vereinfachten Rechenformel. Bei Leerstand, abweichenden Erstattungen oder zeitlichen Differenzen muss das Jahresmodell erweitert werden.
-3. Gehalt ist KZ 245 minus im Modell eingegebener Werbungskosten. Andere persönliche Steuerfaktoren fehlen. Kein Jahresbrutto-zu-Netto-Lohnrechner.
-4. AfA-Modus „herleiten“ setzt eine bestätigte Gebäude-AfA-Basis voraus. Kein vollständiger Kaufpreis-/Grundanteils-/Erwerbsarten-Assistent.
-5. Umsatzsteuerpflicht/unbekannt blendet Ergebnisse aus. Keine gemischten USt-Sätze oder Vorsteuerberechnung implementiert. Die steuerliche Behandlung eines früheren Immobilienkaufs entscheidet nicht automatisch über den heutigen Vermietungs-USt-Status.
-6. Anschaffungsvergleich: gleicher Mietbetrag, aktuelles Jahr. Bei Sofortabzug > 1.000 € oder Jahres-AfA > Kaufpreis wird kein Vergleichsergebnis gezeigt. Das ersetzt keine Prüfung wirtschaftlicher Einheiten, Privatanteil, Inbetriebnahme und zulässigem Jahresabzug.
-7. Historische Jahresabrechnung ist aktuell **nur ein fiktives UI-Beispiel**, keine importierbare oder bearbeitbare Buchhaltung. Keine Nachzahlung/Gutschrift wird in die normale Zielmiete gerechnet.
-8. Alle numerischen Beispielwerte sind fiktiv. Die Anlage wurde aus privaten Unterlagen strukturell abgeleitet; deren Dateien/Inhalte und tatsächliche Zahlen wurden nicht veröffentlicht.
+`data/tarif-2026.json`: zentrale Tarifquelle mit Prüfdatum. 20 automatisierte Rechen-/Kostenmodelltests. Die GitHub-Actions-Prüfung führt Syntax und Tests bei Push/PR aus.
+
+## Wichtige Alpha-Annahmen und offene Punkte
+
+1. Nur 12 vermietete Monate, ohne USt, 100 % Eigentümeranteil, kein Kredit. Gehalt als KZ 245 minus eingegebene Werbungskosten; keine volle persönliche Steuerveranlagung.
+2. Zahlungs-/Erstattungsbeträge sind Planwerte, keine abgegrenzte Jahresbuchhaltung. Timing, Leerstand, Jahresausgleich und tatsächlich steuerlich zulässige Kosten werden nicht automatisch ermittelt. Ungeklärte Abzüge nicht mit einer abschließend richtigen Steuerprognose verwechseln.
+3. Jahresabzüge dürfen unabhängig von den Zahlungen eingegeben werden. Der Nutzer muss Zeitpunkt, Betrag, Vermietungsanteil und mögliche Verteilung klären. Gebäude-AfA und Anschaffungsvergleich nicht zusätzlich als Kostenposition doppelt erfassen.
+4. AfA weiterhin direkt oder aus bestätigter Gebäude-Basis/Satz. Vollständiger Assistent für erstmalige Vermietung nach Privatnutzung ist offen; kein individueller Jahres-AfA-Wert festgestellt.
+5. Kleinunternehmerbefreiung als Planungsannahme. Unbekannter/steuerpflichtiger USt-Status blendet Ergebnisse aus. Keine gemischten USt-Sätze/Vorsteuer. Umsatzgrenze unternehmerweit beim selben Unternehmer prüfen.
+6. Anschaffung bei gleicher Miete, vollem Kaufpreis als Zahlung und angegebenem Jahresabzug. Kein Vergleich bei Sofortabzug > 1.000 € oder Jahres-AfA > Kaufpreis. Kein Verlustausgleich. Monatswert heißt jetzt „Monatlich übrig im Anschaffungsjahr“ mit Erklärung Jahresbetrag ÷ 12.
+7. Historische Jahresabrechnung bleibt ausschließlich fiktive Detailansicht ohne zusätzliche Wirkung auf die Zielmiete. Keine doppelte Erfassung der Akonti und Jahreskosten.
+8. Ausschließlich fiktive öffentliche Beispielwerte. Private Dokumente und tatsächliche Zahlen werden nicht veröffentlicht.
 
 ## Fachlicher Recherche-Stand
 
@@ -44,11 +48,12 @@ Die Vorschreibung enthält getrennte BK, Wasser, Heizung, Warmwasser, I-Fonds. J
 
 ## Sinnvoller nächster Arbeitsblock
 
-1. Erledigt: Nutzer bestätigt am 19.10.2026 den manuellen Bedienungstest auf iPhone/Safari. GitHub Pages ist aktiviert; Live-Alpha: https://ieeks.github.io/mietklar/.
-2. Im Kostenmodell **Zahlung, erwartete Mietererstattung und bestätigten Steuerabzug** getrennt führen; Quellen/Status je Position ergänzen.
-3. Objekt-/Mietrechtsszenario und „noch kein Mietvertrag“ als Eingaben ergänzen, Vorschläge mit Begründung statt automatischer Freigaben.
-4. AfA-Hilfe für erstmalige Vermietung nach Privatnutzung ergänzen; Anschaffungs-/Herstellungsbasis, Grundanteil, Nebenkosten und Vermietungsbeginn prüfen. Kleinunternehmerbefreiung ist vorerst die gewünschte Planungsannahme; tatsächliche Voraussetzungen separat verifizieren. Keine privaten Unterlagen in Commits aufnehmen.
-5. Danach weitere Features aus ROADMAP; Pages ist bereits aktiviert.
+1. Neue Kostenoberfläche auf iPhone/Safari ausprobieren. Der Nutzer hat die Bedienung der vorherigen Alpha 0.1 am 19.10.2026 bestätigt; das ist keine Abnahme der neuen Karten.
+2. Detaillierte bedingte Kostenhinweise/Kostenarten ausbauen und Garage fachlich führen. MRG-/Vertragseinordnung nicht automatisch freigeben.
+3. AfA-Hilfe für erstmalige Vermietung nach Privatnutzung; Kaufbasis/Grundanteil/Nebenkosten/Vermietungsbeginn berücksichtigen.
+4. Jahresmodell, Einkommensbasis, Vorwärtsmodus nach ROADMAP. USt-Voraussetzungen separat verifizieren.
+
+GitHub Pages ist aktiviert: https://ieeks.github.io/mietklar/. Änderungen auf main veröffentlichen automatisch.
 
 ## Prüfen / weiterentwickeln
 
@@ -58,8 +63,9 @@ npm test
 python3 -m http.server 8080
 ```
 
-Syntax- und Rechentests erfolgreich. Browserlauf konnte mangels installiertem Chromium in der Arbeitsumgebung nicht durchgeführt werden. Nicht als End-to-End-getestet bezeichnen. Die helle Stilrichtung wurde positiv bestätigt. Der Nutzer hat den manuellen iPhone-/Safari-Bedienungstest am 19.10.2026 als erledigt bestätigt. Dies ist kein automatisierter End-to-End-Test und keine vollständige Barrierefreiheitsprüfung.
+Syntax und 20 Rechen-/Kostenmodelltests erfolgreich. Browser-Rendering der neuen Oberfläche ist nicht bestätigt: Chromium fehlt; Downloadversuch lieferte ein unbrauchbares Archiv. Ein zusätzlicher DOM-Funktionsdurchgang (ohne Browser-Rendering) mit temporärem jsdom bestand. Details in docs/TESTING.md. Manueller Safari-Test der vorherigen Version bleibt als historischer Nachweis erhalten.
 
 ## Projektpflege
 
 Kleine statische App ohne unnötiges Framework. Keine echten Finanzdaten in Fixtures. Rechenkern und UI getrennt halten. Bei fachlicher Änderung Gegenbeispiele ergänzen. Dokumente nach dem endgültigen Stand umschreiben; ROADMAP erledigte Punkte markieren. Nicht versehentlich persönliche PDFs, OCR-Zwischendateien oder den gesamten Scratch-Ordner committen.
+
