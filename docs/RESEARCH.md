@@ -13,7 +13,22 @@ Stand: 19.10.2026. Quellen sind Ausgangspunkte; ein Kontoname und ein Baujahr er
 
 ### Erstmalige Vermietung nach Privatnutzung
 
-Nach [BMF: AfA bei Vermietung](https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/absetzung-fuer-abnutzung-bei-vuv.html), geprüft am 19.10.2026: Ein bisheriger Vermietungs-AfA-Wert muss bei erstmaliger Vermietung nicht vorhanden sein. Bei seit 2013 erstmaliger Vermietung sind fiktive Anschaffungskosten nur im entsprechenden Altvermögensfall möglich; für Neuvermögen sind die tatsächlichen Anschaffungs-/Herstellungskosten maßgeblich. Grund und Boden sind nicht abschreibbar. Erwerbszeitpunkt/-art, anrechenbare Nebenkosten und Vermietungsbeginn prüfen; keinen heutigen Marktwert pauschal ansetzen. Grundsätzlich 1,5 % Jahres-AfA, Halb-/Ganzjahres-AfA und Sonderfälle getrennt behandeln. Der vollständige Assistent ist noch nicht implementiert.
+Nach [BMF: AfA bei Vermietung](https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/absetzung-fuer-abnutzung-bei-vuv.html), geprüft am 19.10.2026: Ein bisheriger Vermietungs-AfA-Wert muss bei erstmaliger Vermietung nicht vorhanden sein. Bei seit 2013 erstmaliger Vermietung sind fiktive Anschaffungskosten nur im entsprechenden Altvermögensfall möglich; für Neuvermögen sind die tatsächlichen Anschaffungs-/Herstellungskosten maßgeblich. Grund und Boden sind nicht abschreibbar. Erwerbszeitpunkt/-art, anrechenbare Nebenkosten und Vermietungsbeginn prüfen; keinen heutigen Marktwert pauschal ansetzen. Grundsätzlich 1,5 % Jahres-AfA, Halb-/Ganzjahres-AfA und Sonderfälle getrennt behandeln. Ein einfacher Assistent für Käufe ab 2003 nach Privatnutzung ist seit Alpha 0.3 implementiert; Sonderfälle und eine steuerliche Freigabe nicht.
+
+### AfA-Implementierung Alpha 0.3
+
+Zusätzlich am 19.10.2026 anhand der aktuellen Primärquellen geprüft:
+
+- [RIS § 16 Abs. 1 Z 8 EStG, Fassung 2026](https://www.ris.bka.gv.at/NormDokument.wxe?Abfrage=Bundesnormen&Gesetzesnummer=10004570&Paragraf=16&FassungVom=2026-10-19): tatsächliche Anschaffungs-/Herstellungskosten, Fortführung beim unentgeltlichen Erwerb, Antragsregelung für fiktive Kosten im einschlägigen Altvermögensfall, reguläre 1,5 % und Grundanteilsabzug. Nicht jede Erstvermietung rechtfertigt eine Neubewertung.
+- [RIS GrundanteilV 2016](https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=Bundesnormen&Gesetzesnummer=20009521): 20 % bei Gemeinde unter 100.000 Einwohnern und durchschnittlichem baureifem Land unter 400 €/m²; bei mindestens 100.000 Einwohnern oder mindestens 400 €/m² je nach mehr als 10 bzw. bis zu 10 Wohn-/Geschäftseinheiten 30 bzw. 40 %. Maßgebliches Volkszählungsergebnis und Regeln für Geschäftseinheiten beachten. Nachweis und offenkundig erhebliche Abweichung separat prüfen (§ 3).
+- [BMF EStR, Anschaffungsnebenkosten](https://findok.bmf.gv.at/findok/volltext?segmentId=356eb374-13af-4468-b0dc-ba361b38efec): Anschaffungskosten umfassen passende Nebenkosten, etwa GrESt und gerichtliche Eintragungsgebühr. Finanzierungskosten nicht pauschal in die Gebäude-Kaufbasis nehmen.
+- [BMF AfA bei Vermietung](https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/absetzung-fuer-abnutzung-bei-vuv.html): reguläre Halb-/Ganzjahres-AfA und gesonderte Regeln für beschleunigte AfA.
+
+Die Kaufherleitung beschränkt sich bewusst auf Käufe ab 2003 nach ausschließlich privater Nutzung, aktuelle erstmalige Vermietung und reguläre Gebäude-AfA. Das ist eine technische Umfangsgrenze, keine Behauptung, dass jeder Kauf bis 2002 zwingend Altvermögen wäre. Andere Konstellationen benötigen einen separat geklärten Wert. Eingegebene Kaufnebenkosten werden vor der Grund-/Gebäudeaufteilung addiert; separat bewertete Einrichtung und andere Kaufbestandteile abgrenzen. Keine geschätzten Prozentsätze auf Kaufnebenkosten automatisch anwenden.
+
+Grundanteil-Vorschlag ist nur nach bekannten Bedingungen und Ausschluss besonderer Bewertungsfälle verfügbar, wird nicht automatisch angewendet und bleibt nach Übernahme als Planungsannahme gekennzeichnet. Nach einer Änderung der Hilfsbedingungen wird ein übernommener Vorschlag ungültig. Individuell eingegebene Werte sind Angaben des Nutzers, keine Bestätigung der App.
+
+Die Hauptrechnung nutzt einen vollen Jahres-AfA-Wert für 12 vermietete Monate. Die Startjahr-Vorschau bei regulärer AfA dient nur der Information. Kein stillschweigender Wechsel auf Halbjahres-AfA in einer Ganzjahres-Mietkalkulation. Sonder-/beschleunigte Abschreibung sowie eine vollständige Startjahresrechnung sind nicht automatisiert.
 
 ## Kostenmodell seit Alpha 0.2
 
@@ -63,4 +78,5 @@ Gewünschtes Entwicklungsszenario seit 19.10.2026: vorerst Kleinunternehmerbefre
 ## Private Quellen
 
 Es wurden eine aktuelle Eigentümer-Vorschreibung, eine Vorjahresabrechnung, ein Grundbuchauszug und ein Kaufvertrag als Struktur-/Szenariobeispiele gelesen. Keine Originale, OCR-Texte, persönlichen Identifikatoren oder tatsächlichen Einzelbeträge sind Bestandteil dieses Repos. Bei einer späteren individuellen Berechnung gezielt privat auf aktuelle Dokumente zugreifen; nicht aus fiktiven Fixtures auf reale Verhältnisse schließen.
+
 

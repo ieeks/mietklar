@@ -1,6 +1,7 @@
 
 import { solveRent, comparePurchase, validateTariff } from './calc.js';
 import { aggregateCosts } from './costs.js';
+import { resolveAfa, suggestLandShare } from './afa.js';
 
 (async () => {
   const root = document.getElementById('mietklar-app');
@@ -9,7 +10,7 @@ import { aggregateCosts } from './costs.js';
   const el = key => q('[data-key="' + key + '"]');
   const val = key => Number(el(key).value);
   const money = value => new Intl.NumberFormat('de-AT', { style: 'currency', currency: 'EUR' }).format(value);
-  let step = 0, afaMode = 'known', tariff;
+  let step = 0, tariff, adoptedLandSuggestion = false;
   const hints = {
     bk: 'Sammelposten: Einzelpositionen und Mietvertrag prüfen. Nicht pauschal vollständig weiterverrechnen.',
     water: 'Wasser und Abwasser: Kostenanteil, Abrechnung und Vereinbarung prüfen.',
@@ -85,6 +86,46 @@ import { aggregateCosts } from './costs.js';
     q('[data-contract-hint]').textContent = hint;
   }
 
+  function landSuggestion() {
+    const suggestion = suggestLandShare({
+      municipality: el('afaMunicipality').value, priceBand: el('afaLandPriceBand').value,
+      units: el('afaUnits').value, exception: el('afaLandException').value
+    });
+    q('[data-land-suggestion]').textContent = suggestion.message;
+    q('[data-apply-land]').disabled = suggestion.percent === null;
+    return suggestion;
+  }
+
+  function readAfa() {
+    const number = key => el(key).value === '' ? null : Number(el(key).value);
+    const mode = el('afaMode').value;
+    all('[data-afa-section]').forEach(section => section.hidden = section.dataset.afaSection !== mode);
+    q('[data-afa-evidence-wrap]').hidden = mode === 'unknown';
+    landSuggestion();
+    const result = resolveAfa({
+      mode, annualAfa: number('afa'), evidence: el('afaEvidence').value,
+      buildingBasis: number('building'), rate: number('rate'), basisStatus: el('afaBasisStatus').value,
+      acquisition: el('afaAcquisition').value, previousUse: el('afaPreviousUse').value,
+      purchaseYear: number('afaPurchaseYear'), price: number('afaPrice'),
+      landPercent: number('afaLandPercent'), landStatus: el('afaLandStatus').value,
+      transferTax: number('afaTransferTax'), registration: number('afaRegistration'),
+      legal: number('afaLegal'), broker: number('afaBroker'), other: number('afaOther'),
+      firstYearMonths: el('afaFirstMonths').value === 'unknown' ? null : Number(el('afaFirstMonths').value)
+    }, 2026);
+    q('[data-afa-status]').textContent = result.status === 'open' ? result.notes[0]
+      : mode === 'purchase'
+        ? 'Vorläufige Kaufherleitung: ' + money(result.annualAfa) + ' reguläre Gebäude-AfA pro vollem Jahr. Deine Angaben sind nicht durch die App geprüft.'
+        : 'In der Volljahresplanung angesetzt: ' + money(result.annualAfa) + ' Gebäude-AfA. '
+          + (result.status === 'estimate' ? 'Grundlage ist eine Planungsannahme.' : 'Wert von dir angegeben; keine Prüfung durch die App.');
+    q('[data-afa-purchase-breakdown]').hidden = result.totalAcquisition === null;
+    q('[data-afa-total]').textContent = result.totalAcquisition === null ? '–' : money(result.totalAcquisition);
+    q('[data-afa-land]').textContent = result.landValue === null ? '–' : money(result.landValue);
+    q('[data-afa-building]').textContent = result.buildingBasis === null ? '–' : money(result.buildingBasis);
+    q('[data-afa-first-wrap]').hidden = result.firstYearAfa === null;
+    q('[data-afa-first]').textContent = result.firstYearAfa === null ? '–' : money(result.firstYearAfa);
+    return result;
+  }
+
   function showError(message) {
     q('[data-error]').hidden = false;
     q('[data-error]').textContent = message;
@@ -92,6 +133,9 @@ import { aggregateCosts } from './costs.js';
     q('[data-investment-result]').hidden = true;
     all('[data-out]').forEach(node => node.textContent = '–');
     q('[data-open-cost]').textContent = 'Bitte die Eingaben prüfen.';
+    q('[data-afa-status]').textContent = 'Berechnung derzeit nicht möglich. Bitte die Eingaben prüfen.';
+    q('[data-afa-purchase-breakdown]').hidden = true;
+    q('[data-afa-first-wrap]').hidden = true;
     return false;
   }
 
@@ -102,22 +146,23 @@ import { aggregateCosts } from './costs.js';
     const lines = readCosts();
     let invalid = false;
     for (const input of all('input[type="number"]')) {
+      // AfA fields are validated by the selected route, with incomplete routes explicitly using 0.
+      if (input.closest('[data-afa-section]')) { input.setAttribute('aria-invalid', 'false'); continue; }
       const row = input.closest('[data-cost-row]');
       const inactive = (input.hasAttribute('data-cost-forward') && row.querySelector('[data-cost-payer]').value !== 'partial')
         || (input.hasAttribute('data-cost-tax-annual') && row.querySelector('[data-cost-tax]').value !== 'annual')
-        || (input === el('purchaseAfa') && el('treatment').value !== 'afa')
-        || ([el('building'), el('rate')].includes(input) && afaMode === 'known')
-        || (input === el('afa') && afaMode !== 'known');
+        || (input === el('purchaseAfa') && el('treatment').value !== 'afa');
       const bad = !inactive && (input.value === '' || !Number.isFinite(Number(input.value)) || Number(input.value) < 0);
       input.setAttribute('aria-invalid', String(bad));
       invalid ||= bad;
     }
-    if (afaMode !== 'known' && val('rate') > 100) invalid = true;
     if (invalid) return showError('Bitte gültige Beträge ab 0 eingeben. Aktive Zahlenfelder dürfen nicht leer sein.');
-    let costs, solved;
+    let costs, solved, afaResult;
     const base = Math.max(0, val('salary') - val('salaryDeduction'));
-    const afa = afaMode === 'known' ? val('afa') : val('building') * val('rate') / 100;
+    let afa;
     try {
+      afaResult = readAfa();
+      afa = afaResult.annualAfa;
       costs = aggregateCosts([...lines, {
         name: 'Persönlicher Puffer', amount: val('buffer'), period: 'month',
         kind: 'buffer', payer: 'owner', taxStatus: 'none'
@@ -150,7 +195,7 @@ import { aggregateCosts } from './costs.js';
     all('[data-out]').forEach(node => node.textContent = money(outputs[node.dataset.out]));
     q('[data-open-cost]').textContent = costs.unknownForward.length + ' Position(en) mit offener Erstattung; '
       + costs.unknownTax.length + ' mit offenem Steuerabzug. Ungeklärt heißt jeweils vorerst 0 € Erstattung bzw. 0 € Abzug.';
-    const assumptions = [];
+    const assumptions = afaResult.notes.map(note => 'Gebäude-AfA: ' + note);
     for (const row of costs.unknownForward) assumptions.push(row.name + ': Erstattung noch prüfen; vorerst von dir getragen.');
     for (const row of costs.unknownTax) assumptions.push(row.name + ': Steuerabzug noch prüfen; vorerst 0 € Abzug.');
     for (const row of costs.rows.filter(row => row.annualDeduction > 0 && !row.evidence)) {
@@ -174,6 +219,7 @@ import { aggregateCosts } from './costs.js';
       ? 'Für diesen Umsatzsteuerstatus gibt es noch kein Ergebnis. Bitte den Status im vorigen Schritt prüfen.'
       : 'Planung für 12 vermietete Monate mit angenommener Kleinunternehmerbefreiung. '
         + (costs.unknownTax.length ? 'Offene Steuerabzüge sind mit 0 € angesetzt. ' : '')
+        + (afaResult.status === 'open' ? 'Gebäude-AfA ist offen und mit 0 € angesetzt. ' : '')
         + 'Mietererstattungen zählen als Einnahmen; nur die gesondert angegebenen Jahresabzüge mindern die Steuerbasis.';
     const cutoff = tariff.brackets.find(b => b.upTo === null || base + Math.max(0, e) <= b.upTo);
     q('[data-tax-explain]').textContent = 'Tarifbasis aus dem Gehalt: ' + money(base)
@@ -222,15 +268,26 @@ import { aggregateCosts } from './costs.js';
   });
   q('[data-next]').addEventListener('click', () => { if (compute()) { step = Math.min(4, step + 1); show(); } });
   q('[data-back]').addEventListener('click', () => { step = Math.max(0, step - 1); show(); });
-  root.addEventListener('input', compute);
-  root.addEventListener('change', compute);
-  all('[data-afa-mode]').forEach(button => button.addEventListener('click', () => {
-    afaMode = button.dataset.afaMode;
-    all('[data-afa-mode]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
-    q('[data-afa-known]').hidden = afaMode !== 'known';
-    q('[data-afa-help]').hidden = afaMode === 'known';
+  q('[data-apply-land]').addEventListener('click', () => {
+    const suggestion = landSuggestion();
+    if (suggestion.percent === null) return;
+    el('afaLandPercent').value = suggestion.percent;
+    el('afaLandStatus').value = 'estimate';
+    adoptedLandSuggestion = true;
     compute();
-  }));
+    el('afaLandPercent').focus();
+  });
+  function handleInput(event) {
+    if (adoptedLandSuggestion && event.target.hasAttribute('data-land-guide')) {
+      el('afaLandStatus').value = 'unknown';
+      el('afaLandPercent').value = '';
+      adoptedLandSuggestion = false;
+    }
+    if ([el('afaLandPercent'), el('afaLandStatus')].includes(event.target)) adoptedLandSuggestion = false;
+    compute();
+  }
+  root.addEventListener('input', handleInput);
+  root.addEventListener('change', handleInput);
   try {
     const response = await fetch(new URL('../data/tarif-2026.json', import.meta.url));
     if (!response.ok) throw new Error('Tarifdatei nicht erreichbar');
@@ -243,4 +300,5 @@ import { aggregateCosts } from './costs.js';
   q('[data-next]').disabled = false;
   show();
 })();
+
 

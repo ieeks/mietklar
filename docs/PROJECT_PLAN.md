@@ -43,3 +43,6 @@ Statische HTML/CSS/JavaScript-Module, gleiche Herkunft für Tarifdatei, relative
 
 
 Alpha-0.2-Stand: Zahlungsbetrag, erwartete Erstattung und angegebener Jahresabzug sind jetzt unabhängig implementiert. Kosten sind flexibel mit Monat/Jahr erfassbar. Quellen/Status und offene Annahmen werden angezeigt. Der vollständige Jahres-/AfA-/Rechtsassistent bleibt geplant.
+
+
+Alpha-0.3-Stand: AfA-Hilfe mit vier Eingabewegen, einfacher Kaufherleitung nach Privatnutzung, bedingter Grundanteil-Hilfe und separater regulärer Startjahr-Information. Der Hauptrechner bleibt auf ein volles Vermietungsjahr beschränkt. Weitere Erwerbsarten/Sonder-AfA und die tatsächliche Startjahr-Rechnung sind offen.

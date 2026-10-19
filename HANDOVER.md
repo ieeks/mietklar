@@ -1,11 +1,11 @@
-# Übergabe: mietklar. Alpha 0.2
+# Übergabe: mietklar. Alpha 0.3
 
 Stand: 19.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADMAP, docs/RESEARCH lesen. Danach zuerst den aktuellen Branch/Commit prüfen; die nächste Sitzung nicht aus dem Gesprächsgedächtnis rekonstruieren.
 
 ## Ziel und bestätigte Entscheidungen
 
 - Österreichische Dauervermietung, Eigentumswohnung, kein Kredit.
-- Für den weiteren AfA-Assistenten zusätzlich das Szenario „bisher ausschließlich privat genutzt, erstmalige Vermietung“ berücksichtigen; keine bestehende Vermietungs-AfA voraussetzen. Ein individueller AfA-Jahreswert ist noch nicht ermittelt.
+- Der AfA-Assistent berücksichtigt zusätzlich das Szenario „bisher ausschließlich privat genutzt, erstmalige Vermietung“ berücksichtigen; keine bestehende Vermietungs-AfA voraussetzen. Ein individueller AfA-Jahreswert ist noch nicht ermittelt.
 - Als gewünschte Planungsannahme Kleinunternehmerbefreiung verwenden (ohne Ausgangs-USt und ohne Vorsteuerabzug). Keine bestätigte Statusprüfung: 55.000-€-Grenze unternehmerweit beim selben Unternehmer, relevantes Vorjahr/laufendes Jahr und ein möglicher bindender Verzicht bleiben zu prüfen.
 - Wunschbetrag X ist **frei verfügbares Geld nach Kosten, zusätzlicher Einkommensteuer und gewähltem Puffer**. Monatszahl ist ein Jahresdurchschnitt, keine Garantie gleichbleibender Zahlungseingänge.
 - Zuerst Rückwärtsrechnung: gewünschter Monatsüberschuss → benötigte Hauptmiete. Vorwärtsmodus ist geplant, noch kein eigener UI-Modus.
@@ -25,14 +25,20 @@ Statische App mit fünf Schritten, heller Darstellung und Home-Button über die 
 
 `src/ui.js`: offene Positionen im Ergebnis; Mietrechtsszenario/Vertragsstatus beeinflussen erklärende Hinweise, erteilen keine Rechtsfreigabe und ändern nicht automatisch die eingegebene Erstattung. Noch kein Mietvertrag ist der Startwert, Mietrecht startet ungeklärt. Keine persönlichen Objektwerte als Defaults.
 
-`data/tarif-2026.json`: zentrale Tarifquelle mit Prüfdatum. 20 automatisierte Rechen-/Kostenmodelltests. Die GitHub-Actions-Prüfung führt Syntax und Tests bei Push/PR aus.
+`src/afa.js`: AfA standardmäßig offen mit 0 €. Vier Wege: offen, bekannter voller Jahreswert, eingegebene Gebäudebasis/Satz, Kaufherleitung. Kaufherleitung für Käufe ab 2003 nach ausschließlich privater Nutzung: historische Kaufkosten plus passende Nebenkosten, Grundanteil abziehen, reguläre Jahres-AfA 1,5 %. Grundanteil muss bewusst als Planannahme oder vom Nutzer geklärter Anteil eingeordnet werden. Kein fiktiver AfA-Wert als Default.
+
+Grundanteil-Hilfe: Bedingungen für 20/30/40 % aus GrundanteilV 2016, gesonderte Nachweise/erhebliche Abweichungen verhindern einen Pauschalvorschlag. Keine automatische Anwendung; ausdrücklicher Übernahme-Button. Änderung der zugrunde liegenden Hilfsangaben setzt einen zuvor übernommenen Vorschlag zurück. Individuell eingegebene Anteile werden nicht automatisch überschrieben.
+
+Reguläre Startjahr-AfA bei 0/1–6/7–12 Nutzungsmonaten = 0/halb/voll. Diese Vorschau ändert **nicht** die Zielmiete für 12 vermietete Monate. Sonder-/beschleunigte AfA wird nicht automatisch berechnet. Gekaufter Altbestand bis 2002, frühere Vermietung und andere Erwerbsarten führen zur separaten Prüfung statt automatischer neuer Basis. Bestätigte Sonderwerte können über Jahreswert/Basis übernommen werden.
+
+`data/tarif-2026.json`: zentrale Tarifquelle mit Prüfdatum. 30 automatisierte Rechen-/Kostenmodelltests. Die GitHub-Actions-Prüfung führt Syntax und Tests bei Push/PR aus.
 
 ## Wichtige Alpha-Annahmen und offene Punkte
 
 1. Nur 12 vermietete Monate, ohne USt, 100 % Eigentümeranteil, kein Kredit. Gehalt als KZ 245 minus eingegebene Werbungskosten; keine volle persönliche Steuerveranlagung.
 2. Zahlungs-/Erstattungsbeträge sind Planwerte, keine abgegrenzte Jahresbuchhaltung. Timing, Leerstand, Jahresausgleich und tatsächlich steuerlich zulässige Kosten werden nicht automatisch ermittelt. Ungeklärte Abzüge nicht mit einer abschließend richtigen Steuerprognose verwechseln.
 3. Jahresabzüge dürfen unabhängig von den Zahlungen eingegeben werden. Der Nutzer muss Zeitpunkt, Betrag, Vermietungsanteil und mögliche Verteilung klären. Gebäude-AfA und Anschaffungsvergleich nicht zusätzlich als Kostenposition doppelt erfassen.
-4. AfA weiterhin direkt oder aus bestätigter Gebäude-Basis/Satz. Vollständiger Assistent für erstmalige Vermietung nach Privatnutzung ist offen; kein individueller Jahres-AfA-Wert festgestellt.
+4. AfA-Hilfe für den einfachen Kauf-/Privatnutzungsfall ist implementiert. Individuelle AfA noch nicht ermittelt. Nur mit passender Erwerbs-/Nutzungsgeschichte verwenden. Fehlende Angaben führen zu 0 € AfA mit Hinweis. Individuelle Basis, Kostenaufteilung, Sonderfälle und Vorjahreswerte werden nicht durch die App freigegeben.
 5. Kleinunternehmerbefreiung als Planungsannahme. Unbekannter/steuerpflichtiger USt-Status blendet Ergebnisse aus. Keine gemischten USt-Sätze/Vorsteuer. Umsatzgrenze unternehmerweit beim selben Unternehmer prüfen.
 6. Anschaffung bei gleicher Miete, vollem Kaufpreis als Zahlung und angegebenem Jahresabzug. Kein Vergleich bei Sofortabzug > 1.000 € oder Jahres-AfA > Kaufpreis. Kein Verlustausgleich. Monatswert heißt jetzt „Monatlich übrig im Anschaffungsjahr“ mit Erklärung Jahresbetrag ÷ 12.
 7. Historische Jahresabrechnung bleibt ausschließlich fiktive Detailansicht ohne zusätzliche Wirkung auf die Zielmiete. Keine doppelte Erfassung der Akonti und Jahreskosten.
@@ -48,9 +54,9 @@ Die Vorschreibung enthält getrennte BK, Wasser, Heizung, Warmwasser, I-Fonds. J
 
 ## Sinnvoller nächster Arbeitsblock
 
-1. Neue Kostenoberfläche auf iPhone/Safari ausprobieren. Der Nutzer hat die Bedienung der vorherigen Alpha 0.1 am 19.10.2026 bestätigt; das ist keine Abnahme der neuen Karten.
+1. Neue Kosten- und AfA-Oberfläche auf iPhone/Safari ausprobieren. Der Nutzer hat die Bedienung der vorherigen Alpha 0.1 am 19.10.2026 bestätigt; das ist keine Abnahme der neuen Karten.
 2. Detaillierte bedingte Kostenhinweise/Kostenarten ausbauen und Garage fachlich führen. MRG-/Vertragseinordnung nicht automatisch freigeben.
-3. AfA-Hilfe für erstmalige Vermietung nach Privatnutzung; Kaufbasis/Grundanteil/Nebenkosten/Vermietungsbeginn berücksichtigen.
+3. Einkommensbasis und Vorwärtsmodus ergänzen; danach Jahresmodell mit tatsächlichem Vermietungsbeginn/Leerstand. AfA-Sonderfälle und weitere Erwerbsarten nur mit eigenen fachlichen Regeln ausbauen.
 4. Jahresmodell, Einkommensbasis, Vorwärtsmodus nach ROADMAP. USt-Voraussetzungen separat verifizieren.
 
 GitHub Pages ist aktiviert: https://ieeks.github.io/mietklar/. Änderungen auf main veröffentlichen automatisch.
@@ -63,9 +69,10 @@ npm test
 python3 -m http.server 8080
 ```
 
-Syntax und 20 Rechen-/Kostenmodelltests erfolgreich. Browser-Rendering der neuen Oberfläche ist nicht bestätigt: Chromium fehlt; Downloadversuch lieferte ein unbrauchbares Archiv. Ein zusätzlicher DOM-Funktionsdurchgang (ohne Browser-Rendering) mit temporärem jsdom bestand. Details in docs/TESTING.md. Manueller Safari-Test der vorherigen Version bleibt als historischer Nachweis erhalten.
+Syntax und 30 Rechen-/Kosten-/AfA-Tests erfolgreich. Browser-Rendering der neuen Oberfläche ist nicht bestätigt: Chromium fehlt; Downloadversuch lieferte ein unbrauchbares Archiv. Ein zusätzlicher DOM-Funktionsdurchgang (ohne Browser-Rendering) mit temporärem jsdom bestand: Kostenregression plus AfA-Wege, offene Werte, Grundanteil-Übernahme/Invalidierung, Sonderfälle und Startjahr-Vorschau. Details in docs/TESTING.md. Manueller Safari-Test der vorherigen Version bleibt als historischer Nachweis erhalten.
 
 ## Projektpflege
 
 Kleine statische App ohne unnötiges Framework. Keine echten Finanzdaten in Fixtures. Rechenkern und UI getrennt halten. Bei fachlicher Änderung Gegenbeispiele ergänzen. Dokumente nach dem endgültigen Stand umschreiben; ROADMAP erledigte Punkte markieren. Nicht versehentlich persönliche PDFs, OCR-Zwischendateien oder den gesamten Scratch-Ordner committen.
+
 

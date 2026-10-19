@@ -1,6 +1,6 @@
 # mietklar.
 
-**Alpha 0.2 · Stand 19.10.2026**
+**Alpha 0.3 · Stand 19.10.2026**
 
 Welche Hauptmiete ist nötig, damit nach laufenden Kosten, Rücklage und zusätzlicher Einkommensteuer ein gewünschter Monatsbetrag bleibt?
 
@@ -31,10 +31,13 @@ npm test
 - Mietrechtsszenario und Vertragsstatus mit bedingten Hinweisen; keine automatische Vertragsprüfung.
 - Offene Erstattungen und Steuerabzüge werden im Ergebnis einzeln aufgelistet.
 - Fiktive Jahresabrechnung als Detailansicht; wird nicht zusätzlich in die laufenden Kosten eingerechnet.
-- KZ-245-Eingabe mit beispielhafter Werbungskostenpauschale; AfA direkt oder aus bestätigter Gebäude-Basis und Satz.
+- KZ-245-Eingabe mit beispielhafter Werbungskostenpauschale.
+- AfA: offen (0 €), bekannter Volljahreswert, eigene Gebäude-Basis/Satz oder Kaufherleitung für erstmalige Vermietung nach Privatnutzung.
+- Kaufherleitung ab Kaufjahr 2003: Kaufpreis und Nebenkosten, Grundanteil, reguläre 1,5 % Jahres-AfA. Bedingte Grundanteil-Hilfe mit bewusster Übernahme als Planungsannahme.
+- Reguläre Startjahr-AfA als gesonderte Information; die Zielmiete bleibt eine Volljahresplanung.
 - Tarif 2026, progressive Zusatzsteuer, vereinfachter Veranlagungsfreibetrag und Rückwärtssuche auf volle Cent.
 - Anschaffungsvergleich bei **unveränderter Hauptmiete**, inklusive Jahres-Steuerwirkung und tatsächlichem Geldverbrauch.
-- Separate reine Rechenfunktionen und 20 automatisierte Rechen-/Kostenmodelltests.
+- Separate reine Rechenfunktionen und 30 automatisierte Rechen-/Kostenmodelltests.
 
 ## Grenzen dieser Alpha
 
@@ -45,9 +48,11 @@ npm test
 - Bestätigte Jahresabzüge können von den Jahreszahlungen abweichen (z. B. Verteilungsbeträge). Keine automatische Einordnung solcher Beträge, keine Verlustgutschrift.
 - Kein vollständiger Lohn-/Steuerbescheid: unter anderem keine einkommensabhängigen Absetzbeträge, Sonderausgaben-Automatik, Familienbonus-Ausschöpfung oder Progressionsvorbehalte. Keine weiteren nicht lohnsteuerpflichtigen Einkünfte im Freibetragsmodell.
 - Keine automatische Verlustverwertung; negative Vermietungseinkünfte erzeugen keine Steuererstattung.
+- **Offene Gebäude-AfA = 0 €**, kein vorbelegter fiktiver Jahresabzug. Kaufpreis, Grundanteil und Sonderfälle werden nicht aus Dokumenten automatisch bestätigt. Käufe bis 2002, Erbe/Schenkung und frühere Vermietung benötigen einen separat geklärten Jahreswert oder eine Basis.
+- Kaufherleitung nur reguläre Gebäude-AfA; keine automatisch beschleunigte AfA, keine individuelle Bewertung und keine Startjahr-Zielmietrechnung.
 - Mietrechtliche Hinweise berücksichtigen die gewählte Einordnung und den Vertragsstatus. Ein detaillierter Kostenkatalog, Prüfung der Einordnung und rechtliche Vertragsfreigaben fehlen.
 - Keine Speicherung, kein PDF-Upload/OCR, kein Import/Export, keine fertige Druckansicht.
-- Manueller iPhone-/Safari-Bedienungstest der Alpha 0.1 vom Nutzer am 19.10.2026 bestätigt. Die neue Kostenoberfläche benötigt noch einen eigenen Safari-Durchgang. Kein automatisierter Browser-End-to-End-Test in dieser Arbeitsumgebung.
+- Manueller iPhone-/Safari-Bedienungstest der Alpha 0.1 vom Nutzer am 19.10.2026 bestätigt. Die neuen Kosten- und AfA-Oberflächen benötigen noch einen eigenen Safari-Durchgang. Kein automatisierter Browser-End-to-End-Test in dieser Arbeitsumgebung.
 
 ## GitHub Pages
 
@@ -64,4 +69,5 @@ GitHub Pages ist aktiviert: Deploy from a branch → `main` → `/ (root)`. Die 
 5. [Prüfungen](docs/TESTING.md) – Nachweise und noch offene Abnahme.
 
 Private Rechnungen, Verträge, Grundbuchauszüge, Adressen, Kontodaten und tatsächliche Gehaltszahlen gehören nicht in dieses öffentliche Repository. Eingaben werden aktuell ausschließlich im Arbeitsspeicher des Browsers gehalten.
+
 

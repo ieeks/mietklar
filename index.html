@@ -3,7 +3,7 @@
 
 
 <div class="mr-app">
-<header class="mr-top"><button type="button" class="mr-wordmark" data-home aria-label="mietklar. – Zur Startseite" title="Zur Startseite">mietklar<span style="color:var(--mr-brand)">.</span></button><span class="mr-year">Alpha 0.2 · 2026</span></header><div class="mr-help alpha"><strong>Alpha · fiktive Beispieldaten.</strong> Bedienungs- und Tarifmodell für 12 vermietete Monate ohne USt. Ungeklärte Steuerabzüge werden mit 0 € angesetzt. Keine vollständige Steuer- oder Mietrechtsprüfung.</div>
+<header class="mr-top"><button type="button" class="mr-wordmark" data-home aria-label="mietklar. – Zur Startseite" title="Zur Startseite">mietklar<span style="color:var(--mr-brand)">.</span></button><span class="mr-year">Alpha 0.3 · 2026</span></header><div class="mr-help alpha"><strong>Alpha · fiktive Beispieldaten.</strong> Bedienungs- und Tarifmodell für 12 vermietete Monate ohne USt. Ungeklärte Steuerabzüge werden mit 0 € angesetzt. Keine vollständige Steuer- oder Mietrechtsprüfung.</div>
 <div class="mr-progress"><span data-progress-text>Schritt 1 von 5 · Ziel &amp; Einkommen</span><div class="mr-dots" aria-hidden="true"><span class="mr-dot" data-on="true"></span><span class="mr-dot"></span><span class="mr-dot"></span><span class="mr-dot"></span><span class="mr-dot"></span></div></div>
 <main class="mr-main">
 <section class="mr-step-panel" data-panel="0">
@@ -52,10 +52,81 @@
 <div class="mr-hint" data-open-cost></div></div>
 </section>
 <section class="mr-step-panel" data-panel="2" hidden>
-<div class="mr-eyebrow">AfA &amp; Steuerannahmen</div><h2>Abschreibung verstehen.</h2><p>Die AfA senkt den steuerpflichtigen Überschuss. Sie ist keine laufende Überweisung.</p>
-<div class="mr-mode"><button type="button" data-afa-mode="known" aria-pressed="true" class="">Jahreswert bekannt</button><button type="button" data-afa-mode="help" aria-pressed="false" class="">Wert herleiten</button></div>
-<div data-afa-known><label class="mr-field" style="margin-top:17px">AfA laut Überschussrechnung / Jahr (€)<input data-key="afa" type="number" min="0" value="2400" inputmode="decimal"></label><div class="mr-help">Aus der bestehenden Überschussrechnung oder dem Anlageverzeichnis übernehmen. Eine bereits festgelegte AfA nicht ohne Grund durch eine neue Kaufpreis-Schätzung ersetzen.</div></div>
-<div data-afa-help hidden><div class="mr-fields"><label class="mr-field">Bestätigte Gebäude-AfA-Basis (€)<input data-key="building" type="number" min="0" value="160000" inputmode="decimal"></label><label class="mr-field">Bestätigter jährlicher AfA-Satz (%)<input data-key="rate" type="number" min="0" max="100" value="1.5" step="0.1" inputmode="decimal"></label></div><div class="mr-help">Die Basis umfasst den abschreibbaren Gebäudeanteil, nicht Grund und Boden. Erwerbsart, Erwerbszeitpunkt und bisherige AfA sind zu berücksichtigen. Der Kaufpreis allein reicht für eine verlässliche Herleitung nicht aus.</div><div class="mr-row"><span>AfA aus diesen Annahmen / Jahr</span><strong data-out="annualAfa"></strong></div></div>
+<div class="mr-eyebrow">AfA &amp; Steuerannahmen</div><h2>Woher kommt deine AfA?</h2>
+<p>Du schreibst das Gebäude über mehrere Jahre ab. Das senkt die Steuerbasis, ohne dass jedes Jahr dieser Betrag vom Konto abgeht.</p>
+<label class="mr-field">Welcher Weg passt zu dir?<select data-key="afaMode">
+<option value="unknown">AfA ist noch offen · vorerst 0 €</option>
+<option value="purchase">Bisher privat genutzt · aus Kauf herleiten</option>
+<option value="known">Vollen Jahreswert bereits bekannt</option>
+<option value="basis">Gebäude-Basis und Satz bereits bekannt</option>
+</select></label>
+<div class="mr-help" data-afa-status role="status"></div>
+<div data-afa-section="known" hidden>
+<label class="mr-field mr-afa-field">AfA für ein volles Planungsjahr (€)<input data-key="afa" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Jahreswert aus deiner Berechnung"></label>
+<div class="mr-hint">Aus Anlageverzeichnis, Überschussrechnung oder einer geklärten Berechnung übernehmen. Bei früherer Vermietung die bestehende AfA fortführen. Einen Halbjahreswert nicht ungeprüft als vollen Jahreswert verwenden.</div>
+</div>
+<div data-afa-section="basis" hidden>
+<div class="mr-fields">
+<label class="mr-field">Abschreibbare Gebäude-Basis (€)<input data-key="building" type="number" min="0" step="0.01" inputmode="decimal"></label>
+<label class="mr-field">Jährlicher AfA-Satz (%)<input data-key="rate" type="number" min="0" max="100" step="0.1" value="1.5" inputmode="decimal"></label>
+</div>
+<label class="mr-field">Wie sicher ist diese Grundlage?<select data-key="afaBasisStatus"><option value="unknown">Noch zu klären · vorerst 0 € AfA</option><option value="estimate">Schätzung für die Planung verwenden</option><option value="provided">Basis und Satz sind von mir geklärt</option></select></label>
+<div class="mr-hint">Grund und Boden sind hier bereits abgezogen. Bei Sonderfällen eine passend ermittelte Basis und den Jahres-Satz übernehmen; die App bestätigt deren steuerliche Zulässigkeit nicht.</div>
+</div>
+<div data-afa-section="purchase" hidden>
+<div class="mr-section"><h3>1 · Erwerb und bisherige Nutzung</h3>
+<div class="mr-fields">
+<label class="mr-field">Wie erworben?<select data-key="afaAcquisition"><option value="purchase">Gekauft</option><option value="gift">Geerbt / geschenkt</option><option value="other">Hergestellt / anderer Erwerb</option></select></label>
+<label class="mr-field">Bisherige Nutzung<select data-key="afaPreviousUse"><option value="private">Bisher privat, noch nie vermietet</option><option value="rented">Schon einmal vermietet</option><option value="unknown">Noch zu klären</option></select></label>
+<label class="mr-field">Kaufjahr<input data-key="afaPurchaseYear" type="number" min="1900" max="2026" step="1" inputmode="numeric" placeholder="JJJJ"></label>
+</div>
+<div class="mr-hint">Die einfache Kaufherleitung deckt Käufe ab 2003 und erstmalige Vermietung nach Privatnutzung ab. Erbe, Schenkung, frühere Vermietung und ältere Käufe benötigen eine eigene Prüfung. Ein heutiger Marktwert ist hier keine Kaufkostenbasis.</div></div>
+<div class="mr-section"><h3>2 · Kaufpreis und Nebenkosten</h3>
+<label class="mr-field">Immobilien-Kaufpreis inkl. Grundanteil (€)<input data-key="afaPrice" type="number" min="0" step="0.01" inputmode="decimal"></label>
+<div class="mr-hint">Ohne separat bewertete Möbel/Einrichtung. Garage und andere gesonderte Kaufbestandteile passend abgrenzen. Maßgebliche Kosten inklusive nicht abziehbarer USt verwenden.</div>
+<details><summary>Welche Kaufnebenkosten zählen dazu?</summary>
+<p>Zum Beispiel Grunderwerbsteuer, Eigentumseintragung, Vertragserrichtung und Käuferprovision. Nur den passenden Anteil für diese Immobilie erfassen. Bereits im Kaufpreis enthaltene Beträge nicht nochmals addieren.</p>
+<div class="mr-fields">
+<label class="mr-field">Grunderwerbsteuer (€)<input data-key="afaTransferTax" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+<label class="mr-field">Eigentumseintragung (€)<input data-key="afaRegistration" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+<label class="mr-field">Vertrag / zugehörige Rechtskosten (€)<input data-key="afaLegal" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+<label class="mr-field">Käuferprovision (€)<input data-key="afaBroker" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+<label class="mr-field">Weitere geklärte Kaufnebenkosten (€)<input data-key="afaOther" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+</div><div class="mr-hint">Finanzierungs-/Pfandbestellungskosten gehören nicht pauschal in diese Basis. Umbauten und spätere Arbeiten gesondert einordnen. Unbekannte Nebenkosten können vorerst 0 bleiben; die Herleitung ist dann unvollständig.</div>
+</details></div>
+<div class="mr-section"><h3>3 · Grundanteil abziehen</h3>
+<p>Grund und Boden nutzen sich steuerlich nicht ab. Nur der Gebäudeanteil wird abgeschrieben.</p>
+<div class="mr-fields"><label class="mr-field">Grundanteil (%)<input data-key="afaLandPercent" type="number" min="0" max="100" step="0.1" inputmode="decimal"></label>
+<label class="mr-field">Einordnung des Anteils<select data-key="afaLandStatus"><option value="unknown">Noch zu klären · vorerst 0 € AfA</option><option value="estimate">Planungsannahme verwenden</option><option value="provided">Anteil ist von mir geklärt</option></select></label></div>
+<details class="mr-land-guide"><summary>Wie finde ich einen Grundanteil?</summary>
+<div class="mr-help">Die Grundanteil-Verordnung kennt Pauschalansätze. Diese Hilfe zeigt einen bedingten Vorschlag; sie bewertet weder Grundstück noch Unterlagen.</div>
+<div class="mr-fields">
+<label class="mr-field">Gemeindegröße<select data-key="afaMunicipality" data-land-guide><option value="unknown">Noch unklar</option><option value="large">Mindestens 100.000 Einwohner</option><option value="small">Unter 100.000 Einwohner</option></select></label>
+<label class="mr-field">Durchschnittliches baureifes Land<select data-key="afaLandPriceBand" data-land-guide><option value="unknown">Noch unklar</option><option value="low">Unter 400 €/m²</option><option value="high">Mindestens 400 €/m²</option></select></label>
+<label class="mr-field">Wohn-/Geschäftseinheiten im Gebäude<select data-key="afaUnits" data-land-guide><option value="unknown">Noch unklar</option><option value="over10">Mehr als 10</option><option value="upTo10">Bis zu 10</option></select></label>
+<label class="mr-field">Abweichender Nachweis / erhebliche Besonderheit?<select data-key="afaLandException" data-land-guide><option value="unknown">Noch zu prüfen</option><option value="none">Beides nach meiner Prüfung nicht</option><option value="proof">Gesonderter Nachweis vorhanden</option><option value="deviation">Offenkundig erhebliche Abweichung</option></select></label>
+</div>
+<div class="mr-help" data-land-suggestion></div><button type="button" data-apply-land disabled>Vorschlag als Planungsannahme übernehmen</button>
+<div class="mr-hint">Einwohner laut maßgeblichem Volkszählungsergebnis. Geschäftseinheiten nach der Verordnung zählen; nicht bloß Grundbuchanteile. Der Baulandpreis meint den örtlichen Durchschnitt, nicht den Wohnungspreis pro m².
+<a href="https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=Bundesnormen&amp;Gesetzesnummer=20009521" target="_blank" rel="noopener noreferrer">GrundanteilV 2016, §§ 2–3</a></div>
+</details></div>
+<div class="mr-section"><h3>4 · Regeljahr und Startjahr unterscheiden</h3>
+<div class="mr-help">Die Kaufherleitung verwendet den regulären Satz von 1,5 % für ein volles Vermietungsjahr. Beschleunigte AfA und andere Sonderfälle werden hier nicht automatisch berechnet.</div>
+<details><summary>Was gilt im ersten Vermietungsjahr?</summary>
+<label class="mr-field">AfA-relevante Nutzungsmonate im Startjahr<select data-key="afaFirstMonths"><option value="unknown">Noch zu klären</option><option value="0">0 Monate</option><option value="1">1 Monate</option><option value="2">2 Monate</option><option value="3">3 Monate</option><option value="4">4 Monate</option><option value="5">5 Monate</option><option value="6">6 Monate</option><option value="7">7 Monate</option><option value="8">8 Monate</option><option value="9">9 Monate</option><option value="10">10 Monate</option><option value="11">11 Monate</option><option value="12">12 Monate</option></select></label>
+<div class="mr-hint">Gemeint ist die Nutzung zur Einkünfteerzielung, nicht bloß das Datum eines Mietvertrags. Bei regulärer AfA: mehr als sechs Monate = voller Jahreswert, sonst bei begonnener Nutzung die Hälfte. Die Zielmiete bleibt eine Planung für 12 vermietete Monate; eine Startjahresrechnung mit Leerstand folgt separat.</div>
+<div class="mr-row" data-afa-first-wrap hidden><span>Reguläre AfA im Startjahr · nur zur Information</span><strong data-afa-first></strong></div>
+</details></div>
+</div>
+<label class="mr-field mr-afa-field" data-afa-evidence-wrap hidden>Quelle / Begründung (optional)<input data-key="afaEvidence" type="text" maxlength="300" placeholder="z. B. Kaufunterlagen, Grundanteilsnachweis, Steuerberatung"></label>
+<div class="mr-summary" aria-live="polite">
+<div data-afa-purchase-breakdown hidden>
+<div class="mr-row"><span>Kaufpreis + eingegebene Nebenkosten</span><strong data-afa-total></strong></div>
+<div class="mr-row"><span>Davon nicht abschreibbarer Grundanteil</span><strong data-afa-land></strong></div>
+<div class="mr-row"><span>Abschreibbare Gebäude-Basis</span><strong data-afa-building></strong></div><div class="mr-divider"></div></div>
+<div class="mr-row"><span>Gebäude-AfA in deiner Volljahresplanung</span><strong data-out="annualAfa"></strong></div>
+<div class="mr-hint">Keine zusätzliche Zahlung. Nicht nochmals unter Wohnungskosten erfassen.</div></div>
+<div class="mr-hint mr-afa-source">Stand 19.10.2026 · <a href="https://www.bmf.gv.at/themen/steuern/immobilien-grundstuecke/vermietung-verpachtung/absetzung-fuer-abnutzung-bei-vuv.html" target="_blank" rel="noopener noreferrer">BMF: AfA bei Vermietung</a> · <a href="https://www.ris.bka.gv.at/NormDokument.wxe?Abfrage=Bundesnormen&amp;Gesetzesnummer=10004570&amp;Paragraf=16" target="_blank" rel="noopener noreferrer">§ 16 EStG</a></div>
 <div class="mr-section"><h3>Umsatzsteuerstatus</h3><label class="mr-field">Welche Behandlung gilt bei dir?<select data-key="vat"><option value="exempt">Kleinunternehmerbefreiung · Beispiel</option><option value="unknown">Noch zu klären</option><option value="taxable">Umsatzsteuerpflichtig</option></select></label><div class="mr-hint">Diese Alpha rechnet nur den Fall ohne Umsatzsteuer. Weitere Fälle werden in der eigentlichen App ergänzt.</div></div>
 <div class="mr-help">Vorschau: 12 vermietete Monate. Für die endgültige App ergänzen wir Leerstand und weitere steuerliche Annahmen.</div>
 </section>
@@ -76,7 +147,7 @@
 </section>
 <div class="mr-error" role="alert" data-error hidden></div><noscript>Bitte JavaScript aktivieren, um die Alpha zu verwenden.</noscript>
 <nav class="mr-nav" aria-label="Rechenschritte"><button type="button" data-back class="">← Zurück</button><button type="button" disabled data-next class="mr-primary ">Weiter zu den Kosten →</button></nav>
-<div class="mr-note">Alpha 0.2 · Sämtliche vorausgefüllten Zahlen sind fiktive Beispiele. Keine automatische Speicherung.</div>
+<div class="mr-note">Alpha 0.3 · Sämtliche vorausgefüllten Zahlen sind fiktive Beispiele. Keine automatische Speicherung.</div>
 </main></div>
 
 </div>
@@ -103,4 +174,5 @@
 
 <script type="module" src="./src/ui.js"></script>
 </body></html>
+
 

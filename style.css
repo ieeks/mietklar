@@ -83,3 +83,10 @@ html{color-scheme:only light}body{margin:0;padding:20px 12px;background:#fff6f0;
 #mietklar-app select:disabled{opacity:1;cursor:default}
 @media(max-width:440px){#mietklar-app .mr-fields{grid-template-columns:1fr}#mietklar-app .mr-cost-card{padding:12px}#mietklar-app .mr-main{padding:18px}}
 
+#mietklar-app .mr-afa-field{margin-top:18px}
+#mietklar-app [data-afa-section] .mr-section{margin-top:24px}
+#mietklar-app [data-apply-land]{margin-top:12px}
+#mietklar-app .mr-afa-source{margin-top:16px}
+#mietklar-app [data-afa-status]{margin-top:14px}
+
+
