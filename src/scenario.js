@@ -1,9 +1,9 @@
-import { aggregateCosts } from './costs.js?v=0.8.0-alpha.1';
-import { resolveAfa } from './afa.js?v=0.8.0-alpha.1';
-import { resolveIncomeBase, calculateScenario } from './planning.js?v=0.8.0-alpha.1';
-import { resolveYear, resolveYearAfa } from './year.js?v=0.8.0-alpha.1';
-import { comparePurchase } from './calc.js?v=0.8.0-alpha.1';
-import { parseAmount, numeric } from './numbers.js?v=0.8.0-alpha.1';
+import { aggregateCosts } from './costs.js?v=0.8.0-alpha.2';
+import { resolveAfa } from './afa.js?v=0.8.0-alpha.2';
+import { resolveIncomeBase, calculateScenario } from './planning.js?v=0.8.0-alpha.2';
+import { resolveYear, resolveYearAfa } from './year.js?v=0.8.0-alpha.2';
+import { comparePurchase } from './calc.js?v=0.8.0-alpha.2';
+import { parseAmount, numeric } from './numbers.js?v=0.8.0-alpha.2';
 
 function amount(raw, label, field) {
   try {
@@ -121,3 +121,4 @@ export function buildFlow(result) {
   return { income, shortfall, total, segments: segments.map((row, i) => ({ ...row, displayValue: cents[i] / 100,
     percent: total > 0 ? Math.max(0, row.value) / total * 100 : 0 })) };
 }
+

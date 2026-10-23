@@ -1,13 +1,13 @@
 # Prüfstand Alpha 0.8
 
-Stand: 19.10.2026. Die Abnahme gilt jeweils für den genannten Umfang, nicht pauschal für spätere Oberflächen.
+Stand: 23.10.2026. Die Abnahme gilt jeweils für den genannten Umfang, nicht pauschal für spätere Oberflächen.
 
 ## Lokal erfolgreich
 
-- `npm test`: 95 reine Tests in Tarif-, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Szenariomodulen.
+- `npm test`: 99 reine Tests in Tarif-, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Szenariomodulen.
 - Enthalten: 3.000 deterministische Modelle mit unterschiedlichen Einkommen, Kosten, AfA, Erstattungen, 1–12 Mietmonaten und Zielbeträgen. Jedes Ergebnis erreicht das Ziel; ein Cent weniger Miete reicht nicht, sofern die Lösung nicht bereits 0 € ist. Fester Seed für reproduzierbare Fehler.
 - `npm run check`: Syntaxprüfung aller automatisch gefundenen JavaScript-Dateien in src, tests, e2e und scripts sowie Playwright-Konfiguration. Zusätzlich Versionszuordnung von Browsermodulen, Stylesheet und Tarifabruf geprüft, um gemischte alte/neue Assets nach Pages-Updates zu verhindern. Kein ESLint-/Typprüfungsnachweis.
-- Playwright-Testliste: neun Fälle × zwei Engines = 18 Fälle gefunden. Dies allein ist kein Browserlauf.
+- Playwright-Testliste: zwölf Fälle × zwei Engines = 24 Fälle gefunden. Dies allein ist kein Browserlauf.
 - DOM-Funktionsdurchgang mit temporärem jsdom: zwölf Speichergruppen erfolgreich mit neuer Oberfläche, einschließlich Restore/Neuberechnung, Drafts, Delete ohne Sitzungsverlust, Import/Undo an/aus, fehlerhafte/zu große/fremde Versions-/Jahresdateien, Mehrtab-Pause, geschützter Recovery-Download, verweigertem Speicher, Quota-/Löschfehlern, überholten Dateilesungen, 100 Kostenpositionen und Rollback bei Anwendungsfehler.
 - Kein lokaler echter Browserlauf in dieser Arbeitsumgebung. Browsertests sind deshalb auf GitHub Actions eingerichtet.
 
@@ -82,3 +82,12 @@ Lokal Syntax/Assetprüfung und 95 reine Tests erfolgreich. Neue Gegenfälle: Vol
 Browser-Suite jetzt zehn Fälle × Chromium/WebKit = 20. Neuer Fall: geerbter Kontext, Kategorie und Vereinbarung, Quellen, Hinweise im Ergebnisblatt, Text ohne HTML-Ausführung, Breiten 320/390/1280, Reservewechsel mit gesperrten Auswahlen, erneutes Öffnen nach Import und Alles-zuklappen ohne Datenverlust. Neue manuelle iPhone-Abnahme weiterhin offen.
 
 Alpha 0.8 Browser-Nachweis: Commit `8f791152c98aa0daa89dbe395c235d777f019b11`, [Actions 39310549482](https://github.com/ieeks/mietklar/actions/runs/39310549482): Syntax/Assetprüfung, 95 reine Tests und alle 20 Chromium-/WebKit-Fälle erfolgreich. Die fachlichen Hinweise sind bedingt; eine echte iPhone-Abnahme und konkrete Vertrags-/Belegprüfung bleiben offen.
+
+
+## Zentrales Tarifjahr und Quellenanzeige · 0.8.0-alpha.2
+
+Lokal Syntax-/Assetprüfung und 99 reine Tests erfolgreich. Die zusätzliche Tarifprüfung validiert ausgewähltes Dateijahr, Tarifstruktur, HTTPS-Quelle, Quellenbezeichnung und ein echtes ISO-Prüfdatum. Aktuelle 2026-Rechenwerte und Format-4-Sicherungen bleiben unverändert. Ein abweichendes Sicherungsjahr nennt beide Jahre und wird nicht übernommen.
+
+Browser-Suite jetzt zwölf Fälle × Chromium/WebKit = 24: Quellenlink/Prüfdatum am Ergebnis und im Druckblatt; fiktiver Jahreswechsel durch genau eine geänderte Tarifdatei-Auswahl, alle Jahresbeschriftungen, AfA-Kaufjahresgrenze, Exportjahr und unveränderte geschützte lokale Altsicherung; abgewiesener Fremdjahresimport ohne Eingabeverlust. Falsches Dokumentjahr, unsicherer Quellenlink und ungültiges Prüfdatum sperren Start und Druck. Das fiktive Folgejahr nutzt bewusst unveränderte Teststufen und ist kein realer Tarif.
+
+Lokaler Browserlauf noch nicht möglich: Browser-Download lieferte ein unvollständiges ZIP. Der CI-Nachweis für diesen Commit wird nach dem Lauf ergänzt. Native iPhone-/Safari-Abnahme bleibt offen.

@@ -1,5 +1,12 @@
 # Änderungen
 
+## 0.8.0-alpha.2 · 23.10.2026
+
+- Eine zentrale aktive Tarifdatei; Kalenderbeschriftungen, AfA-Kaufjahresgrenze, Druckblatt und Sicherungen verwenden deren Jahr.
+- Verlinkte Tarifquelle und dokumentiertes Prüfdatum unter dem Ergebnis sowie im Druck/PDF. Unveränderte Tarifwerte und fachlicher Quellenstand.
+- Quellenmetadaten und Dateijahr werden vor dem Start geprüft; Meldung bei fremdem Sicherungsjahr nennt beide Jahre. Format 4 und geschützte alte Stände bleiben erhalten.
+- Zusätzliche Tarif-/Jahreswechsel- und Browserfälle; historische 2026-Rechenfälle bleiben unabhängig erhalten.
+
 ## 0.8.0-alpha.1 · 19.10.2026
 
 - Vier Schritte pro Kostenkarte mit 18 Kostenarten, Quellen und konkreten nächsten Aktionen.
@@ -51,6 +58,7 @@ Wortmarke als Home-Button: von jedem Schritt direkt zu Ziel & Einkommen, ohne Ei
 ## 0.1.0-alpha.1 – 18.10.2026
 
 Erster GitHub-Checkpoint des gemeinsam abgestimmten geführten Mietrechners. Laufende Kosten, AfA, 2026-Tarif, Zielmiete und Anschaffungsvergleich mit offen ausgewiesenen Vereinfachungen. Fiktive öffentliche Beispieldaten, separater Rechenkern, 11 Tests, Projektplan, Recherche, Handover und Roadmap. Noch keine produktive Freigabe und kein aktiviertes GitHub Pages.
+
 
 
 

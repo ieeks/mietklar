@@ -1,13 +1,24 @@
-import { suggestLandShare } from './afa.js?v=0.8.0-alpha.1';
-import { resolveYear } from './year.js?v=0.8.0-alpha.1';
-import { numeric, money } from './numbers.js?v=0.8.0-alpha.1';
+import { suggestLandShare } from './afa.js?v=0.8.0-alpha.2';
+import { resolveYear } from './year.js?v=0.8.0-alpha.2';
+import { numeric, money } from './numbers.js?v=0.8.0-alpha.2';
+import { tariffCheckedDate } from './tariff.js?v=0.8.0-alpha.2';
+
+export function renderTariff(root, tariff) {
+  root.querySelectorAll('[data-tariff-year]').forEach(node => { node.textContent = tariff.year; });
+  root.querySelector('[data-key="periodMode"] option[value="year"]').textContent = 'Kalenderjahr ' + tariff.year + ' · Start & Leerstand';
+  root.querySelector('[data-key="afaPurchaseYear"]').max = tariff.year;
+  const source = root.querySelector('[data-tariff-source]');
+  source.href = tariff.source; source.textContent = tariff.sourceLabel;
+  root.querySelector('[data-tariff-checked]').textContent = tariffCheckedDate(tariff);
+  root.querySelector('[data-tariff-info]').hidden = false;
+}
 
 export function landSuggestion(fields) {
   return suggestLandShare({ municipality: fields.afaMunicipality, priceBand: fields.afaLandPriceBand,
     units: fields.afaUnits, exception: fields.afaLandException });
 }
 
-export function renderForm(root, state) {
+export function renderForm(root, state, tariffYear) {
   const q = s => root.querySelector(s), all = s => [...root.querySelectorAll(s)];
   const f = state.fields, forward = state.calculationMode === 'rent', yearMode = f.periodMode === 'year';
   all('[data-calc-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.calcMode === state.calculationMode)));
@@ -33,8 +44,8 @@ export function renderForm(root, state) {
   q('[data-slider-max]').textContent = money(Number(slider.max));
   try {
     const period = resolveYear({ mode: f.periodMode, startMonth: numeric(f.startMonth), vacantMonths: numeric(f.vacantMonths), expectedVacantMonths: numeric(f.expectedVacantMonths) });
-    q('[data-year-summary]').textContent = period.rentMonths + ' Mietmonate in 2026. Wunschbetrag = Durchschnitt über zwölf Kalendermonate; 1.000 €/Monat bedeuten 12.000 € Jahresziel.';
-    q('[data-summary="period"]').textContent = period.rentMonths + ' Mietmonate' + (yearMode ? ' · 2026' : ' · Regeljahr');
+    q('[data-year-summary]').textContent = period.rentMonths + ' Mietmonate in ' + tariffYear + '. Wunschbetrag = Durchschnitt über zwölf Kalendermonate; 1.000 €/Monat bedeuten 12.000 € Jahresziel.';
+    q('[data-summary="period"]').textContent = period.rentMonths + ' Mietmonate' + (yearMode ? ' · ' + tariffYear : ' · Regeljahr');
   } catch { q('[data-summary="period"]').textContent = 'Bitte prüfen'; q('[data-year-summary]').textContent = 'Bitte Startmonat und Leerstand prüfen.'; }
   const suggestion = landSuggestion(f);
   q('[data-land-suggestion]').textContent = suggestion.message;
@@ -58,3 +69,4 @@ export function renderAfa(root, result) {
   q('[data-afa-first-wrap]').hidden = result.firstYearAfa === null;
   q('[data-afa-first]').textContent = money(result.firstYearAfa);
 }
+

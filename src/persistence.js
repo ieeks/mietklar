@@ -1,6 +1,6 @@
-import { COST_KIND_IDS } from './cost-guidance.js?v=0.8.0-alpha.1';
-import { suggestLandShare } from './afa.js?v=0.8.0-alpha.1';
-import { numericDraft, numeric as parsedNumeric } from './numbers.js?v=0.8.0-alpha.1';
+import { COST_KIND_IDS } from './cost-guidance.js?v=0.8.0-alpha.2';
+import { suggestLandShare } from './afa.js?v=0.8.0-alpha.2';
+import { numericDraft, numeric as parsedNumeric } from './numbers.js?v=0.8.0-alpha.2';
 
 export const STORAGE_KEY = 'mietklar:saved-inputs';
 export const SCHEMA_VERSION = 4;
@@ -121,7 +121,8 @@ export function parseSnapshot(raw, expectedYear) {
   exactKeys(value, ['app', 'schemaVersion', 'tariffYear', 'savedAt', 'state'], 'Sicherung');
   if (value.app !== 'mietklar') throw new TypeError('Diese Datei ist keine mietklar-Sicherung.');
   if (![1, 2, 3, SCHEMA_VERSION].includes(value.schemaVersion)) throw new RangeError('Diese Sicherungsversion wird von der App noch nicht unterstützt.');
-  if (!Number.isInteger(value.tariffYear) || value.tariffYear !== expectedYear) throw new RangeError('Sicherung und App gehören nicht zum gleichen Steuerjahr.');
+  if (!Number.isInteger(value.tariffYear)) throw new RangeError('Sicherung enthält kein gültiges Steuerjahr.');
+  if (value.tariffYear !== expectedYear) throw new RangeError('Sicherung gehört zum Steuerjahr ' + value.tariffYear + ', die App rechnet mit ' + expectedYear + '.');
   let state = validateState(value.state, value.schemaVersion);
   if (value.schemaVersion === 1) state = {
     ...state, fields: { ...state.fields, ...YEAR_DEFAULTS },
@@ -150,3 +151,4 @@ export function writeSavedSnapshot(storage, state, tariffYear, savedAt) {
 export function removeSavedSnapshot(storage) {
   storage.removeItem(STORAGE_KEY);
 }
+

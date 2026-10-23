@@ -1,5 +1,6 @@
 {
   "year": 2026,
+  "sourceLabel": "BMF",
   "source": "https://www.bmf.gv.at/themen/steuern/arbeitnehmerveranlagung/steuertarif-steuerabsetzbetraege/steuertarif-steuerabsetzbetraege.html",
   "checkedAt": "2026-10-18",
   "brackets": [
@@ -13,3 +14,4 @@
   ],
   "note": "55 Prozent oberhalb einer Million befristet bis 2029. Kein vollständiges Veranlagungsmodell."
 }
+

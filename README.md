@@ -1,6 +1,6 @@
 # mietklar.
 
-**Alpha 0.8 · Stand 19.10.2026**
+**Alpha 0.8 · Stand 23.10.2026**
 
 Welche Hauptmiete brauchst du für deinen Wunschüberschuss – und was bleibt von einer vorgegebenen Miete nach Zahlungen, Rücklage und zusätzlicher Einkommensteuer?
 
@@ -23,7 +23,7 @@ npm run check
 npm test
 ```
 
-Die Syntaxprüfung findet JavaScript-Dateien automatisch und prüft konsistente Asset-Versionen. 95 reine Rechen-, Kosten-, AfA-, Jahres-, Speicher- und Szenariotests, einschließlich 3.000 deterministischer Zielmietfälle. Für die zusätzlichen Browserprüfungen ist Playwright ausschließlich als Entwicklungsabhängigkeit enthalten:
+Die Syntaxprüfung findet JavaScript-Dateien automatisch und prüft konsistente Asset-Versionen sowie die aktive Tarifdatei. 99 reine Rechen-, Kosten-, AfA-, Jahres-, Speicher-, Tarif- und Szenariotests, einschließlich 3.000 deterministischer Zielmietfälle. Für die zusätzlichen Browserprüfungen ist Playwright ausschließlich als Entwicklungsabhängigkeit enthalten:
 
 ```sh
 npm ci
@@ -31,7 +31,13 @@ npx playwright install --with-deps chromium webkit
 npm run test:e2e
 ```
 
-GitHub Actions prüft Syntax und Rechenfälle sowie zehn Bedienungsfälle in Chromium und WebKit. Nachweise und verbleibende manuelle Abnahme: [TESTING.md](docs/TESTING.md).
+GitHub Actions prüft Syntax und Rechenfälle sowie zwölf Bedienungsfälle in Chromium und WebKit. Nachweise und verbleibende manuelle Abnahme: [TESTING.md](docs/TESTING.md).
+
+## Tarifjahr und Quelle
+
+`src/tariff.js` wählt einmalig `data/tarif-2026.json`. Tarifjahr, BMF-Link und Prüfdatum stammen aus dieser Datei. Jahresangaben in Oberfläche, Kalenderplanung, AfA-Kaufjahresgrenze, Sicherungen und Druckblatt verwenden dasselbe Jahr. Unter dem Ergebnis und im PDF stehen Tarifjahr, verlinkte Quelle und das dokumentierte Prüfdatum. Der bestehende Quellenstand bleibt 18.10.2026; das Datum des technischen Umbaus ist keine neue fachliche Quellenprüfung.
+
+Für ein neues Jahr zuerst eine fachlich geprüfte `data/tarif-JJJJ.json` mit `year`, `source`, `sourceLabel`, `checkedAt` und `brackets` ergänzen. Dann ausschließlich die Tarifdatei in `src/tariff.js` umstellen, Paketversion erhöhen, `npm run assets:stamp`, `npm run check`, `npm test` und Browserprüfungen ausführen. Historische Referenztests behalten ihre geprüften Jahrestarife. Kein automatisches Umschalten nach Systemdatum. Abweichendes Dateijahr oder ungültige Quellenangaben verhindern den Start. Sicherungen anderer Jahre bleiben geschützt; die Fehlermeldung nennt beide Jahre. Speicherformat bleibt 4. Weitere fachliche Regeln und deren Quellen sind vor einer neuen Jahresfreigabe weiterhin zu prüfen.
 
 ## Bedienung
 
@@ -87,3 +93,4 @@ Die App überträgt Formulareingaben nicht an einen Server. Die freiwillige loka
 GitHub Pages veröffentlicht statisch aus `main` und `/ (root)` mit relativen Asset-Pfaden.
 
 Bei einer neuen Paketversion vor Veröffentlichung `npm run assets:stamp` ausführen. Alle Browsermodule, Stylesheet und Tarifabruf werden passend versioniert; die Prüfung verhindert gemischte alte/neue Dateien aus dem Browsercache.
+
