@@ -1,10 +1,10 @@
-import { createAmountInputs } from './amount-inputs.js?v=0.8.0-alpha.1';
-import { validateTariff } from './calc.js?v=0.8.0-alpha.1';
-import { setupPersistence } from './storage-ui.js?v=0.8.0-alpha.1';
-import { createCostEditor } from './cost-editor.js?v=0.8.0-alpha.1';
-import { renderForm, landSuggestion } from './form-view.js?v=0.8.0-alpha.1';
-import { evaluateScenario } from './scenario.js?v=0.8.0-alpha.1';
-import { renderResult, renderError } from './result-view.js?v=0.8.0-alpha.1';
+import { createAmountInputs } from './amount-inputs.js?v=0.8.0-alpha.2';
+import { loadActiveTariff } from './tariff.js?v=0.8.0-alpha.2';
+import { setupPersistence } from './storage-ui.js?v=0.8.0-alpha.2';
+import { createCostEditor } from './cost-editor.js?v=0.8.0-alpha.2';
+import { renderForm, renderTariff, landSuggestion } from './form-view.js?v=0.8.0-alpha.2';
+import { evaluateScenario } from './scenario.js?v=0.8.0-alpha.2';
+import { renderResult, renderError } from './result-view.js?v=0.8.0-alpha.2';
 
 (async () => {
   const root = document.getElementById('mietklar-app');
@@ -43,7 +43,7 @@ import { renderResult, renderError } from './result-view.js?v=0.8.0-alpha.1';
     lastFingerprint = fingerprint;
     all('[aria-invalid="true"]').forEach(node => node.setAttribute('aria-invalid', 'false'));
     try {
-      renderForm(root, state);
+      renderForm(root, state, tariff.year);
       if (!light) editor.render(state.fields);
       const result = evaluateScenario(state, tariff);
       q('[data-error]').hidden = true;
@@ -110,10 +110,8 @@ import { renderResult, renderError } from './result-view.js?v=0.8.0-alpha.1';
   window.addEventListener('beforeprint', () => compute(false, true));
 
   try {
-    const response = await fetch(new URL('../data/tarif-2026.json?v=0.8.0-alpha.1', import.meta.url));
-    if (!response.ok) throw new Error('Tarifdatei nicht erreichbar');
-    tariff = validateTariff(await response.json());
-    if (tariff.year !== 2026) throw new Error('Tarifjahr stimmt nicht mit der Oberfläche überein');
+    tariff = await loadActiveTariff();
+    renderTariff(root, tariff);
     compute();
     persistence = setupPersistence({ root, tariffYear: tariff.year, captureState, applyState,
       refresh: () => compute(), isValid: () => q('[data-error]').hidden && field('vat').value === 'exempt' });
@@ -123,3 +121,4 @@ import { renderResult, renderError } from './result-view.js?v=0.8.0-alpha.1';
     root.dataset.ready = 'error';
   }
 })();
+

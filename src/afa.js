@@ -1,4 +1,5 @@
-import { nonnegative } from './calc.js?v=0.8.0-alpha.1';
+import { nonnegative } from './calc.js?v=0.8.0-alpha.2';
+import { ACTIVE_TARIFF_YEAR } from './tariff.js?v=0.8.0-alpha.2';
 
 const pending = message => ({
   status: 'open', annualAfa: 0, buildingBasis: null, landValue: null,
@@ -42,7 +43,7 @@ export function regularFirstYearAfa(annualAfa, months) {
 }
 
 /** Full regular-year planning. This is not a property valuation or tax assessment. */
-export function resolveAfa(input, calculationYear = 2026) {
+export function resolveAfa(input, calculationYear = ACTIVE_TARIFF_YEAR) {
   if (!Number.isInteger(calculationYear)) throw new RangeError('Ungültiges Rechenjahr.');
   if (input.mode === 'unknown') return pending('Gebäude-AfA noch nicht ermittelt.');
   if (input.mode === 'known') {
@@ -103,4 +104,5 @@ export function resolveAfa(input, calculationYear = 2026) {
     ]
   };
 }
+
 

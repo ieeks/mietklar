@@ -1,4 +1,4 @@
-import { STORAGE_KEY, SCHEMA_VERSION, MAX_BACKUP_BYTES, makeSnapshot, parseSnapshot, writeSavedSnapshot, removeSavedSnapshot } from './persistence.js?v=0.8.0-alpha.1';
+import { STORAGE_KEY, SCHEMA_VERSION, MAX_BACKUP_BYTES, makeSnapshot, parseSnapshot, writeSavedSnapshot, removeSavedSnapshot } from './persistence.js?v=0.8.0-alpha.2';
 
 export function setupPersistence({ root, tariffYear, captureState, applyState, refresh, isValid }) {
   const doc = root.ownerDocument, win = doc.defaultView;
@@ -181,3 +181,4 @@ export function setupPersistence({ root, tariffYear, captureState, applyState, r
   loadSaved();
   return { scheduleSave, flush };
 }
+

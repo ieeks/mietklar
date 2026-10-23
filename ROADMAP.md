@@ -87,7 +87,8 @@
 - [x] Alpha 0.7: separates aktuelles Ergebnisblatt über Browserdruck/PDF, keine Form-Bedienelemente.
 - [ ] Bedienung mit Tastatur, Fokus, Fehlermeldungen, 320-px-Layout und Safari abnehmen.
 - [x] GitHub Pages aktiviert; Live-Alpha vom Nutzer aufgerufen und auf iPhone/Safari getestet: https://ieeks.github.io/mietklar/.
-- [ ] Herkunft/Stand aller Tarif- und Regelwerte anzeigen; fremdes Tarifjahr nicht stillschweigend übernehmen.
+- [x] Alpha 0.8.0-alpha.2: aktive Tarifdatei zentral wählen; Jahr in Oberfläche/AfA/Print/Sicherung ableiten, Tarifquelle und Prüfdatum anzeigen, fremde Sicherungsjahre weiter schützen.
+- [ ] Herkunft/Stand weiterer fachlicher Regelwerte vollständig anzeigen und vor einer neuen Jahresfreigabe prüfen.
 
 ## Später, bei Bedarf
 
@@ -107,3 +108,4 @@ PDF-/OCR-Import, mehrere Eigentümer/Objekte, Rendite, Kredit oder Airbnb. Diese
 - [ ] Neue Prüfhilfe am echten iPhone testen; persönliche Belege und konkrete Klauseln separat prüfen.
 
 Danach: individuelle AfA-Unterlagen vervollständigen, gemeinsame Abnahme der Planung mit belastbaren Eingaben; Teilmonate/Zu- und Abflusszeitpunkte bleiben ein späterer eigener Modellschritt.
+

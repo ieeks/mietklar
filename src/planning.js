@@ -1,4 +1,4 @@
-import { nonnegative, cashAtRent, solveRent } from './calc.js?v=0.8.0-alpha.1';
+import { nonnegative, cashAtRent, solveRent } from './calc.js?v=0.8.0-alpha.2';
 
 /** One salary income only. Already adjusted bases must never receive another deduction. */
 export function resolveIncomeBase(input) {
@@ -29,4 +29,5 @@ export function calculateScenario(input, model, tariff) {
   const rent = nonnegative(input.rent, 'Monatliche Hauptmiete');
   return { rent, ...cashAtRent(rent, model, tariff) };
 }
+
 

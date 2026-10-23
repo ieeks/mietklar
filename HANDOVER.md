@@ -1,6 +1,6 @@
 # Übergabe: mietklar. Alpha 0.8
 
-Stand: 19.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADMAP, docs/RESEARCH lesen. Danach zuerst den aktuellen Branch/Commit prüfen; die nächste Sitzung nicht aus dem Gesprächsgedächtnis rekonstruieren.
+Stand: 23.10.2026, Europe/Vienna. Nächster Einstieg: README, diese Datei, ROADMAP, docs/RESEARCH lesen. Danach zuerst den aktuellen Branch/Commit prüfen; die nächste Sitzung nicht aus dem Gesprächsgedächtnis rekonstruieren.
 
 ## Ziel und bestätigte Entscheidungen
 
@@ -74,7 +74,7 @@ Die Vorschreibung enthält getrennte BK, Wasser, Heizung, Warmwasser, I-Fonds. J
 
 1. Neue Einseitenansicht auf iPhone/Safari abnehmen: beide Richtungen, Regler/exaktes Kommafeld, alle Hilfen, Speichern/Import, PDF-/Druckdialog und Layout. Speichern/Sicherung der Alpha 0.5 wurde am 19.10.2026 ausdrücklich abgenommen; das ist keine Abnahme des neuen Designs.
 2. Neue Kosten-Prüfhilfe gemeinsam mit fiktiven Eingaben abnehmen; anschließend individuelle Belege und Vertragsgrundlagen privat prüfen. Vergleich pro m² bleibt Orientierung, keine gesetzliche Freigabe.
-3. Weitere Review-Punkte und Reihenfolge in docs/REVIEW_FOLLOWUP.md. Vor Jahreswechsel Tarifparameter/Jahr zentralisieren. Teilmonate/abweichende Zahlungen und persönliche Steuerfaktoren bleiben eigene größere Blöcke.
+3. Weitere Review-Punkte und Reihenfolge in docs/REVIEW_FOLLOWUP.md. Tarifdatei/Jahr und Quellenanzeige sind seit 0.8.0-alpha.2 zentralisiert; vor einer neuen Jahresfreigabe die fachlichen Regeln erneut prüfen. Teilmonate/abweichende Zahlungen und persönliche Steuerfaktoren bleiben eigene größere Blöcke.
 4. Persönlichen Fall privat gegenprüfen; keine Originale/echten Zahlen in GitHub. USt-Voraussetzungen separat klären.
 
 GitHub Pages ist aktiviert: https://ieeks.github.io/mietklar/. Änderungen auf main veröffentlichen automatisch.
@@ -110,3 +110,12 @@ Schema 4 ergänzt `composition` (max. 400 Zeichen), `agreement` (unknown/planned
 Nächster Nutzertest: eine fiktive Karte öffnen, Mietrecht/Vertragsstatus ändern, Kostenart/Vereinbarung prüfen, Quelle öffnen, alles zuklappen, Sicherung exportieren/importieren. Echte iPhone-/Safari-Dialoge weiterhin separat abnehmen. Individuelle Vertrags-/Belegprüfung und Gebäude-AfA sind dadurch nicht abgeschlossen.
 
 Alpha 0.8 Browser-Nachweis: Commit `8f791152c98aa0daa89dbe395c235d777f019b11`, [Actions 39310549482](https://github.com/ieeks/mietklar/actions/runs/39310549482): Syntax/Assetprüfung, 95 reine Tests und alle 20 Chromium-/WebKit-Fälle erfolgreich. Die fachlichen Hinweise sind bedingt; eine echte iPhone-Abnahme und konkrete Vertrags-/Belegprüfung bleiben offen.
+
+
+## Tarifdatei und Quelle · 0.8.0-alpha.2 / 23.10.2026
+
+`src/tariff.js` wählt genau eine aktive Datei, derzeit `data/tarif-2026.json`. Der erwartete Jahrgang wird aus dem Dateinamen abgeleitet und gegen das Dokument geprüft. `loadActiveTariff` prüft Tarifstruktur, Jahr, HTTPS-Quellenlink, `sourceLabel` und `checkedAt`, bevor die Oberfläche startet. Jahresbeschriftungen, Kalenderplanung, AfA-Kaufjahresgrenze, Druckblatt und Sicherungen folgen diesem Dokumentjahr; keine Umschaltung nach Systemdatum. `sourceLabel` ergänzt die bestehende Datei; Stufen, Quelle und Prüfdatum 18.10.2026 bleiben fachlich unverändert. Quelle und Datum stehen unter dem Ergebnis und im Druck/PDF.
+
+Speicherformat bleibt 4. Abweichende Sicherungsjahre werden weiterhin geschützt und mit beiden Jahren gemeldet, keine automatische Jahresmigration. `npm run check` prüft zusätzlich das aktive Dokument und genau eine Tarifdatei-Auswahl; Asset-Version 0.8.0-alpha.2 durchgehend gestempelt. Lokal 99 reine Tests und Syntax-/Assetprüfung erfolgreich. Browsernachweis siehe docs/TESTING.md. Weitere fachliche Regeln/Quellen und persönliche AfA werden dadurch nicht neu freigegeben.
+
+Browsernachweis der Implementierung: Commit `f34e59de30923ceb0484abce2d291e064c7b5927`, [Actions 39967212316](https://github.com/ieeks/mietklar/actions/runs/39967212316): 99 reine Tests, Syntax-/Asset-/Tarifprüfung und alle 24 Chromium-/WebKit-Fälle ohne Retry erfolgreich. Mobile Quellenzeile visuell geprüft. Native iPhone-Abnahme bleibt offen.

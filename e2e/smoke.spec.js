@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
+import { ACTIVE_TARIFF_URL } from '../src/tariff.js';
+const currentTariff = JSON.parse(await readFile(ACTIVE_TARIFF_URL, 'utf8'));
 const field = (page, key) => page.locator('[data-key="' + key + '"]');
 const key = 'mietklar:saved-inputs';
 const release = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8')).version;
@@ -191,8 +193,15 @@ test('legacy formats 1, 2 and 3 imports preserve financial values and do not ena
 });
 
 test('print sheet uses the current result and hides app controls in print media', async ({ page }, testInfo) => {
+  await expect(page.locator('[data-tariff-info]')).toContainText('Tarif ' + currentTariff.year);
+  await expect(page.locator('[data-tariff-source]')).toHaveText(currentTariff.sourceLabel);
+  await expect(page.locator('[data-tariff-source]')).toHaveAttribute('href', currentTariff.source);
+  await expect(page.locator('[data-tariff-checked]')).toHaveText(currentTariff.checkedAt.split('-').reverse().join('.'));
   await page.locator('[data-calc-mode="rent"]').click();
   await expect(page.locator('[data-print-sheet]')).toContainText('505,00');
+  await expect(page.locator('[data-print-sheet]')).toContainText('Tarif ' + currentTariff.year);
+  await expect(page.locator('[data-print-sheet]')).toContainText('geprüft am ' + currentTariff.checkedAt.split('-').reverse().join('.'));
+  await expect(page.locator('[data-print-sheet] a').first()).toHaveAttribute('href', currentTariff.source);
   await page.evaluate(() => { window.print = () => { window.__printed = true; }; });
   await page.locator('[data-print]').click(); expect(await page.evaluate(() => window.__printed)).toBe(true);
   await page.emulateMedia({ media: 'print' });
@@ -327,4 +336,56 @@ test('guided costs inherit context, preserve review data and keep legal and tax 
   await page.locator('[data-collapse-all]').click();
   await expect(page.locator('details[open]')).toHaveCount(0);
   const again = await exportBackup(page); expect(again.state).toEqual(saved.state);
+});
+
+
+test('one selected tariff controls labels, purchase-year limit, print and backup-year protection', async ({ page }) => {
+  const previous = await exportBackup(page), rawPrevious = JSON.stringify(previous);
+  await page.evaluate(({ key, raw }) => localStorage.setItem(key, raw), { key, raw: rawPrevious });
+  const nextYear = currentTariff.year + 1;
+  // Fictitious year with unchanged brackets: tests configuration, not future tax law.
+  const synthetic = { ...currentTariff, year: nextYear, sourceLabel: 'Fiktive Testquelle', checkedAt: nextYear + '-01-02' };
+  await page.route(/\/src\/tariff\.js(?:\?|$)/, async route => {
+    const response = await route.fetch();
+    await route.fulfill({ response, body: (await response.text()).replace('tarif-' + currentTariff.year + '.json', 'tarif-' + nextYear + '.json') });
+  });
+  await page.route(new RegExp('/data/tarif-' + nextYear + '\\.json(?:\\?|$)'), route => route.fulfill({ json: synthetic }));
+  await page.reload();
+  await expect(page.locator('#mietklar-app')).toHaveAttribute('data-ready', 'true');
+  for (const node of await page.locator('[data-tariff-year]').all()) await expect(node).toHaveText(String(nextYear));
+  await expect(field(page, 'afaPurchaseYear')).toHaveAttribute('max', String(nextYear));
+  await expect(page.locator('[data-tariff-source]')).toHaveText('Fiktive Testquelle');
+  await expect(page.locator('[data-tariff-checked]')).toHaveText('02.01.' + nextYear);
+  await expect(page.locator('[data-storage-status]')).toContainText(String(currentTariff.year));
+  await expect(page.locator('[data-storage-status]')).toContainText(String(nextYear));
+  expect(await page.evaluate(key => localStorage.getItem(key), key)).toBe(rawPrevious);
+  await openSection(page, 'period');
+  await field(page, 'periodMode').selectOption('year');
+  await expect(field(page, 'periodMode').locator('option:checked')).toContainText(String(nextYear));
+  await expect(page.locator('[data-year-summary]')).toContainText('Mietmonate in ' + nextYear);
+  await expect(page.locator('[data-summary="period"]')).toContainText(String(nextYear));
+  const current = await exportBackup(page);
+  expect(current.tariffYear).toBe(nextYear);
+  await importBackup(page, previous);
+  await expect(page.locator('[data-storage-status]')).toContainText('Import nicht übernommen');
+  await expect(page.locator('[data-storage-status]')).toContainText(String(currentTariff.year));
+  await expect(page.locator('[data-storage-status]')).toContainText(String(nextYear));
+  expect((await exportBackup(page)).state).toEqual(current.state);
+  expect(await page.evaluate(key => localStorage.getItem(key), key)).toBe(rawPrevious);
+  await expect(page.locator('[data-print-sheet]')).toContainText('Tarif ' + nextYear);
+  await expect(page.locator('[data-print-sheet]')).toContainText('Kalenderjahr ' + nextYear);
+  await expect(page.locator('[data-print-sheet]')).toContainText('Quelle: Fiktive Testquelle · geprüft am 02.01.' + nextYear);
+});
+
+test('wrong year or invalid source metadata prevents startup and printing', async ({ page }) => {
+  for (const patch of [{ year: currentTariff.year + 1 }, { source: 'javascript:alert(1)' }, { checkedAt: '2026-02-30' }]) {
+    await page.route(/\/data\/tarif-\d{4}\.json(?:\?|$)/, route => route.fulfill({ json: { ...currentTariff, ...patch } }));
+    await page.reload();
+    await expect(page.locator('#mietklar-app')).toHaveAttribute('data-ready', 'error');
+    await expect(page.locator('[data-error]')).toContainText('Start nicht möglich');
+    await expect(page.locator('[data-result-content]')).toBeHidden();
+    await expect(page.locator('[data-print]')).toBeDisabled();
+    await expect(page.locator('[data-tariff-info]')).toBeHidden();
+    await page.unroute(/\/data\/tarif-\d{4}\.json(?:\?|$)/);
+  }
 });

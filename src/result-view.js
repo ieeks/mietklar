@@ -1,7 +1,8 @@
-import { costGuidance } from './cost-guidance.js?v=0.8.0-alpha.1';
-import { buildFlow, comparePerSquareMetre } from './scenario.js?v=0.8.0-alpha.1';
-import { money, numeric, decimal } from './numbers.js?v=0.8.0-alpha.1';
-import { renderAfa } from './form-view.js?v=0.8.0-alpha.1';
+import { costGuidance } from './cost-guidance.js?v=0.8.0-alpha.2';
+import { buildFlow, comparePerSquareMetre } from './scenario.js?v=0.8.0-alpha.2';
+import { money, numeric, decimal } from './numbers.js?v=0.8.0-alpha.2';
+import { renderAfa } from './form-view.js?v=0.8.0-alpha.2';
+import { tariffCheckedDate } from './tariff.js?v=0.8.0-alpha.2';
 
 function assumptionsFor(result) {
   const { fields: f, income, period, afaResult, yearAfa, costs } = result;
@@ -42,17 +43,21 @@ function renderFlow(root, result) {
     : money(flow.income) + ' Mietereinnahmen inkl. Kostenersatz · Ø/Monat. AfA ist keine zusätzliche Zahlung.';
 }
 
-function renderPrint(root, result, notes, reference) {
+function renderPrint(root, result, notes, reference, tariff) {
   const doc = root.ownerDocument, sheet = root.querySelector('[data-print-sheet]');
   const node = (tag, text, className) => { const n = doc.createElement(tag); if (text !== undefined) n.textContent = text; if (className) n.className = className; return n; };
   const { fields: f, solved, costs, model, period, income } = result;
   const fragment = doc.createDocumentFragment();
-  fragment.append(node('h1', 'mietklar. · Ergebnisblatt'), node('p', 'Alpha 0.8 · Tarif 2026 · Berechnet am ' + new Date().toLocaleDateString('de-AT')));
+  fragment.append(node('h1', 'mietklar. · Ergebnisblatt'), node('p', 'Alpha 0.8 · Tarif ' + tariff.year + ' · Berechnet am ' + new Date().toLocaleDateString('de-AT')));
+  const provenance = node('p', 'Quelle: '), source = node('a', tariff.sourceLabel);
+  source.href = tariff.source;
+  provenance.append(source, doc.createTextNode(' · geprüft am ' + tariffCheckedDate(tariff)));
+  fragment.append(provenance);
   fragment.append(node('h2', 'Hauptmiete ' + money(solved.rent) + ' je Mietmonat'), node('p', 'Jahressaldo ' + money(solved.annualCash) + ' · Durchschnitt ' + money(solved.monthlyCash) + ' je Kalendermonat'));
   const list = node('dl');
   const entries = [
     ['Rechenrichtung', result.input.mode === 'target' ? 'Wunschüberschuss ' + money(result.input.target) + '/Monat im Jahresdurchschnitt' : 'Vorgegebene Hauptmiete'],
-    ['Zeitraum', period.mode === 'full' ? 'Typisches Vermietungsjahr' : 'Kalenderjahr 2026 · erster möglicher Mietmonat ' + f.startMonth],
+    ['Zeitraum', period.mode === 'full' ? 'Typisches Vermietungsjahr' : 'Kalenderjahr ' + tariff.year + ' · erster möglicher Mietmonat ' + f.startMonth],
     ['Mietmonate / Leerstand', period.rentMonths + ' / ' + period.vacantMonths],
     ['Gehaltsbasis vor Vermietung', money(income.base) + '/Jahr · ' + (f.incomeMode === 'provided' ? 'bereinigt angegeben' : 'KZ 245 ' + money(numeric(f.salary)) + ' minus Werbungskosten ' + money(income.appliedDeduction))],
     ['Hauptmiete / Jahr', money(solved.annualRent)], ['Kostenersatz / Jahr', money(costs.annualReimbursements)],
@@ -140,7 +145,7 @@ export function renderResult(root, result, tariff) {
   q('[data-reference-note]').textContent = reference.above ? 'Über deinem Vergleichswert von ' + money(reference.reference) + '/m². Eigene Orientierung, keine gesetzliche Mietpreisgrenze.' : '';
   q('[data-summary="reference"]').textContent = reference.value === null ? 'Optional' : money(reference.value) + ' / m²';
   renderFlow(root, result);
-  if (allowed) renderPrint(root, result, notes, reference);
+  if (allowed) renderPrint(root, result, notes, reference, tariff);
   else q('[data-print-sheet]').textContent = 'Kein Ergebnisblatt: Umsatzsteuerstatus noch zu prüfen.';
 }
 
@@ -156,3 +161,4 @@ export function renderError(root, error) {
   q('[data-afa-pending-note]').hidden = true;
   q('[data-afa-effective-label]').textContent = 'Gebäude-AfA im gewählten Zeitraum';
 }
+
