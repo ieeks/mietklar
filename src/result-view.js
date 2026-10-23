@@ -1,7 +1,7 @@
-import { costGuidance } from './cost-guidance.js?v=0.8.0-alpha.1';
-import { buildFlow, comparePerSquareMetre } from './scenario.js?v=0.8.0-alpha.1';
-import { money, numeric, decimal } from './numbers.js?v=0.8.0-alpha.1';
-import { renderAfa } from './form-view.js?v=0.8.0-alpha.1';
+import { costGuidance } from './cost-guidance.js?v=0.8.0-alpha.2';
+import { buildFlow, comparePerSquareMetre } from './scenario.js?v=0.8.0-alpha.2';
+import { money, numeric, decimal } from './numbers.js?v=0.8.0-alpha.2';
+import { renderAfa } from './form-view.js?v=0.8.0-alpha.2';
 
 function assumptionsFor(result) {
   const { fields: f, income, period, afaResult, yearAfa, costs } = result;
@@ -16,7 +16,8 @@ function assumptionsFor(result) {
     : 'Kostenersatz: Vertrag und Verteilungsschlüssel sind nicht durch die App geprüft.');
   if (f.rentalLaw === 'unknown') notes.push('Mietrechtliche Einordnung noch offen.');
   notes.push(period.rentMonths + ' volle Mietmonate. Gleiche Miete je Mietmonat und Zahlungen im selben Jahr angenommen. Teilmonate, Ausfälle und Nachzahlungen fehlen.');
-  notes.push('Keine vollständige persönliche Veranlagung; insbesondere keine automatische Verlustgutschrift oder einkommensabhängigen Absetzbeträge.');
+  notes.push('Keine vollständige persönliche Veranlagung; insbesondere keine automatische Verlustgutschrift oder sonstigen persönlichen Steuerentlastungen. Zuschlagsanspruch für aktive Arbeitnehmer angenommen; tatsächliche SV-Rückerstattung und ihre Begrenzung nicht geprüft.');
+  if (result.solved.taxDetails.supplementLoss > 0) notes.push('Weniger Steuerentlastung durch zusätzliche Einkünfte: ' + money(result.solved.taxDetails.supplementLoss) + ' / Jahr Zuschlag zum Verkehrsabsetzbetrag entfallen; bereits in der zusätzlichen Steuer enthalten.');
   return notes;
 }
 
@@ -58,7 +59,8 @@ function renderPrint(root, result, notes, reference) {
     ['Hauptmiete / Jahr', money(solved.annualRent)], ['Kostenersatz / Jahr', money(costs.annualReimbursements)],
     ['Zahlungen inkl. Rücklage/Puffer / Jahr', money(costs.annualCashCosts)], ['Kostenabzug / Jahr', money(costs.annualTaxCosts)],
     ['Gebäude-AfA im Planjahr', money(model.annualAfa)], ['Vermietungseinkünfte / Jahr', money(solved.rentalIncome)],
-    ['Zusätzliche Einkommensteuer / Jahr', money(solved.annualTax)], ['Umsatzsteuer', 'Kleinunternehmerbefreiung als Planungsannahme; keine Statusprüfung'],
+    ['Zusätzliche Einkommensteuer / Jahr', money(solved.annualTax)],
+    ['Darin: weniger Zuschlag zum Verkehrsabsetzbetrag / Jahr', money(solved.taxDetails.supplementLoss)], ['Umsatzsteuer', 'Kleinunternehmerbefreiung als Planungsannahme; keine Statusprüfung'],
     ['Wohnfläche / Vergleich', reference.value === null ? reference.message : decimal(numeric(f.area)) + ' m² · ' + money(reference.value) + '/m²' + (reference.reference === null ? '' : ' · eigener Vergleich ' + money(reference.reference) + '/m²' + (reference.above ? ' (überschritten)' : ''))]
   ];
   entries.forEach(([label, value]) => { list.append(node('dt', label), node('dd', value)); }); fragment.append(list);
@@ -102,6 +104,9 @@ export function renderResult(root, result, tariff) {
   q('[data-caveat]').textContent = allowed
     ? period.rentMonths + ' Mietmonate · Saldo = Jahresergebnis ÷ 12. Offene Abzüge: 0 €. Ohne USt (Annahme).'
     : 'Für diesen Umsatzsteuerstatus gibt es kein Ergebnis. Bitte unter „Gebäude-AfA & Umsatzsteuer“ den Status prüfen.';
+  const loss = solved.taxDetails.supplementLoss;
+  q('[data-supplement-note]').hidden = !allowed || loss <= 0;
+  q('[data-supplement-note]').textContent = 'Weniger Steuerentlastung durch zusätzliche Einkünfte berücksichtigt: ' + money(loss / 12) + ' / Monat im Jahresdurchschnitt. Bereits in der zusätzlichen Steuer enthalten.';
   q('[data-shortfall-note]').hidden = !shortfall || !allowed;
   q('[data-shortfall-note]').textContent = 'Im Jahresdurchschnitt fehlen dir ' + money(Math.abs(cash)) + ' pro Monat. Ein möglicher steuerlicher Verlustausgleich ist nicht berücksichtigt.';
   q('[data-income-explain]').textContent = f.incomeMode === 'provided' ? 'Bereinigte Basis direkt übernommen; kein weiterer Werbungskostenabzug.'
@@ -124,8 +129,8 @@ export function renderResult(root, result, tariff) {
   q('[data-assumptions]').replaceChildren(...notes.map(text => { const li = doc.createElement('li'); li.textContent = text; return li; }));
   q('[data-assumption-count]').textContent = notes.length; q('[data-assumptions-wrap]').hidden = notes.length === 0;
   q('[data-open-cost]').textContent = costs.unknownForward.length + ' offene Erstattungen, ' + costs.unknownTax.length + ' offene Steuerabzüge. Jeweils vorerst 0 €.';
-  const cutoff = tariff.brackets.find(b => b.upTo === null || income.base + Math.max(0, solved.rentalIncome) <= b.upTo);
-  q('[data-tax-explain]').textContent = 'Gehalts-Tarifbasis ' + money(income.base) + '/Jahr. Vermietungseinkünfte ' + money(solved.rentalIncome) + '/Jahr, einschließlich Kostenersatz und abzüglich separat angegebener Kosten/AfA. Oberster betroffener Tarifteil: ' + Math.round(cutoff.rate * 100) + ' %. Nur der jeweilige Einkommensteil wird so besteuert. Persönliche Sonderfälle fehlen.';
+  const cutoff = tariff.brackets.find(b => b.upTo === null || solved.taxDetails.taxableIncome <= b.upTo);
+  q('[data-tax-explain]').textContent = 'Gehalts-Tarifbasis ' + money(income.base) + '/Jahr. Vermietungseinkünfte ' + money(solved.rentalIncome) + '/Jahr, einschließlich Kostenersatz und abzüglich separat angegebener Kosten/AfA. Oberster betroffener Tarifteil: ' + Math.round(cutoff.rate * 100) + ' %. Nur der jeweilige Einkommensteil wird so besteuert. Eine Minderung des Zuschlags zum Verkehrsabsetzbetrag ist zusätzlich berücksichtigt. Anspruch für aktive Arbeitnehmer angenommen; Familienbonus, tatsächliche SV-Rückerstattung und weitere persönliche Sonderfälle fehlen.';
   q('[data-summary="income"]').textContent = money(income.base) + ' / Jahr';
   q('[data-summary="costs"]').textContent = money(costs.annualCashCosts / 12) + ' / Monat · ' + costs.rows.filter(row => row.forwardUnknown || row.taxUnknown).length + ' offen';
   q('[data-summary="afa"]').textContent = afaPending ? 'AfA offen' : money(model.annualAfa) + ' / Jahr';
@@ -153,6 +158,8 @@ export function renderError(root, error) {
   root.querySelectorAll('[data-out]').forEach(node => node.textContent = '–');
   ['income', 'costs', 'afa', 'purchase'].forEach(key => q('[data-summary="' + key + '"]').textContent = 'Bitte prüfen');
   q('[data-open-cost]').textContent = 'Bitte die Eingaben prüfen.';
+  q('[data-supplement-note]').hidden = true;
   q('[data-afa-pending-note]').hidden = true;
   q('[data-afa-effective-label]').textContent = 'Gebäude-AfA im gewählten Zeitraum';
 }
+

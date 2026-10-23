@@ -1,4 +1,4 @@
-import { formatMoneyInput, numeric } from './numbers.js?v=0.8.0-alpha.1';
+import { formatMoneyInput, numeric } from './numbers.js?v=0.8.0-alpha.2';
 
 // Keep the exact draft separate from the grouped display: formatting must not
 // round calculation inputs, rewrite backups, or cause a second blur render.
@@ -54,3 +54,4 @@ export function createAmountInputs(root) {
   refresh();
   return { readValue, writeValue, refresh };
 }
+

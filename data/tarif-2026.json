@@ -3,13 +3,41 @@
   "source": "https://www.bmf.gv.at/themen/steuern/arbeitnehmerveranlagung/steuertarif-steuerabsetzbetraege/steuertarif-steuerabsetzbetraege.html",
   "checkedAt": "2026-10-18",
   "brackets": [
-    {"upTo":13539,"rate":0},
-    {"upTo":21992,"rate":0.20},
-    {"upTo":36458,"rate":0.30},
-    {"upTo":70365,"rate":0.40},
-    {"upTo":104859,"rate":0.48},
-    {"upTo":1000000,"rate":0.50},
-    {"upTo":null,"rate":0.55}
+    {
+      "upTo": 13539,
+      "rate": 0
+    },
+    {
+      "upTo": 21992,
+      "rate": 0.2
+    },
+    {
+      "upTo": 36458,
+      "rate": 0.3
+    },
+    {
+      "upTo": 70365,
+      "rate": 0.4
+    },
+    {
+      "upTo": 104859,
+      "rate": 0.48
+    },
+    {
+      "upTo": 1000000,
+      "rate": 0.5
+    },
+    {
+      "upTo": null,
+      "rate": 0.55
+    }
   ],
-  "note": "55 Prozent oberhalb einer Million befristet bis 2029. Kein vollständiges Veranlagungsmodell."
+  "note": "55 Prozent oberhalb einer Million befristet bis 2029. Kein vollständiges Veranlagungsmodell.",
+  "employeeSupplement": {
+    "maximum": 804,
+    "fullUntil": 19761,
+    "zeroFrom": 30259,
+    "source": "https://www.bmf.gv.at/themen/steuern/arbeitnehmerveranlagung/steuertarif-steuerabsetzbetraege/uebersicht-steuerabsetzbetraege.html",
+    "checkedAt": "2026-10-23"
+  }
 }

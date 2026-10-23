@@ -1,5 +1,14 @@
 # Änderungen
 
+## 0.8.0-alpha.2 · 23.10.2026
+
+- Minderung des Zuschlags zum Verkehrsabsetzbetrag im Arbeitnehmermodell in zusätzlicher Steuer, Zielmiete und Anschaffungsvergleich berücksichtigen.
+- Maximum und Einkommensgrenzen in der Jahres-Tarifdatei mit Strukturprüfung.
+- Kurzer Ergebnis-Hinweis und jährlicher Nachweis im Druckblatt; kein neues Eingabefeld, Schema bleibt 4.
+- Anspruch angenommen, tatsächliche SV-Rückerstattung/Begrenzungen und Familienbonus bleiben außerhalb.
+- 103 reine Tests; zusätzlicher Browserfall in Chromium und WebKit.
+
+
 ## 0.8.0-alpha.1 · 19.10.2026
 
 - Vier Schritte pro Kostenkarte mit 18 Kostenarten, Quellen und konkreten nächsten Aktionen.
@@ -51,6 +60,7 @@ Wortmarke als Home-Button: von jedem Schritt direkt zu Ziel & Einkommen, ohne Ei
 ## 0.1.0-alpha.1 – 18.10.2026
 
 Erster GitHub-Checkpoint des gemeinsam abgestimmten geführten Mietrechners. Laufende Kosten, AfA, 2026-Tarif, Zielmiete und Anschaffungsvergleich mit offen ausgewiesenen Vereinfachungen. Fiktive öffentliche Beispieldaten, separater Rechenkern, 11 Tests, Projektplan, Recherche, Handover und Roadmap. Noch keine produktive Freigabe und kein aktiviertes GitHub Pages.
+
 
 
 

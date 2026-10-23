@@ -4,7 +4,7 @@ Stand: 19.10.2026. Die Abnahme gilt jeweils für den genannten Umfang, nicht pau
 
 ## Lokal erfolgreich
 
-- `npm test`: 95 reine Tests in Tarif-, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Szenariomodulen.
+- `npm test`: 103 reine Tests in Tarif-, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Szenariomodulen.
 - Enthalten: 3.000 deterministische Modelle mit unterschiedlichen Einkommen, Kosten, AfA, Erstattungen, 1–12 Mietmonaten und Zielbeträgen. Jedes Ergebnis erreicht das Ziel; ein Cent weniger Miete reicht nicht, sofern die Lösung nicht bereits 0 € ist. Fester Seed für reproduzierbare Fehler.
 - `npm run check`: Syntaxprüfung aller automatisch gefundenen JavaScript-Dateien in src, tests, e2e und scripts sowie Playwright-Konfiguration. Zusätzlich Versionszuordnung von Browsermodulen, Stylesheet und Tarifabruf geprüft, um gemischte alte/neue Assets nach Pages-Updates zu verhindern. Kein ESLint-/Typprüfungsnachweis.
 - Playwright-Testliste: neun Fälle × zwei Engines = 18 Fälle gefunden. Dies allein ist kein Browserlauf.
@@ -82,3 +82,12 @@ Lokal Syntax/Assetprüfung und 95 reine Tests erfolgreich. Neue Gegenfälle: Vol
 Browser-Suite jetzt zehn Fälle × Chromium/WebKit = 20. Neuer Fall: geerbter Kontext, Kategorie und Vereinbarung, Quellen, Hinweise im Ergebnisblatt, Text ohne HTML-Ausführung, Breiten 320/390/1280, Reservewechsel mit gesperrten Auswahlen, erneutes Öffnen nach Import und Alles-zuklappen ohne Datenverlust. Neue manuelle iPhone-Abnahme weiterhin offen.
 
 Alpha 0.8 Browser-Nachweis: Commit `8f791152c98aa0daa89dbe395c235d777f019b11`, [Actions 39310549482](https://github.com/ieeks/mietklar/actions/runs/39310549482): Syntax/Assetprüfung, 95 reine Tests und alle 20 Chromium-/WebKit-Fälle erfolgreich. Die fachlichen Hinweise sind bedingt; eine echte iPhone-Abnahme und konkrete Vertrags-/Belegprüfung bleiben offen.
+
+
+## Zuschlagskorrektur 0.8.0-alpha.2
+
+103 reine Tests und Syntax/Assetprüfung lokal erfolgreich. Acht neue Gegenfälle prüfen volle/halbe/fehlende Entlastung, beide Grenzen ±1 €, konfigurierbare Parameter und kaputte Tarifdateien, gleichen Freibetrags-/Einkommensansatz, keine Gutschrift aus Vermietungsverlusten, unveränderte Fälle oberhalb der Obergrenze, Vorwärts-/Rückwärtsrechnung und minimale Cent-Miete bei 6/12 Mietmonaten. Kosten/AfA/Erstattungen und Anschaffungen verändern dieselbe Zuschlagsbasis.
+
+Unabhängiger fiktiver Referenzfall: Gehaltsbasis 25.010 €, monatliche Hauptmiete 600 €, zwölf Mietmonate, 4.020 € jährliche Cash-Kosten, kein Abzug/AfA. Zusätzliche Tarifsteuer 2.160 € plus 402 € Zuschlagsminderung = 2.562 € jährliche Mehrbelastung; 51,50 € Monats-Cash. Bei 7.200 € AfA entfällt die Mehrbelastung. Kein privater Datensatz.
+
+Elf Browserfälle je Engine (22 insgesamt), zusätzlicher Fall für sichtbaren Hinweis, KZ-/direkte Einkommensbasis, beide Rechenrichtungen, Druckbetrag, Wegfall durch AfA, Import-Neuberechnung und ungültige Eingaben ohne alten Hinweis. CI-Nachweis wird nach Abschluss ergänzt. Kein lokaler echter Browserlauf oder neue native iPhone-Abnahme behauptet.

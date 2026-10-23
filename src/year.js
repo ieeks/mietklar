@@ -1,5 +1,5 @@
-import { nonnegative } from './calc.js?v=0.8.0-alpha.1';
-import { regularFirstYearAfa } from './afa.js?v=0.8.0-alpha.1';
+import { nonnegative } from './calc.js?v=0.8.0-alpha.2';
+import { regularFirstYearAfa } from './afa.js?v=0.8.0-alpha.2';
 
 export function resolveYear(input) {
   if (input.mode === 'full') {
@@ -25,3 +25,4 @@ export function resolveYearAfa(input, fullAfa) {
   if (fullAfa.status === 'open' || input.months === null) return { annualAfa: 0, notes: ['Für die reguläre erste Jahres-AfA fehlen Volljahreswert oder AfA-Nutzungsmonate; vorerst 0 €.'] };
   return { annualAfa: regularFirstYearAfa(fullAfa.annualAfa, input.months), notes: ['Reguläres erstes AfA-Jahr nach separat eingegebenen Nutzungsmonaten. Leerstand ist nicht automatisch eine AfA-Kürzung; keine beschleunigte AfA.'] };
 }
+

@@ -107,3 +107,14 @@ PDF-/OCR-Import, mehrere Eigentümer/Objekte, Rendite, Kredit oder Airbnb. Diese
 - [ ] Neue Prüfhilfe am echten iPhone testen; persönliche Belege und konkrete Klauseln separat prüfen.
 
 Danach: individuelle AfA-Unterlagen vervollständigen, gemeinsame Abnahme der Planung mit belastbaren Eingaben; Teilmonate/Zu- und Abflusszeitpunkte bleiben ein späterer eigener Modellschritt.
+
+
+## Korrektur 0.8.0-alpha.2 – Zuschlag zum Verkehrsabsetzbetrag
+
+- [x] Jährliche Zuschlagsparameter in der Tarifdatei; Strukturprüfung ohne stillen Fallback.
+- [x] Minderung in beiden Rechenrichtungen sowie im Anschaffungsvergleich berücksichtigen.
+- [x] Kurzer Ergebnis-Hinweis und gesonderter Nachweis im Druckblatt; kein zusätzliches Eingabefeld.
+- [x] Grenzfälle, Freibetrag, AfA/Kosten/Erstattungen, Verlust ohne erfundene Gutschrift und minimale Cent-Zielmiete prüfen.
+- [ ] Tatsächliche Gebäude-AfA vervollständigen und mit dem persönlichen Fall am iPhone durchgehen.
+
+Anspruch für aktive Arbeitnehmer ist Modellannahme. Tatsächliche SV-Rückerstattung/Begrenzungen und Familienbonus bleiben gesondert; kein allgemeiner Veranlagungsrechner.

@@ -1,6 +1,6 @@
-import { suggestLandShare } from './afa.js?v=0.8.0-alpha.1';
-import { resolveYear } from './year.js?v=0.8.0-alpha.1';
-import { numeric, money } from './numbers.js?v=0.8.0-alpha.1';
+import { suggestLandShare } from './afa.js?v=0.8.0-alpha.2';
+import { resolveYear } from './year.js?v=0.8.0-alpha.2';
+import { numeric, money } from './numbers.js?v=0.8.0-alpha.2';
 
 export function landSuggestion(fields) {
   return suggestLandShare({ municipality: fields.afaMunicipality, priceBand: fields.afaLandPriceBand,
@@ -58,3 +58,4 @@ export function renderAfa(root, result) {
   q('[data-afa-first-wrap]').hidden = result.firstYearAfa === null;
   q('[data-afa-first]').textContent = money(result.firstYearAfa);
 }
+

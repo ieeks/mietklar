@@ -1,6 +1,6 @@
 # mietklar.
 
-**Alpha 0.8 · Stand 19.10.2026**
+**Alpha 0.8.0-alpha.2 · Stand 23.10.2026**
 
 Welche Hauptmiete brauchst du für deinen Wunschüberschuss – und was bleibt von einer vorgegebenen Miete nach Zahlungen, Rücklage und zusätzlicher Einkommensteuer?
 
@@ -23,7 +23,7 @@ npm run check
 npm test
 ```
 
-Die Syntaxprüfung findet JavaScript-Dateien automatisch und prüft konsistente Asset-Versionen. 95 reine Rechen-, Kosten-, AfA-, Jahres-, Speicher- und Szenariotests, einschließlich 3.000 deterministischer Zielmietfälle. Für die zusätzlichen Browserprüfungen ist Playwright ausschließlich als Entwicklungsabhängigkeit enthalten:
+Die Syntaxprüfung findet JavaScript-Dateien automatisch und prüft konsistente Asset-Versionen. 103 reine Rechen-, Kosten-, AfA-, Jahres-, Speicher- und Szenariotests, einschließlich 3.000 deterministischer Zielmietfälle. Für die zusätzlichen Browserprüfungen ist Playwright ausschließlich als Entwicklungsabhängigkeit enthalten:
 
 ```sh
 npm ci
@@ -31,7 +31,7 @@ npx playwright install --with-deps chromium webkit
 npm run test:e2e
 ```
 
-GitHub Actions prüft Syntax und Rechenfälle sowie zehn Bedienungsfälle in Chromium und WebKit. Nachweise und verbleibende manuelle Abnahme: [TESTING.md](docs/TESTING.md).
+GitHub Actions prüft Syntax und Rechenfälle sowie elf Bedienungsfälle in Chromium und WebKit. Nachweise und verbleibende manuelle Abnahme: [TESTING.md](docs/TESTING.md).
 
 ## Bedienung
 
@@ -62,9 +62,15 @@ Bei neuen Positionen zuerst die Kostenart wählen. Beim Aufteilen eines Akontos 
 - AfA offen = 0 €, bekannter voller Jahreswert, eigene Gebäudebasis/Satz oder Kaufherleitung ab Kaufjahr 2003 nach ausschließlich privater Nutzung. Grundanteilhilfe nur mit bewusster Übernahme. Kalenderjahres-AfA gesondert: offen, eigener Betrag oder reguläres erstes Halb-/Ganzjahr mit separat angegebenen AfA-Nutzungsmonaten.
 - Anschaffungsvergleich hält die Hauptmiete unverändert, berücksichtigt volle Zahlung und tatsächlichen Jahresabzug. Ein Fehler im optionalen Vergleich verdeckt das gültige Miet-Ergebnis nicht.
 
+## Zuschlag zum Verkehrsabsetzbetrag ab 0.8.0-alpha.2
+
+Im Arbeitnehmermodell wird die Minderung des Zuschlags automatisch in der zusätzlichen Steuer berücksichtigt. Der Rechner vergleicht den Zuschlag vor und nach Hinzurechnung der positiven Vermietungseinkünfte, nach Kosten/AfA und begrenztem Veranlagungsfreibetrag. Die Tarifdatei enthält Maximum und beide Einkommensgrenzen. Beide Rechenrichtungen, der Anschaffungsvergleich und das Druckblatt verwenden dieselbe Korrektur. Bei einem Verlust des Zuschlags erscheint eine kurze Erklärung unter dem Ergebnis; der Betrag ist bereits in der Steuer enthalten und wird nicht nochmals abgezogen.
+
+Beide Einkommenswege setzen aktive Arbeitnehmertätigkeit und einen Anspruch auf den Zuschlag im vereinfachten Modell voraus. Eine tatsächlich auszahlbare SV-Rückerstattung einschließlich Begrenzungen wird nicht ermittelt. Ebenso fehlen Familienbonus und weitere persönliche Steuerwirkungen. Deshalb ist das keine vollständige Veranlagung, insbesondere bei niedrigen Einkommen oder weiteren Entlastungen. Kein zusätzliches Eingabefeld; gespeicherte Angaben bleiben im Format 4 und werden mit der ergänzten Formel neu berechnet.
+
 ## Grenzen und offene Prüfung
 
-Keine vollständige persönliche Veranlagung: insbesondere keine automatische Verlustgutschrift, einkommensabhängigen Absetzbeträge, Sonderausgaben, Familienbonus-Ausschöpfung oder Progressionsvorbehalte; Freibetragsmodell nur Gehalt plus eine Vermietung ohne weitere einschlägige Einkünfte. Kleinunternehmerbefreiung bleibt eine Planungsannahme mit separat zu prüfenden Voraussetzungen.
+Keine vollständige persönliche Veranlagung: insbesondere keine automatische Verlustgutschrift, sonstigen einkommensabhängigen Absetzbeträge, Sonderausgaben, Familienbonus-Ausschöpfung oder Progressionsvorbehalte; Freibetragsmodell nur Gehalt plus eine Vermietung ohne weitere einschlägige Einkünfte. Kleinunternehmerbefreiung bleibt eine Planungsannahme mit separat zu prüfenden Voraussetzungen.
 
 Ganze Monate, gleiche Miete je Mietmonat, Zahlung im selben Jahr. Keine Teilmonate, Mietausfälle, Nachzahlungen oder automatische Abgrenzung rund um den Jahreswechsel. Abzüge, Vermietungsanteile, private Vorperioden, Verteilung und ernsthafte Vermietungsabsicht sind selbst zu klären. Ein Akonto ersetzt keine steuerliche Jahresermittlung. Gebäude-AfA nicht doppelt als Kostenposition erfassen.
 
@@ -87,3 +93,4 @@ Die App überträgt Formulareingaben nicht an einen Server. Die freiwillige loka
 GitHub Pages veröffentlicht statisch aus `main` und `/ (root)` mit relativen Asset-Pfaden.
 
 Bei einer neuen Paketversion vor Veröffentlichung `npm run assets:stamp` ausführen. Alle Browsermodule, Stylesheet und Tarifabruf werden passend versioniert; die Prüfung verhindert gemischte alte/neue Dateien aus dem Browsercache.
+
