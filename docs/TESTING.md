@@ -99,4 +99,6 @@ CI-Nachweis: Commit `f34e59de30923ceb0484abce2d291e064c7b5927`, [Actions 3996721
 
 Unabhängiger fiktiver Referenzfall: Gehaltsbasis 25.010 €, monatliche Hauptmiete 600 €, zwölf Mietmonate, 4.020 € jährliche Cash-Kosten, kein Abzug/AfA. Zusätzliche Tarifsteuer 2.160 € plus 402 € Zuschlagsminderung = 2.562 € jährliche Mehrbelastung; 51,50 € Monats-Cash. Bei 7.200 € AfA entfällt die Mehrbelastung. Kein privater Datensatz.
 
-Dreizehn Browserfälle je Engine (26 insgesamt), zusätzlicher Fall für sichtbaren Hinweis, KZ-/direkte Einkommensbasis, beide Rechenrichtungen, Druckbetrag, Wegfall durch AfA, Import-Neuberechnung und ungültige Eingaben ohne alten Hinweis. CI-Nachweis wird nach Abschluss ergänzt. Kein lokaler echter Browserlauf oder neue native iPhone-Abnahme behauptet.
+Dreizehn Browserfälle je Engine (26 insgesamt), zusätzlicher Fall für sichtbaren Hinweis, KZ-/direkte Einkommensbasis, beide Rechenrichtungen, Druckbetrag, Wegfall durch AfA, Import-Neuberechnung und ungültige Eingaben ohne alten Hinweis.  Kein lokaler echter Browserlauf oder neue native iPhone-Abnahme behauptet.
+
+Zuschlagskorrektur mit zentralem Tarifjahr gemeinsam bestätigt: Commit `81aeaafd5c3d41017a0b991c23b5e487fe936f60`, [Actions 39969115235](https://github.com/ieeks/mietklar/actions/runs/39969115235): Syntax/Asset-/Tarifprüfung, 107 reine Tests und alle 26 Chromium-/WebKit-Fälle erfolgreich. Beide parallelen Änderungen sind enthalten; keine privaten Fixtures. Echte iPhone-Abnahme weiterhin offen.
