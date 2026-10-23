@@ -1,10 +1,10 @@
-import { createAmountInputs } from './amount-inputs.js?v=0.8.0-alpha.2';
-import { loadActiveTariff } from './tariff.js?v=0.8.0-alpha.2';
-import { setupPersistence } from './storage-ui.js?v=0.8.0-alpha.2';
-import { createCostEditor } from './cost-editor.js?v=0.8.0-alpha.2';
-import { renderForm, renderTariff, landSuggestion } from './form-view.js?v=0.8.0-alpha.2';
-import { evaluateScenario } from './scenario.js?v=0.8.0-alpha.2';
-import { renderResult, renderError } from './result-view.js?v=0.8.0-alpha.2';
+import { createAmountInputs } from './amount-inputs.js?v=0.8.0-alpha.3';
+import { loadActiveTariff } from './tariff.js?v=0.8.0-alpha.3';
+import { setupPersistence } from './storage-ui.js?v=0.8.0-alpha.3';
+import { createCostEditor } from './cost-editor.js?v=0.8.0-alpha.3';
+import { renderForm, renderTariff, landSuggestion } from './form-view.js?v=0.8.0-alpha.3';
+import { evaluateScenario } from './scenario.js?v=0.8.0-alpha.3';
+import { renderResult, renderError } from './result-view.js?v=0.8.0-alpha.3';
 
 (async () => {
   const root = document.getElementById('mietklar-app');
@@ -121,4 +121,5 @@ import { renderResult, renderError } from './result-view.js?v=0.8.0-alpha.2';
     root.dataset.ready = 'error';
   }
 })();
+
 

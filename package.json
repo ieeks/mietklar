@@ -1,6 +1,6 @@
 {
   "name": "mietklar",
-  "version": "0.8.0-alpha.2",
+  "version": "0.8.0-alpha.3",
   "private": true,
   "type": "module",
   "description": "Austrian rental cashflow calculator",
@@ -17,3 +17,4 @@
     "node": ">=22"
   }
 }
+

@@ -12,6 +12,12 @@ export function validateTariff(tariff) {
     else { if (!Number.isFinite(b.upTo) || b.upTo <= previous) throw new RangeError('Tarifgrenzen müssen steigen'); previous = b.upTo; }
   });
   if (tariff.brackets.at(-1).upTo !== null) throw new RangeError('Offene letzte Tarifstufe fehlt');
+  const supplement = tariff.employeeSupplement;
+  if (!supplement || !Number.isFinite(supplement.maximum) || supplement.maximum < 0
+    || !Number.isFinite(supplement.fullUntil) || supplement.fullUntil < 0
+    || !Number.isFinite(supplement.zeroFrom) || supplement.zeroFrom <= supplement.fullUntil) {
+    throw new RangeError('Ungültige Zuschlagsparameter in der Tarifdatei');
+  }
   return tariff;
 }
 export function tariffTax(income, tariff) {
@@ -29,13 +35,30 @@ export function assessmentAllowance(otherIncome) {
   nonnegative(otherIncome, 'Andere Einkünfte');
   return otherIncome === 0 ? 0 : Math.max(0, Math.min(730, 1460 - otherIncome));
 }
-export function additionalTax(base, rentalIncome, tariff) {
+/** Entitlement model for active employees; actual SV-refund limits are not assessed. */
+export function employeeSupplement(income, tariff) {
+  nonnegative(income, 'Einkommen für den Zuschlag'); validateTariff(tariff);
+  const { maximum, fullUntil, zeroFrom } = tariff.employeeSupplement;
+  if (income <= fullUntil) return maximum;
+  if (income >= zeroFrom) return 0;
+  return maximum * (zeroFrom - income) / (zeroFrom - fullUntil);
+}
+export function additionalTaxDetails(base, rentalIncome, tariff) {
   nonnegative(base, 'Tarifbasis');
   if (!Number.isFinite(rentalIncome)) throw new RangeError('Ungültige Vermietungseinkünfte');
-  // Alpha: salary + one rental; no other non-payroll income; no tax credit for losses.
+  // Salary + one rental, no other non-payroll income. A rental loss still does
+  // not create a refund or an increased supplement in this planning model.
   const positive = Math.max(0, rentalIncome);
-  const taxable = Math.max(0, base + positive - assessmentAllowance(positive));
-  return Math.max(0, tariffTax(taxable, tariff) - tariffTax(base, tariff));
+  const taxableIncome = base + Math.max(0, positive - assessmentAllowance(positive));
+  const tariffIncrease = Math.max(0, tariffTax(taxableIncome, tariff) - tariffTax(base, tariff));
+  const supplementBefore = employeeSupplement(base, tariff);
+  const supplementAfter = employeeSupplement(taxableIncome, tariff);
+  const supplementLoss = Math.max(0, supplementBefore - supplementAfter);
+  return { annualTax: tariffIncrease + supplementLoss, tariffIncrease, supplementBefore,
+    supplementAfter, supplementLoss, taxableIncome };
+}
+export function additionalTax(base, rentalIncome, tariff) {
+  return additionalTaxDetails(base, rentalIncome, tariff).annualTax;
 }
 export function cashAtRent(monthlyRent, model, tariff) {
   nonnegative(monthlyRent, 'Miete');
@@ -44,9 +67,10 @@ export function cashAtRent(monthlyRent, model, tariff) {
   const reimbursements = nonnegative(model.annualReimbursements ?? 0, 'Mietererstattungen');
   const annualRent = monthlyRent * rentMonths;
   const rentalIncome = annualRent + reimbursements - model.annualTaxCosts - model.annualAfa;
-  const annualTax = additionalTax(model.base, rentalIncome, tariff);
+  const taxDetails = additionalTaxDetails(model.base, rentalIncome, tariff);
+  const annualTax = taxDetails.annualTax;
   const annualCash = annualRent + reimbursements - model.annualCashCosts - annualTax;
-  return { annualRent, annualCash, rentalIncome, annualTax, monthlyCash: annualCash / 12 };
+  return { annualRent, annualCash, rentalIncome, annualTax, taxDetails, monthlyCash: annualCash / 12 };
 }
 export function solveRent(model, tariff) {
   for (const key of ['base', 'annualTaxCosts', 'annualAfa', 'annualCashCosts', 'target']) nonnegative(model[key], key);
@@ -76,5 +100,6 @@ export function comparePurchase({ base, rentalIncome, monthlyCash, purchase, ded
   const burden = purchase - saving;
   return { saving, burden, afterPurchase: monthlyCash - burden / 12 };
 }
+
 
 

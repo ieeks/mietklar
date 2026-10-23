@@ -1,7 +1,7 @@
-import { suggestLandShare } from './afa.js?v=0.8.0-alpha.2';
-import { resolveYear } from './year.js?v=0.8.0-alpha.2';
-import { numeric, money } from './numbers.js?v=0.8.0-alpha.2';
-import { tariffCheckedDate } from './tariff.js?v=0.8.0-alpha.2';
+import { suggestLandShare } from './afa.js?v=0.8.0-alpha.3';
+import { resolveYear } from './year.js?v=0.8.0-alpha.3';
+import { numeric, money } from './numbers.js?v=0.8.0-alpha.3';
+import { tariffCheckedDate } from './tariff.js?v=0.8.0-alpha.3';
 
 export function renderTariff(root, tariff) {
   root.querySelectorAll('[data-tariff-year]').forEach(node => { node.textContent = tariff.year; });
@@ -69,4 +69,5 @@ export function renderAfa(root, result) {
   q('[data-afa-first-wrap]').hidden = result.firstYearAfa === null;
   q('[data-afa-first]').textContent = money(result.firstYearAfa);
 }
+
 

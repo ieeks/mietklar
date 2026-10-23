@@ -1,6 +1,6 @@
-import { COST_KIND_IDS } from './cost-guidance.js?v=0.8.0-alpha.2';
-import { suggestLandShare } from './afa.js?v=0.8.0-alpha.2';
-import { numericDraft, numeric as parsedNumeric } from './numbers.js?v=0.8.0-alpha.2';
+import { COST_KIND_IDS } from './cost-guidance.js?v=0.8.0-alpha.3';
+import { suggestLandShare } from './afa.js?v=0.8.0-alpha.3';
+import { numericDraft, numeric as parsedNumeric } from './numbers.js?v=0.8.0-alpha.3';
 
 export const STORAGE_KEY = 'mietklar:saved-inputs';
 export const SCHEMA_VERSION = 4;
@@ -151,4 +151,5 @@ export function writeSavedSnapshot(storage, state, tariffYear, savedAt) {
 export function removeSavedSnapshot(storage) {
   storage.removeItem(STORAGE_KEY);
 }
+
 

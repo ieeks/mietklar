@@ -1,5 +1,5 @@
-import { nonnegative } from './calc.js?v=0.8.0-alpha.2';
-import { ACTIVE_TARIFF_YEAR } from './tariff.js?v=0.8.0-alpha.2';
+import { nonnegative } from './calc.js?v=0.8.0-alpha.3';
+import { ACTIVE_TARIFF_YEAR } from './tariff.js?v=0.8.0-alpha.3';
 
 const pending = message => ({
   status: 'open', annualAfa: 0, buildingBasis: null, landValue: null,
@@ -104,5 +104,6 @@ export function resolveAfa(input, calculationYear = ACTIVE_TARIFF_YEAR) {
     ]
   };
 }
+
 
 

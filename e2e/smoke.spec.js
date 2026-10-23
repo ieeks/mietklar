@@ -389,3 +389,36 @@ test('wrong year or invalid source metadata prevents startup and printing', asyn
     await page.unroute(/\/data\/tarif-\d{4}\.json(?:\?|$)/);
   }
 });
+
+
+test('employee supplement loss updates rent, cash and print without adding raw inputs', async ({ page }) => {
+  await page.locator('[data-calc-mode="rent"]').click();
+  await field(page, 'monthlyRent').fill('600');
+  await openSection(page, 'income');
+  await field(page, 'salary').fill('25142');
+  await expect(page.locator('[data-out="headline"]')).toContainText('51,50');
+  await expect(page.locator('[data-supplement-note]')).toBeVisible();
+  await expect(page.locator('[data-supplement-note]')).toContainText('33,50');
+  await expect(page.locator('[data-print-sheet]')).toContainText('402,00');
+  const original = await exportBackup(page); expect(original.schemaVersion).toBe(4);
+  await field(page, 'incomeMode').selectOption('provided');
+  await field(page, 'salaryBase').fill('25010');
+  await expect(page.locator('[data-out="headline"]')).toContainText('51,50');
+  await page.locator('[data-calc-mode="target"]').click();
+  await field(page, 'target').fill('600');
+  const rent = await value(page, 'headline');
+  await page.locator('[data-calc-mode="rent"]').click();
+  await field(page, 'monthlyRent').fill(String(rent));
+  await expect(page.locator('[data-out="headline"]')).toContainText('600,00');
+  await openSection(page, 'afa');
+  await field(page, 'afaMode').selectOption('known');
+  await field(page, 'afa').fill('24000');
+  await expect(page.locator('[data-supplement-note]')).toBeHidden();
+  await expect(page.locator('[data-print-sheet]')).not.toContainText('402,00');
+  await importBackup(page, original);
+  await expect(page.locator('[data-out="headline"]')).toContainText('51,50');
+  await expect(page.locator('[data-supplement-note]')).toBeVisible();
+  await field(page, 'monthlyRent').fill('-1');
+  await expect(page.locator('[data-error]')).toBeVisible();
+  await expect(page.locator('[data-supplement-note]')).toBeHidden();
+});

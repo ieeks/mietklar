@@ -4,10 +4,10 @@ Stand: 23.10.2026. Die Abnahme gilt jeweils für den genannten Umfang, nicht pau
 
 ## Lokal erfolgreich
 
-- `npm test`: 99 reine Tests in Tarif-, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Szenariomodulen.
+- `npm test`: 107 reine Tests in Tarif-, Kosten-, AfA-, Planungs-, Jahres-, Speicher- und Szenariomodulen.
 - Enthalten: 3.000 deterministische Modelle mit unterschiedlichen Einkommen, Kosten, AfA, Erstattungen, 1–12 Mietmonaten und Zielbeträgen. Jedes Ergebnis erreicht das Ziel; ein Cent weniger Miete reicht nicht, sofern die Lösung nicht bereits 0 € ist. Fester Seed für reproduzierbare Fehler.
 - `npm run check`: Syntaxprüfung aller automatisch gefundenen JavaScript-Dateien in src, tests, e2e und scripts sowie Playwright-Konfiguration. Zusätzlich Versionszuordnung von Browsermodulen, Stylesheet und Tarifabruf geprüft, um gemischte alte/neue Assets nach Pages-Updates zu verhindern. Kein ESLint-/Typprüfungsnachweis.
-- Playwright-Testliste: zwölf Fälle × zwei Engines = 24 Fälle gefunden. Dies allein ist kein Browserlauf.
+- Playwright-Testliste: dreizehn Fälle × zwei Engines = 26 Fälle gefunden. Dies allein ist kein Browserlauf.
 - DOM-Funktionsdurchgang mit temporärem jsdom: zwölf Speichergruppen erfolgreich mit neuer Oberfläche, einschließlich Restore/Neuberechnung, Drafts, Delete ohne Sitzungsverlust, Import/Undo an/aus, fehlerhafte/zu große/fremde Versions-/Jahresdateien, Mehrtab-Pause, geschützter Recovery-Download, verweigertem Speicher, Quota-/Löschfehlern, überholten Dateilesungen, 100 Kostenpositionen und Rollback bei Anwendungsfehler.
 - Kein lokaler echter Browserlauf in dieser Arbeitsumgebung. Browsertests sind deshalb auf GitHub Actions eingerichtet.
 
@@ -91,3 +91,12 @@ Lokal Syntax-/Assetprüfung und 99 reine Tests erfolgreich. Die zusätzliche Tar
 Browser-Suite jetzt zwölf Fälle × Chromium/WebKit = 24: Quellenlink/Prüfdatum am Ergebnis und im Druckblatt; fiktiver Jahreswechsel durch genau eine geänderte Tarifdatei-Auswahl, alle Jahresbeschriftungen, AfA-Kaufjahresgrenze, Exportjahr und unveränderte geschützte lokale Altsicherung; abgewiesener Fremdjahresimport ohne Eingabeverlust. Falsches Dokumentjahr, unsicherer Quellenlink und ungültiges Prüfdatum sperren Start und Druck. Das fiktive Folgejahr nutzt bewusst unveränderte Teststufen und ist kein realer Tarif.
 
 CI-Nachweis: Commit `f34e59de30923ceb0484abce2d291e064c7b5927`, [Actions 39967212316](https://github.com/ieeks/mietklar/actions/runs/39967212316): Syntax/Asset-/Tarifprüfung, 99 reine Tests und alle 24 Chromium-/WebKit-Fälle ohne Retry erfolgreich. Mobile 390-px-Aufnahme mit Quellenzeile visuell geprüft; Druckblatt mit Quelle/Datum geprüft und PDF in Chromium erzeugt. Lokaler Browser-Download lieferte ein unvollständiges ZIP; die Browsernachweise stammen aus CI. Native iPhone-/Safari-Abnahme bleibt offen.
+
+
+## Zuschlagskorrektur 0.8.0-alpha.3
+
+107 reine Tests und Syntax/Assetprüfung lokal erfolgreich. Acht neue Gegenfälle prüfen volle/halbe/fehlende Entlastung, beide Grenzen ±1 €, konfigurierbare Parameter und kaputte Tarifdateien, gleichen Freibetrags-/Einkommensansatz, keine Gutschrift aus Vermietungsverlusten, unveränderte Fälle oberhalb der Obergrenze, Vorwärts-/Rückwärtsrechnung und minimale Cent-Miete bei 6/12 Mietmonaten. Kosten/AfA/Erstattungen und Anschaffungen verändern dieselbe Zuschlagsbasis.
+
+Unabhängiger fiktiver Referenzfall: Gehaltsbasis 25.010 €, monatliche Hauptmiete 600 €, zwölf Mietmonate, 4.020 € jährliche Cash-Kosten, kein Abzug/AfA. Zusätzliche Tarifsteuer 2.160 € plus 402 € Zuschlagsminderung = 2.562 € jährliche Mehrbelastung; 51,50 € Monats-Cash. Bei 7.200 € AfA entfällt die Mehrbelastung. Kein privater Datensatz.
+
+Dreizehn Browserfälle je Engine (26 insgesamt), zusätzlicher Fall für sichtbaren Hinweis, KZ-/direkte Einkommensbasis, beide Rechenrichtungen, Druckbetrag, Wegfall durch AfA, Import-Neuberechnung und ungültige Eingaben ohne alten Hinweis. CI-Nachweis wird nach Abschluss ergänzt. Kein lokaler echter Browserlauf oder neue native iPhone-Abnahme behauptet.

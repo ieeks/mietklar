@@ -1,4 +1,4 @@
-import { numeric } from './numbers.js?v=0.8.0-alpha.2';
+import { numeric } from './numbers.js?v=0.8.0-alpha.3';
 
 export const COST_GUIDANCE_CHECKED = '19.10.2026';
 const ris = (law, paragraph) => 'https://www.ris.bka.gv.at/NormDokument.wxe?Abfrage=Bundesnormen&Gesetzesnummer=' + law + '&Paragraf=' + paragraph;
@@ -136,4 +136,5 @@ export function costGuidance(line, context = {}) {
     tenant, tax, taxText: type.tax, steps: [...new Set(steps)], warnings: [...new Set(warnings)],
     sources: sourceIds.map(id => COST_SOURCES[id]), checked: COST_GUIDANCE_CHECKED };
 }
+
 

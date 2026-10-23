@@ -1,7 +1,7 @@
-import { validateTariff } from './calc.js?v=0.8.0-alpha.2';
+import { validateTariff } from './calc.js?v=0.8.0-alpha.3';
 
 // Select a reviewed tariff here; all displayed years follow this document.
-export const ACTIVE_TARIFF_URL = new URL('../data/tarif-2026.json?v=0.8.0-alpha.2', import.meta.url);
+export const ACTIVE_TARIFF_URL = new URL('../data/tarif-2026.json?v=0.8.0-alpha.3', import.meta.url);
 export const ACTIVE_TARIFF_YEAR = Number(ACTIVE_TARIFF_URL.pathname.match(/tarif-(\d{4})\.json$/)[1]);
 
 export function validateTariffDocument(document, expectedYear = ACTIVE_TARIFF_YEAR) {
@@ -28,3 +28,4 @@ export async function loadActiveTariff(request = fetch) {
 export function tariffCheckedDate(tariff) {
   return tariff.checkedAt.split('-').reverse().join('.');
 }
+

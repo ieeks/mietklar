@@ -1,6 +1,6 @@
-import { COST_TYPES, costGuidance } from './cost-guidance.js?v=0.8.0-alpha.2';
-import { numeric, money } from './numbers.js?v=0.8.0-alpha.2';
-import { MAX_COST_ROWS } from './persistence.js?v=0.8.0-alpha.2';
+import { COST_TYPES, costGuidance } from './cost-guidance.js?v=0.8.0-alpha.3';
+import { numeric, money } from './numbers.js?v=0.8.0-alpha.3';
+import { MAX_COST_ROWS } from './persistence.js?v=0.8.0-alpha.3';
 
 export function createCostEditor(root, readValue = input => input.value) {
   const q = selector => root.querySelector(selector);
@@ -128,5 +128,6 @@ export function createCostEditor(root, readValue = input => input.value) {
   }
   return { capture, restore, render, add, changeKind };
 }
+
 
 

@@ -119,3 +119,14 @@ Alpha 0.8 Browser-Nachweis: Commit `8f791152c98aa0daa89dbe395c235d777f019b11`, [
 Speicherformat bleibt 4. Abweichende Sicherungsjahre werden weiterhin geschützt und mit beiden Jahren gemeldet, keine automatische Jahresmigration. `npm run check` prüft zusätzlich das aktive Dokument und genau eine Tarifdatei-Auswahl; Asset-Version 0.8.0-alpha.2 durchgehend gestempelt. Lokal 99 reine Tests und Syntax-/Assetprüfung erfolgreich. Browsernachweis siehe docs/TESTING.md. Weitere fachliche Regeln/Quellen und persönliche AfA werden dadurch nicht neu freigegeben.
 
 Browsernachweis der Implementierung: Commit `f34e59de30923ceb0484abce2d291e064c7b5927`, [Actions 39967212316](https://github.com/ieeks/mietklar/actions/runs/39967212316): 99 reine Tests, Syntax-/Asset-/Tarifprüfung und alle 24 Chromium-/WebKit-Fälle ohne Retry erfolgreich. Mobile Quellenzeile visuell geprüft. Native iPhone-Abnahme bleibt offen.
+
+
+## Alpha 0.8.0-alpha.3 · 23.10.2026 · Zuschlagsminderung
+
+`calc.js`: neue reine `employeeSupplement` und `additionalTaxDetails`. Zusätzliche Steuer = bisherige Tarifdifferenz plus Minderung des Zuschlags zum Verkehrsabsetzbetrag. Positive Vermietungseinkünfte nach Kosten/AfA und begrenztem Veranlagungsfreibetrag bilden dieselbe Einkommensbasis für Tarif und Zuschlag. Der Freibetrag darf diese Basis nicht unter die Gehaltsbasis drücken; keine automatische Verlustgutschrift oder Zuschlagserhöhung bei negativen Vermietungseinkünften. Rücklage weiterhin Cash ohne Abzug. Anschaffungen verwenden dieselbe Zusatzsteuerfunktion, daher kann ein geklärter Abzug auch Zuschlag wiederherstellen; die Miete bleibt fest.
+
+`data/tarif-2026.json`: `employeeSupplement` mit maximum/fullUntil/zeroFrom, Quelle und Prüfdatum 23.10.2026. Fehlende/nichtendliche/falsch geordnete Parameter werden abgewiesen. Keine stillschweigende Berechnung ohne Zuschlag, wenn die Tarifdatei beschädigt ist. Die normale Kurve und Steuerdifferenz sind ungerundet; nur Anzeige und minimale Cent-Miete werden wie bisher gerundet.
+
+`result-view.js`/HTML: kurze Hinweiszeile nur bei tatsächlicher Minderung; Betrag ist schon in der Steuer enthalten. Druckblatt enthält Jahresbetrag und Erklärung. Hinweis verschwindet bei Wegfall der Minderung und bei ungültigem Ergebnis. Arbeitnehmer-/Zuschlagsanspruch in beiden Einkommenswegen angenommen; tatsächliche SV-Rückerstattung und Begrenzungen, Familienbonus und weitere persönliche Wirkungen bleiben außerhalb. Kein neues Feld und kein neues Speicherformat. Alte Sicherungen enthalten keine berechneten Ergebnisse und werden mit aktueller Formel neu bewertet.
+
+107 reine Tests lokal erfolgreich. Neuer Browserfall prüft die Korrektur, beide Einkommenswege/Rechenrichtungen, AfA, Druckblatt, Import und Fehlereingaben. CI-Nachweis nach abgeschlossenem Lauf ergänzen. Private Zahlen nicht als Fixture verwendet. Individuelle Gebäude-AfA und echte iPhone-Abnahme weiterhin offen; kein weiterer Komfortausbau für diesen Arbeitsblock.

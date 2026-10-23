@@ -1,4 +1,4 @@
-import { nonnegative } from './calc.js?v=0.8.0-alpha.2';
+import { nonnegative } from './calc.js?v=0.8.0-alpha.3';
 
 /** Cash, reimbursements and deductions are independent annual amounts. */
 export function normalizeCost(line, context = {}) {
@@ -52,5 +52,6 @@ export function aggregateCosts(lines, context = {}) {
     unknownTax: rows.filter(row => row.taxUnknown)
   };
 }
+
 
 

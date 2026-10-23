@@ -41,3 +41,4 @@ export function formatMoneyInput(raw) {
   const fraction = (match[3] || '').padEnd(2, '0');
   return match[1] + integer.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + fraction;
 }
+
